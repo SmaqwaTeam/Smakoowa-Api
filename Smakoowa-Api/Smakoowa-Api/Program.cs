@@ -1,3 +1,10 @@
+global using Smakoowa_Api.Models.Enums;
+global using Smakoowa_Api.Models.Identity;
+global using Smakoowa_Api.Models.Interfaces;
+global using System.ComponentModel.DataAnnotations;
+global using Microsoft.AspNetCore.Identity;
+global using Smakoowa_Api.Models.DatabaseModels;
+
 using Microsoft.EntityFrameworkCore;
 using Smakoowa_Api.Data;
 
