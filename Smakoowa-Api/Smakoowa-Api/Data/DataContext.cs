@@ -135,43 +135,6 @@ namespace Smakoowa_Api.Data
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.RecipeCommentId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-
-
-
-            //modelBuilder.Entity<CommentReply>()
-            //    .HasMany(c => c.Likes)
-            //    .WithOne(l => (CommentReply)l.LikedContent)
-            //    .HasForeignKey(l => l.LikedContentId);
-
-            //modelBuilder.Entity<RecipeComment>()
-            //    .HasMany(r => r.Likes)
-            //    .WithOne(l => (RecipeComment)l.LikedContent)
-            //    .HasForeignKey(r => r.LikedContentId);
-
-            //modelBuilder.Entity<Recipe>()
-            //    .HasMany(r => r.Likes)
-            //    .WithOne(l => (Recipe)l.LikedContent)
-            //    .HasForeignKey(r => r.LikedContentId);
-
-
-            //modelBuilder.Entity<Like>()
-            //    .HasOne(l => (Recipe)l.LikedContent)
-            //    .WithMany(c => c.Likes)
-            //    .HasForeignKey(l => l.LikedContentId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Like>()
-            //    .HasOne(l => (RecipeComment)l.LikedContent)
-            //    .WithMany(c => c.Likes)
-            //    .HasForeignKey(l => l.LikedContentId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Like>()
-            //    .HasOne(l => (CommentReply)l.LikedContent)
-            //    .WithMany(c => c.Likes)
-            //    .HasForeignKey(l => l.LikedContentId)
-            //    .OnDelete(DeleteBehavior.NoAction);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
