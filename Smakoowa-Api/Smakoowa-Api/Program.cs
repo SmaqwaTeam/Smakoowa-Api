@@ -4,9 +4,10 @@ global using Smakoowa_Api.Models.Interfaces;
 global using System.ComponentModel.DataAnnotations;
 global using Microsoft.AspNetCore.Identity;
 global using Smakoowa_Api.Models.DatabaseModels;
-
-using Microsoft.EntityFrameworkCore;
-using Smakoowa_Api.Data;
+global using System.Linq.Expressions;
+global using Microsoft.EntityFrameworkCore;
+global using Smakoowa_Api.Data;
+global using ModernPantryBackend.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
