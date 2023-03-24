@@ -1,13 +1,18 @@
-﻿using ModernPantryBackend.Interfaces;
-
-namespace ModernPantryBackend.Repositories
+﻿namespace ModernPantryBackend.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : IDbKey
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IDbKey
     {
         protected readonly DataContext _context;
+
         public BaseRepository(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> CheckIfExists(Expression<Func<T, bool>> expresion)
+        {
+            if (await _context.Set<T>().Where(expresion).AnyAsync()) return true;
+            else return false;
         }
 
         public virtual async Task<T> Create(T model)
@@ -37,6 +42,11 @@ namespace ModernPantryBackend.Repositories
         public virtual async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion)
         {
             return await _context.Set<T>().Where(expresion).ToListAsync();
+        }
+
+        public async Task<T> FindByConditionsFirstOrDefault(Expression<Func<T, bool>> expresion)
+        {
+            return await _context.Set<T>().Where(expresion).FirstOrDefaultAsync();
         }
     }
 }

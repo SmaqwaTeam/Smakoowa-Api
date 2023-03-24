@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Smakoowa_Api.Models.Identity;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Smakoowa_Api.Models.Auditables;
-using Smakoowa_Api.Models.DatabaseModels.Likes;
-
-namespace Smakoowa_Api.Data
+﻿namespace Smakoowa_Api.Data
 {
     public class DataContext : IdentityDbContext<ApiUser, IdentityRole<int>, int>
     {

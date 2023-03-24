@@ -1,9 +1,7 @@
-﻿using Smakoowa_Api.Models.Services;
-
-namespace Smakoowa_Api.Services.Interfaces.Base
+﻿namespace Smakoowa_Api.Services.Interfaces.Base
 {
-    public interface IUpdaterService
+    public interface IUpdaterService<T> where T : IRequestDto
     {
-        public Task<ServiceResponse> Edit(IRequestDto model);
+        public Task<ServiceResponse> Edit(T model);
     }
 }

@@ -1,9 +1,6 @@
-﻿using ModernPantryBackend.Repositories;
-using Smakoowa_Api.Repositories.Interfaces;
-
-namespace Smakoowa_Api.Repositories
+﻿namespace Smakoowa_Api.Repositories
 {
-    public class RecipeRepository : BaseRepository<Recipe>, ICategoryRepository
+    public class RecipeRepository : BaseRepository<Recipe>, IRecipeRepository
     {
         public RecipeRepository(DataContext context) : base(context) { }
     }

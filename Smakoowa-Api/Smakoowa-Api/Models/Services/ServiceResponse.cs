@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Smakoowa_Api.Models.Services
+﻿namespace Smakoowa_Api.Models.Services
 {
     public class ServiceResponse
     {

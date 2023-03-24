@@ -1,9 +1,6 @@
-﻿using ModernPantryBackend.Repositories;
-using Smakoowa_Api.Repositories.Interfaces;
-
-namespace Smakoowa_Api.Repositories
+﻿namespace Smakoowa_Api.Repositories
 {
-    public class TagRepository : BaseRepository<Tag>, ICategoryRepository
+    public class TagRepository : BaseRepository<Tag>, ITagRepository
     {
         public TagRepository(DataContext context) : base(context) { }
     }

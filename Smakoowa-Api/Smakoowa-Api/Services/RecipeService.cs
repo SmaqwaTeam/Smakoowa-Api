@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.Services;
-using Smakoowa_Api.Services.Interfaces;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
