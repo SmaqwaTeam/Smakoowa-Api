@@ -12,7 +12,7 @@
         }
 
         [HttpPost("Create")]
-        public async Task<ServiceResponse> Create(CreateCategoryRequestDto model)
+        public async Task<ServiceResponse> Create([FromBody] CreateCategoryRequestDto model)
         {
             return await _categoryService.Create(model);
         }
@@ -24,7 +24,7 @@
         }
 
         [HttpPut("Edit")]
-        public async Task<ServiceResponse> Edit(EditCategoryRequestDto model)
+        public async Task<ServiceResponse> Edit([FromBody] EditCategoryRequestDto model)
         {
             return await _categoryService.Edit(model);
         }

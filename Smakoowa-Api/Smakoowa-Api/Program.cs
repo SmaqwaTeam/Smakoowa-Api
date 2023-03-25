@@ -1,3 +1,5 @@
+using Smakoowa_Api.Services.MapperServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -6,6 +8,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddLogging();
 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
@@ -13,6 +16,8 @@ builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepositor
 builder.Services.AddScoped(typeof(ICategoryValidatorService), typeof(CategoryValidatorService));
 builder.Services.AddScoped(typeof(ICategoryMapperService), typeof(CategoryMapperService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
+builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
 
 var app = builder.Build();
 

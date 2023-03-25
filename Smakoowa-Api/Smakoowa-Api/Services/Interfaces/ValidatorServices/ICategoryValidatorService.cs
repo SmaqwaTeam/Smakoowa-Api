@@ -2,7 +2,7 @@
 {
     public interface ICategoryValidatorService
     {
-        public ServiceResponse ValidateCreateCategoryRequestDto(CreateCategoryRequestDto createCategoryRequestDto);
-        public ServiceResponse ValidateEditCategoryRequestDto(EditCategoryRequestDto editCategoryRequestDto);
+        public Task<ServiceResponse> ValidateCreateCategoryRequestDto(CreateCategoryRequestDto createCategoryRequestDto);
+        public Task<ServiceResponse> ValidateEditCategoryRequestDto(EditCategoryRequestDto editCategoryRequestDto);
     }
 }

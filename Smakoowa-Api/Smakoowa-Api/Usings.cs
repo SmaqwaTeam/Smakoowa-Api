@@ -14,7 +14,6 @@ global using Smakoowa_Api.Models.ResponseDtos;
 global using Smakoowa_Api.Models.Services;
 global using Smakoowa_Api.Repositories;
 global using Smakoowa_Api.Repositories.Interfaces;
-global using Smakoowa_Api.Resources;
 global using Smakoowa_Api.Services;
 global using Smakoowa_Api.Services.Interfaces;
 global using Smakoowa_Api.Services.Interfaces.Base;
