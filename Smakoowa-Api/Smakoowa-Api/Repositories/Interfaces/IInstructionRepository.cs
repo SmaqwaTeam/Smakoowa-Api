@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Repositories.Interfaces
 {
-    public interface IInstructionRepository : IBaseRepository<Instruction>
+    public interface IInstructionRepository : IBaseRepository<Instruction>, IRepository
     {
     }
 }

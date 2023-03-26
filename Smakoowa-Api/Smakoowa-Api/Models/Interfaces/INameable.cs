@@ -1,7 +1,7 @@
 ﻿namespace Smakoowa_Api.Models.Interfaces
 {
-    public interface IDbModel
+    public interface INameable
     {
-        int Id { get; }
+        string Name { get; }
     }
 }

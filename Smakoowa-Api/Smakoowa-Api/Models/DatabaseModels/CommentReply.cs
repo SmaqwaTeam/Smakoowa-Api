@@ -1,6 +1,10 @@
-﻿namespace Smakoowa_Api.Models.DatabaseModels
+﻿using Microsoft.EntityFrameworkCore;
+using Smakoowa_Api.Models.Auditables;
+using Smakoowa_Api.Models.DatabaseModels.Likes;
+
+namespace Smakoowa_Api.Models.DatabaseModels
 {
-    public class CommentReply : Updatable, IDbKey, ILikeable
+    public class CommentReply : Updatable, IDbModel, ILikeable
     {
         public int Id { get; set; }
         public string ReplyContent { get; set; }

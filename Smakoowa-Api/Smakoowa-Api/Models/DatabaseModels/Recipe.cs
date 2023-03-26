@@ -1,6 +1,9 @@
-﻿namespace Smakoowa_Api.Models.DatabaseModels
+﻿using Smakoowa_Api.Models.Auditables;
+using Smakoowa_Api.Models.DatabaseModels.Likes;
+
+namespace Smakoowa_Api.Models.DatabaseModels
 {
-    public class Recipe : Updatable, IDbKey, ILikeable
+    public class Recipe : Updatable, IDbModel, ILikeable, INameable
     {
         public int Id { get; set; }
         public string Name { get; set; }
