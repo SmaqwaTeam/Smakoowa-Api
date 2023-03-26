@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services.Interfaces.ValidatorServices
+﻿namespace Smakoowa_Api.Services.Interfaces.ValidatorServices
 {
     public interface ICategoryValidatorService
     {

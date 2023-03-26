@@ -1,6 +1,8 @@
-﻿namespace Smakoowa_Api.Services.Interfaces
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.Interfaces
 {
-    public interface IRecipeService
+    public interface IRecipeService : ICreatorService<RecipeRequestDto>, IEditorService<RecipeRequestDto>, IDeleterService, IGetterService
     {
     }
 }
