@@ -11,18 +11,22 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddLogging();
 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
-builder.Services.AddScoped(typeof(ITagRepository), typeof(TagRepository));
+builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
 
+builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
 builder.Services.AddScoped(typeof(ICategoryValidatorService), typeof(CategoryValidatorService));
 builder.Services.AddScoped(typeof(ICategoryMapperService), typeof(CategoryMapperService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
 
+builder.Services.AddScoped(typeof(ITagRepository), typeof(TagRepository));
 builder.Services.AddScoped(typeof(ITagValidatorService), typeof(TagValidatorService));
 builder.Services.AddScoped(typeof(ITagMapperService), typeof(TagMapperService));
 builder.Services.AddScoped(typeof(ITagService), typeof(TagService));
 
-builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
+builder.Services.AddScoped(typeof(IRecipeRepository), typeof(RecipeRepository));
+builder.Services.AddScoped(typeof(IRecipeValidatorService), typeof(RecipeValidatorService));
+builder.Services.AddScoped(typeof(IRecipeMapperService), typeof(RecipeMapperService));
+builder.Services.AddScoped(typeof(IRecipeService), typeof(RecipeService));
 
 var app = builder.Build();
 

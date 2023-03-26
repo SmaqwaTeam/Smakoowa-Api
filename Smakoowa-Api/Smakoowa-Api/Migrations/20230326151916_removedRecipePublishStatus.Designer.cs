@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smakoowa_Api.Data;
 
@@ -11,9 +12,11 @@ using Smakoowa_Api.Data;
 namespace Smakoowa_Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230326151916_removedRecipePublishStatus")]
+    partial class removedRecipePublishStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,10 +198,10 @@ namespace Smakoowa_Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("RepliedCommentId")
@@ -292,10 +295,10 @@ namespace Smakoowa_Api.Migrations
                     b.Property<int>("CommentReplyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("LikeableType")
@@ -318,10 +321,10 @@ namespace Smakoowa_Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("LikeableType")
@@ -347,10 +350,10 @@ namespace Smakoowa_Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("LikeableType")
@@ -382,10 +385,10 @@ namespace Smakoowa_Api.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -433,10 +436,10 @@ namespace Smakoowa_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatorId")
+                    b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<int>("RecipeId")
@@ -545,21 +548,6 @@ namespace Smakoowa_Api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "980906d9-f6d8-40d9-9f9c-3a57fc407275",
-                            Email = "placeholder@test.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PasswordHash = "123",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "PlaceholderUser"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -632,7 +620,9 @@ namespace Smakoowa_Api.Migrations
                 {
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("CommentReplies")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.RecipeComment", "RepliedComment")
                         .WithMany("CommentReplies")
@@ -683,7 +673,9 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("CommentReplyLikes")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CommentReply");
 
@@ -694,7 +686,9 @@ namespace Smakoowa_Api.Migrations
                 {
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("RecipeCommentLikes")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.RecipeComment", "RecipeComment")
                         .WithMany("Likes")
@@ -711,7 +705,9 @@ namespace Smakoowa_Api.Migrations
                 {
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("RecipeLikes")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.Recipe", "Recipe")
                         .WithMany("Likes")
@@ -734,7 +730,9 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("Recipes")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Updater")
                         .WithMany()
@@ -751,7 +749,9 @@ namespace Smakoowa_Api.Migrations
                 {
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("RecipeComments")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.Recipe", "Recipe")
                         .WithMany("RecipeComments")

@@ -11,7 +11,6 @@ namespace Smakoowa_Api.Models.DatabaseModels
         public DateTime? ApprovedAt { get; set; }
 
         public string? ThumbnailImageUrl { get; set; }
-        public PublishStatus PublishStatus { get; set; }
         public ServingsTier ServingsTier { get; set; }
         public TimeToMakeTier TimeToMakeTier { get; set; }
 

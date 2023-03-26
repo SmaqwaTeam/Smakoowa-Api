@@ -26,3 +26,4 @@ global using Smakoowa_Api.Services.ValidatorServices;
 global using System.ComponentModel.DataAnnotations;
 global using System.Linq.Expressions;
 global using System.Net;
+global using Smakoowa_Api.Models.RequestDtos;

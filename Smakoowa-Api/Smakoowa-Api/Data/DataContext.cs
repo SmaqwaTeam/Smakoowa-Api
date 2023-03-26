@@ -29,6 +29,10 @@
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApiUser>().HasData(
+                new ApiUser { Id = 1, Email = "placeholder@test.com", PasswordHash = "123", UserName = "PlaceholderUser" }
+            );
+
             modelBuilder.Entity<Category>().HasKey(c => c.Id);
 
             modelBuilder.Entity<Recipe>().HasKey(c => c.Id);
