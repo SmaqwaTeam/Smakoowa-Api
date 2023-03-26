@@ -1,6 +1,6 @@
 ﻿namespace ModernPantryBackend.Interfaces
 {
-    public interface IBaseRepository<T> where T : IDbKey
+    public interface IBaseRepository<T> : IRepository where T : IDbModel
     {
         public Task<T> Create(T model);
         public Task Delete(T model);

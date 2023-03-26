@@ -1,4 +1,4 @@
-﻿namespace Smakoowa_Api.Services.Interfaces.Mapper
+﻿namespace Smakoowa_Api.Services.Interfaces.MapperServices
 {
     public interface ICategoryMapperService
     {

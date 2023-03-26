@@ -12,10 +12,15 @@ builder.Services.AddLogging();
 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+builder.Services.AddScoped(typeof(ITagRepository), typeof(TagRepository));
 
 builder.Services.AddScoped(typeof(ICategoryValidatorService), typeof(CategoryValidatorService));
 builder.Services.AddScoped(typeof(ICategoryMapperService), typeof(CategoryMapperService));
 builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
+builder.Services.AddScoped(typeof(ITagValidatorService), typeof(TagValidatorService));
+builder.Services.AddScoped(typeof(ITagMapperService), typeof(TagMapperService));
+builder.Services.AddScoped(typeof(ITagService), typeof(TagService));
 
 builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
 

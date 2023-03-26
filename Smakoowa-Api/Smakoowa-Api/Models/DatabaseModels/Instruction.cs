@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Models.DatabaseModels
 {
-    public class Instruction : IDbKey
+    public class Instruction : IDbModel, INameable
     {
         public int Id { get; set; }
         public string Name { get; set; }
