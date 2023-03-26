@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Controllers
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,21 +14,21 @@
         }
 
         [HttpPost("Create")]
-        public async Task<ServiceResponse> Create([FromBody] CreateTagRequestDto model)
+        public async Task<ServiceResponse> Create([FromBody] TagRequestDto tagRequestDto)
         {
-            return await _tagService.Create(model);
+            return await _tagService.Create(tagRequestDto);
         }
 
-        [HttpDelete("Delete/{id}")]
-        public async Task<ServiceResponse> Delete(int id)
+        [HttpDelete("Delete/{tagId}")]
+        public async Task<ServiceResponse> Delete(int tagId)
         {
-            return await _tagService.Delete(id);
+            return await _tagService.Delete(tagId);
         }
 
         [HttpPut("Edit")]
-        public async Task<ServiceResponse> Edit([FromBody] EditTagRequestDto model)
+        public async Task<ServiceResponse> Edit([FromBody] TagRequestDto tagRequestDto, int tagId)
         {
-            return await _tagService.Edit(model);
+            return await _tagService.Edit(tagRequestDto, tagId);
         }
 
         [HttpGet("GetAll")]
@@ -35,10 +37,10 @@
             return await _tagService.GetAll();
         }
 
-        [HttpGet("GetById/{id}")]
-        public async Task<ServiceResponse> GetById(int id)
+        [HttpGet("GetById/{tagId}")]
+        public async Task<ServiceResponse> GetById(int tagId)
         {
-            return await _tagService.GetById(id);
+            return await _tagService.GetById(tagId);
         }
     }
 }

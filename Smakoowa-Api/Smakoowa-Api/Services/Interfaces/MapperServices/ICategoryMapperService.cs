@@ -1,9 +1,11 @@
-﻿namespace Smakoowa_Api.Services.Interfaces.MapperServices
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.Interfaces.MapperServices
 {
     public interface ICategoryMapperService
     {
-        public Category MapCreateCategoryRequestDto(CreateCategoryRequestDto createCategoryRequestDto);
+        public Category MapCreateCategoryRequestDto(CategoryRequestDto categoryRequestDto);
         public GetCategoryResponseDto MapGetCategoryResponseDto(Category category);
-        public Category MapEditCategoryRequestDto(EditCategoryRequestDto editCategoryRequestDto, Category editedCategory);
+        public Category MapEditCategoryRequestDto(CategoryRequestDto categoryRequestDto, Category editedCategory);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services.ValidatorServices
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.ValidatorServices
 {
     public class CategoryValidatorService : BaseValidatorService, ICategoryValidatorService
     {
@@ -10,35 +12,18 @@
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<ServiceResponse> ValidateCreateCategoryRequestDto(CreateCategoryRequestDto createCategoryRequestDto)
+        public async Task<ServiceResponse> ValidateCategoryRequestDto(CategoryRequestDto categoryRequestDto)
         {
-            var validationResponse = ValidateNameLength(createCategoryRequestDto.Name, "Category");
+            var validationResponse = ValidateNameLength(categoryRequestDto.Name, "Category");
 
             if (!validationResponse.SuccessStatus)
             {
                 return validationResponse;
             }
 
-            if (await _categoryRepository.CheckIfExists(c => c.Name == createCategoryRequestDto.Name))
+            if (await _categoryRepository.CheckIfExists(c => c.Name == categoryRequestDto.Name))
             {
-                return ServiceResponse.Error($"A category with name {createCategoryRequestDto.Name} already exists.");
-            }
-
-            return ServiceResponse.Success();
-        }
-
-        public async Task<ServiceResponse> ValidateEditCategoryRequestDto(EditCategoryRequestDto editCategoryRequestDto)
-        {
-            var validationResponse = ValidateNameLength(editCategoryRequestDto.Name, "Category");
-
-            if (!validationResponse.SuccessStatus)
-            {
-                return validationResponse;
-            }
-
-            if (await _categoryRepository.CheckIfExists(c => c.Name == editCategoryRequestDto.Name))
-            {
-                return ServiceResponse.Error($"A category with name {editCategoryRequestDto.Name} already exists.");
+                return ServiceResponse.Error($"A category with name {categoryRequestDto.Name} already exists.");
             }
 
             return ServiceResponse.Success();
