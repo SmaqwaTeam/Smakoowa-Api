@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Likes;
-
-namespace Smakoowa_Api.Models.Identity
+﻿namespace Smakoowa_Api.Models.Identity
 {
     public class ApiUser : IdentityUser<int>
     {

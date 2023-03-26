@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.Auditables;
-
-namespace Smakoowa_Api.Models.DatabaseModels.Likes
+﻿namespace Smakoowa_Api.Models.DatabaseModels.Likes
 {
     public abstract class Like : Creatable, IDbKey
     {

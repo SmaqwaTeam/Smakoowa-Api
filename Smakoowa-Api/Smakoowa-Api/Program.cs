@@ -1,12 +1,4 @@
-global using Smakoowa_Api.Models.Enums;
-global using Smakoowa_Api.Models.Identity;
-global using Smakoowa_Api.Models.Interfaces;
-global using System.ComponentModel.DataAnnotations;
-global using Microsoft.AspNetCore.Identity;
-global using Smakoowa_Api.Models.DatabaseModels;
-
-using Microsoft.EntityFrameworkCore;
-using Smakoowa_Api.Data;
+using Smakoowa_Api.Services.MapperServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +7,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddLogging();
+
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+
+builder.Services.AddScoped(typeof(ICategoryValidatorService), typeof(CategoryValidatorService));
+builder.Services.AddScoped(typeof(ICategoryMapperService), typeof(CategoryMapperService));
+builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+
+builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
 
 var app = builder.Build();
 

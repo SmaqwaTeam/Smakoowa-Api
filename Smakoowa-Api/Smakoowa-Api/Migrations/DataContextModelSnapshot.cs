@@ -167,7 +167,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("RecipeTag");
+                    b.ToTable("RecipeTag", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Category", b =>
@@ -184,7 +184,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.CommentReply", b =>
@@ -222,7 +222,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("CommentReplies");
+                    b.ToTable("CommentReplies", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Ingredient", b =>
@@ -250,7 +250,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Instruction", b =>
@@ -278,7 +278,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Instructions");
+                    b.ToTable("Instructions", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.CommentReplyLike", b =>
@@ -307,7 +307,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("CommentReplyLikes");
+                    b.ToTable("CommentReplyLikes", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.RecipeCommentLike", b =>
@@ -336,7 +336,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeCommentId");
 
-                    b.ToTable("RecipeCommentLikes");
+                    b.ToTable("RecipeCommentLikes", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.RecipeLike", b =>
@@ -365,7 +365,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeLikes");
+                    b.ToTable("RecipeLikes", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Recipe", b =>
@@ -421,7 +421,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.RecipeComment", b =>
@@ -459,7 +459,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("RecipeComments");
+                    b.ToTable("RecipeComments", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Tag", b =>
@@ -479,7 +479,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.Identity.ApiUser", b =>

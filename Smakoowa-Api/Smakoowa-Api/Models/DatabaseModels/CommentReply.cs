@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Smakoowa_Api.Models.Auditables;
-using Smakoowa_Api.Models.DatabaseModels.Likes;
-
-namespace Smakoowa_Api.Models.DatabaseModels
+﻿namespace Smakoowa_Api.Models.DatabaseModels
 {
     public class CommentReply : Updatable, IDbKey, ILikeable
     {
