@@ -1,4 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos.Tag;
+﻿using Smakoowa_Api.Models.RequestDtos;
 using System;
 
 namespace Smakoowa_Api.Services.ValidatorServices
@@ -13,43 +13,21 @@ namespace Smakoowa_Api.Services.ValidatorServices
             _tagRepository = tagRepository;
         }
 
-        public async Task<ServiceResponse> ValidateCreateTagRequestDto(CreateTagRequestDto createTagRequestDto)
+        public async Task<ServiceResponse> ValidateTagRequestDto(TagRequestDto tagRequestDto)
         {
-            var validationResponse = ValidateNameLength(createTagRequestDto.Name, "Tag");
+            var validationResponse = ValidateNameLength(tagRequestDto.Name, "Tag");
 
             if (!validationResponse.SuccessStatus)
             {
                 return validationResponse;
             }
 
-            if (await _tagRepository.CheckIfExists(t => t.Name == createTagRequestDto.Name))
+            if (await _tagRepository.CheckIfExists(t => t.Name == tagRequestDto.Name))
             {
-                return ServiceResponse.Error($"A tag with name {createTagRequestDto.Name} already exists.");
+                return ServiceResponse.Error($"A tag with name {tagRequestDto.Name} already exists.");
             }
 
-            if (!Enum.IsDefined(typeof(TagType), createTagRequestDto.TagType))
-            {
-                return ServiceResponse.Error($"Invalid tag type.");
-            }
-
-            return ServiceResponse.Success();
-        }
-
-        public async Task<ServiceResponse> ValidateEditTagRequestDto(EditTagRequestDto editTagRequestDto)
-        {
-            var validationResponse = ValidateNameLength(editTagRequestDto.Name, "Tag");
-
-            if (!validationResponse.SuccessStatus)
-            {
-                return validationResponse;
-            }
-
-            if (await _tagRepository.CheckIfExists(t => t.Name == editTagRequestDto.Name))
-            {
-                return ServiceResponse.Error($"A tag with name {editTagRequestDto.Name} already exists.");
-            }
-
-            if (!Enum.IsDefined(typeof(TagType), editTagRequestDto.TagType))
+            if (!Enum.IsDefined(typeof(TagType), tagRequestDto.TagType))
             {
                 return ServiceResponse.Error($"Invalid tag type.");
             }

@@ -1,4 +1,5 @@
-﻿using Smakoowa_Api.Services.Interfaces.MapperServices;
+﻿using Smakoowa_Api.Models.RequestDtos;
+using Smakoowa_Api.Services.Interfaces.MapperServices;
 
 namespace Smakoowa_Api.Services
 {
@@ -18,12 +19,12 @@ namespace Smakoowa_Api.Services
             _helperService = helperService;
         }
 
-        public async Task<ServiceResponse> Create(CreateTagRequestDto createTagRequestDto)
+        public async Task<ServiceResponse> Create(TagRequestDto tagRequestDto)
         {
-            var validationResult = await _tagValidatorService.ValidateCreateTagRequestDto(createTagRequestDto);
+            var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
             if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
 
-            var tag = _tagMapperService.MapCreateTagRequestDto(createTagRequestDto);
+            var tag = _tagMapperService.MapCreateTagRequestDto(tagRequestDto);
 
             try
             {
@@ -37,10 +38,10 @@ namespace Smakoowa_Api.Services
             }
         }
 
-        public async Task<ServiceResponse> Delete(int id)
+        public async Task<ServiceResponse> Delete(int tagId)
         {
-            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == id);
-            if (tag == null) return ServiceResponse.Error($"Tag with id:{id} not found.");
+            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
+            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
 
             try
             {
@@ -53,15 +54,15 @@ namespace Smakoowa_Api.Services
             }
         }
 
-        public async Task<ServiceResponse> Edit(EditTagRequestDto editTagRequestDto)
+        public async Task<ServiceResponse> Edit(TagRequestDto tagRequestDto, int tagId)
         {
-            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == editTagRequestDto.Id);
-            if (tag == null) return ServiceResponse.Error($"Tag with id:{editTagRequestDto.Id} not found.");
+            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
+            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
 
-            var validationResult = await _tagValidatorService.ValidateEditTagRequestDto(editTagRequestDto);
+            var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
             if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
 
-            var updatedTag = _tagMapperService.MapEditTagRequestDto(editTagRequestDto, tag);
+            var updatedTag = _tagMapperService.MapEditTagRequestDto(tagRequestDto, tag);
 
             try
             {
@@ -89,12 +90,12 @@ namespace Smakoowa_Api.Services
             }
         }
 
-        public async Task<ServiceResponse> GetById(int id)
+        public async Task<ServiceResponse> GetById(int tagId)
         {
             try
             {
-                var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == id);
-                if (tag == null) return ServiceResponse.Error($"Tag with id:{id} not found.");
+                var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
+                if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
 
                 var getTagResponseDto = _tagMapperService.MapGetTagResponseDto(tag);
                 return ServiceResponse<GetTagResponseDto>.Success(getTagResponseDto, "Tag retrieved.");

@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services.MapperServices
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.MapperServices
 {
     public class CategoryMapperService : ICategoryMapperService
     {
@@ -9,7 +11,7 @@
             _mapper = mapper;
         }
 
-        public Category MapCreateCategoryRequestDto(CreateCategoryRequestDto createCategoryRequestDto)
+        public Category MapCreateCategoryRequestDto(CategoryRequestDto createCategoryRequestDto)
         {
             return _mapper.Map<Category>(createCategoryRequestDto);
         }
@@ -19,7 +21,7 @@
             return _mapper.Map<GetCategoryResponseDto>(category);
         }
 
-        public Category MapEditCategoryRequestDto(EditCategoryRequestDto editCategoryRequestDto, Category editedCategory)
+        public Category MapEditCategoryRequestDto(CategoryRequestDto editCategoryRequestDto, Category editedCategory)
         {
             editedCategory.Name = editCategoryRequestDto.Name;
             return editedCategory;

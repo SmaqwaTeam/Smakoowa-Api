@@ -1,6 +1,8 @@
-﻿namespace Smakoowa_Api.Services.Interfaces
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.Interfaces
 {
-    public interface ITagService : ICreatorService<CreateTagRequestDto>, IUpdaterService<EditTagRequestDto>, IDeleterService, IGetterService
+    public interface ITagService : ICreatorService<TagRequestDto>, IEditorService<TagRequestDto>, IDeleterService, IGetterService
     {
     }
 }

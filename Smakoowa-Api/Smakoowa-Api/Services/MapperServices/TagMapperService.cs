@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services.MapperServices
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.MapperServices
 {
     public class TagMapperService : ITagMapperService
     {
@@ -9,7 +11,7 @@
             _mapper = mapper;
         }
 
-        public Tag MapCreateTagRequestDto(CreateTagRequestDto createTagRequestDto)
+        public Tag MapCreateTagRequestDto(TagRequestDto createTagRequestDto)
         {
             return _mapper.Map<Tag>(createTagRequestDto);
         }
@@ -19,7 +21,7 @@
             return _mapper.Map<GetTagResponseDto>(category);
         }
 
-        public Tag MapEditTagRequestDto(EditTagRequestDto editTagRequestDto, Tag editedTag)
+        public Tag MapEditTagRequestDto(TagRequestDto editTagRequestDto, Tag editedTag)
         {
             editedTag.Name = editTagRequestDto.Name;
             editedTag.TagType = editTagRequestDto.TagType;

@@ -1,6 +1,8 @@
-﻿namespace Smakoowa_Api.Services.Interfaces
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.Interfaces
 {
-    public interface ICategoryService : ICreatorService<CreateCategoryRequestDto>, IUpdaterService<EditCategoryRequestDto>, IDeleterService, IGetterService
+    public interface ICategoryService : ICreatorService<CategoryRequestDto>, IEditorService<CategoryRequestDto>, IDeleterService, IGetterService
     {
     }
 }

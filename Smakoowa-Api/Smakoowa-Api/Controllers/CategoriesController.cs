@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Controllers
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,21 +14,21 @@
         }
 
         [HttpPost("Create")]
-        public async Task<ServiceResponse> Create([FromBody] CreateCategoryRequestDto model)
+        public async Task<ServiceResponse> Create([FromBody] CategoryRequestDto categoryRequestDto)
         {
-            return await _categoryService.Create(model);
+            return await _categoryService.Create(categoryRequestDto);
         }
 
-        [HttpDelete("Delete/{id}")]
-        public async Task<ServiceResponse> Delete(int id)
+        [HttpDelete("Delete/{categoryId}")]
+        public async Task<ServiceResponse> Delete(int categoryId)
         {
-            return await _categoryService.Delete(id);
+            return await _categoryService.Delete(categoryId);
         }
 
-        [HttpPut("Edit")]
-        public async Task<ServiceResponse> Edit([FromBody] EditCategoryRequestDto model)
+        [HttpPut("Edit/{categoryId}")]
+        public async Task<ServiceResponse> Edit([FromBody] CategoryRequestDto categoryRequestDto, int categoryId)
         {
-            return await _categoryService.Edit(model);
+            return await _categoryService.Edit(categoryRequestDto, categoryId);
         }
 
         [HttpGet("GetAll")]
@@ -35,10 +37,10 @@
             return await _categoryService.GetAll();
         }
 
-        [HttpGet("GetById/{id}")]
-        public async Task<ServiceResponse> GetById(int id)
+        [HttpGet("GetById/{categoryId}")]
+        public async Task<ServiceResponse> GetById(int categoryId)
         {
-            return await _categoryService.GetById(id);
+            return await _categoryService.GetById(categoryId);
         }
     }
 }

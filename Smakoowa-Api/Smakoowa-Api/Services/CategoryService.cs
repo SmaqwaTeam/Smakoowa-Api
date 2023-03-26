@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services
 {
     public class CategoryService : ICategoryService
     {
@@ -16,12 +18,12 @@
             _helperService = helperService;
         }
 
-        public async Task<ServiceResponse> Create(CreateCategoryRequestDto createCategoryRequestDto)
+        public async Task<ServiceResponse> Create(CategoryRequestDto categoryRequestDto)
         {
-            var validationResult = await _categoryValidatorService.ValidateCreateCategoryRequestDto(createCategoryRequestDto);
+            var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
             if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
 
-            var category = _categoryMapperService.MapCreateCategoryRequestDto(createCategoryRequestDto);
+            var category = _categoryMapperService.MapCreateCategoryRequestDto(categoryRequestDto);
 
             try
             {
@@ -35,10 +37,10 @@
             }
         }
 
-        public async Task<ServiceResponse> Delete(int id)
+        public async Task<ServiceResponse> Delete(int categoryId)
         {
-            var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == id);
-            if (category == null) return ServiceResponse.Error($"Category with id:{id} not found.");
+            var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
+            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
 
             try
             {
@@ -51,15 +53,15 @@
             }
         }
 
-        public async Task<ServiceResponse> Edit(EditCategoryRequestDto editCategoryRequestDto)
+        public async Task<ServiceResponse> Edit(CategoryRequestDto categoryRequestDto, int categoryId)
         {
-            var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == editCategoryRequestDto.Id);
-            if (category == null) return ServiceResponse.Error($"Category with id:{editCategoryRequestDto.Id} not found.");
+            var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
+            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
 
-            var validationResult = await _categoryValidatorService.ValidateEditCategoryRequestDto(editCategoryRequestDto);
+            var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
             if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
 
-            var updatedCategory = _categoryMapperService.MapEditCategoryRequestDto(editCategoryRequestDto, category);
+            var updatedCategory = _categoryMapperService.MapEditCategoryRequestDto(categoryRequestDto, category);
 
             try
             {
@@ -87,12 +89,12 @@
             }
         }
 
-        public async Task<ServiceResponse> GetById(int id)
+        public async Task<ServiceResponse> GetById(int categoryId)
         {
             try
             {
-                var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == id);
-                if (category == null) return ServiceResponse.Error($"Category with id:{id} not found.");
+                var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
+                if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
 
                 var getCategoryResponseDto = _categoryMapperService.MapGetCategoryResponseDto(category);
                 return ServiceResponse<GetCategoryResponseDto>.Success(getCategoryResponseDto, "Category retrieved.");

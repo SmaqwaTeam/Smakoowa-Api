@@ -1,6 +1,6 @@
-﻿namespace Smakoowa_Api.Models.RequestDtos.Tag
+﻿namespace Smakoowa_Api.Models.RequestDtos
 {
-    public class CreateTagRequestDto : IRequestDto
+    public class TagRequestDto : IRequestDto
     {
         public string Name { get; set; }
         public TagType TagType { get; set; }

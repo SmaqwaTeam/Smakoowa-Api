@@ -1,9 +1,11 @@
-﻿namespace Smakoowa_Api.Services.Interfaces.MapperServices
+﻿using Smakoowa_Api.Models.RequestDtos;
+
+namespace Smakoowa_Api.Services.Interfaces.MapperServices
 {
     public interface ITagMapperService
     {
-        public Tag MapCreateTagRequestDto(CreateTagRequestDto createTagRequestDto);
+        public Tag MapCreateTagRequestDto(TagRequestDto tagRequestDto);
         public GetTagResponseDto MapGetTagResponseDto(Tag category);
-        public Tag MapEditTagRequestDto(EditTagRequestDto editTagRequestDto, Tag editedTag);
+        public Tag MapEditTagRequestDto(TagRequestDto tagRequestDto, Tag editedTag);
     }
 }
