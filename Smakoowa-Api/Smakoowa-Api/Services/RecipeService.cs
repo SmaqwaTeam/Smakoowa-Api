@@ -28,7 +28,7 @@
             var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
             if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
 
-            var recipe = _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
+            var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
             try
             {
@@ -68,7 +68,7 @@
             var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
             if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
 
-            var updatedRecipe = _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipe);
+            var updatedRecipe = await _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipe);
             var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(recipeRequestDto.Ingredients, recipeId);
 
             updatedRecipe.Ingredients = mappedIngredients;
