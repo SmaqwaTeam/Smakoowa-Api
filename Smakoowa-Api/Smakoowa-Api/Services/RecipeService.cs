@@ -8,9 +8,12 @@
         private readonly IHelperService<RecipeService> _helperService;
         private readonly IIngredientValidatorService _ingredientValidatorService;
         private readonly IIngredientMapperService _ingredientMapperService;
+        private readonly IInstructionValidatorService _instructionValidatorService;
+        private readonly IInstructionMapperService _instructionMapperService;
 
-        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
-            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService)
+        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService, 
+            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService, 
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -18,6 +21,8 @@
             _helperService = helperService;
             _ingredientValidatorService = ingredientValidatorService;
             _ingredientMapperService = ingredientMapperService;
+            _instructionValidatorService = instructionValidatorService;
+            _instructionMapperService = instructionMapperService;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
@@ -27,6 +32,9 @@
 
             var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
             if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
+
+            var instructionValidationResult = await _instructionValidatorService.ValidateInstructionRequestDtos(recipeRequestDto.Instructions);
+            if (!instructionValidationResult.SuccessStatus) return ServiceResponse.Error(instructionValidationResult.Message);
 
             var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
@@ -68,10 +76,15 @@
             var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
             if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
 
+            var instructionValidationResult = await _instructionValidatorService.ValidateInstructionRequestDtos(recipeRequestDto.Instructions);
+            if (!instructionValidationResult.SuccessStatus) return ServiceResponse.Error(instructionValidationResult.Message);
+
             var updatedRecipe = await _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipe);
             var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(recipeRequestDto.Ingredients, recipeId);
+            var mappedInstructions = _instructionMapperService.MapCreateInstructionRequestDtos(recipeRequestDto.Instructions, recipeId);
 
             updatedRecipe.Ingredients = mappedIngredients;
+            updatedRecipe.Instructions = mappedInstructions;
 
             try
             {

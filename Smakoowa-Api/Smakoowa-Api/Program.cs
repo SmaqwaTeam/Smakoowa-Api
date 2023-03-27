@@ -32,6 +32,11 @@ builder.Services.AddScoped(typeof(IIngredientRepository), typeof(IngredientRepos
 builder.Services.AddScoped(typeof(IIngredientValidatorService), typeof(IngredientValidatorService));
 builder.Services.AddScoped(typeof(IIngredientMapperService), typeof(IngredientMapperService));
 
+builder.Services.AddScoped(typeof(IInstructionRepository), typeof(InstructionRepository));
+builder.Services.AddScoped(typeof(IInstructionValidatorService), typeof(InstructionValidatorService));
+builder.Services.AddScoped(typeof(IInstructionMapperService), typeof(InstructionMapperService));
+
+
 
 var app = builder.Build();
 

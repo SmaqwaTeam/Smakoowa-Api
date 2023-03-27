@@ -55,6 +55,11 @@
                 return ServiceResponse.Error("A recipe must have at least one ingredient.");
             }
 
+            if (recipeRequestDto.Instructions == null || recipeRequestDto.Instructions.Count < 1)
+            {
+                return ServiceResponse.Error("A recipe must have at least one instruction.");
+            }
+
             return ServiceResponse.Success();
         }
     }
