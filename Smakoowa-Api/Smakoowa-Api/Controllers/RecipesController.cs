@@ -42,5 +42,11 @@ namespace Smakoowa_Api.Controllers
         {
             return await _recipeService.GetById(recipeId);
         }
+
+        [HttpGet("GetByIdDetailed/{recipeId}")]
+        public async Task<ServiceResponse> GetByIdDetailed(int recipeId)
+        {
+            return await _recipeService.GetByIdDetailed(recipeId);
+        }
     }
 }

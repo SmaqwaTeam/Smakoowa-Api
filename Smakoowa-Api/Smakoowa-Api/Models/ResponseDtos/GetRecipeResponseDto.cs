@@ -16,7 +16,6 @@
         //To be implemented:
         //public string? ThumbnailImageUrl { get; set; }
         //public List<Instruction> Instructions { get; set; }
-        //public List<Ingredient> Ingredients { get; set; }
         //public List<RecipeComment>? RecipeComments { get; set; }
         //public List<RecipeLike>? Likes { get; set; }
     }

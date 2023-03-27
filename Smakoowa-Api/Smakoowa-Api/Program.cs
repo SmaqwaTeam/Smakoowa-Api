@@ -28,6 +28,11 @@ builder.Services.AddScoped(typeof(IRecipeValidatorService), typeof(RecipeValidat
 builder.Services.AddScoped(typeof(IRecipeMapperService), typeof(RecipeMapperService));
 builder.Services.AddScoped(typeof(IRecipeService), typeof(RecipeService));
 
+builder.Services.AddScoped(typeof(IIngredientRepository), typeof(IngredientRepository));
+builder.Services.AddScoped(typeof(IIngredientValidatorService), typeof(IngredientValidatorService));
+builder.Services.AddScoped(typeof(IIngredientMapperService), typeof(IngredientMapperService));
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

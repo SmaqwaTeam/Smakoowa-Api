@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-using Smakoowa_Api.Services.Interfaces.MapperServices;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class TagService : ITagService
     {
@@ -28,8 +25,7 @@ namespace Smakoowa_Api.Services
 
             try
             {
-                var createdTag = await _tagRepository.Create(tag);
-                if (createdTag == null) return ServiceResponse.Error("Failed to create tag.");
+                await _tagRepository.Create(tag);
                 return ServiceResponse.Success("Tag created.");
             }
             catch (Exception ex)

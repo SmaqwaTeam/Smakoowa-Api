@@ -10,9 +10,9 @@
 
         public int CategoryId { get; set; }
         public List<int>? TagIds { get; set; }
+        public List<IngredientRequestDto>? Ingredients { get; set; }
 
         //To be implemented:
         //public List<Instruction> Instructions { get; set; }
-        //public List<Ingredient> Ingredients { get; set; }
     }
 }

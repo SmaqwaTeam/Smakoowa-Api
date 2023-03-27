@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Mappings
+﻿namespace Smakoowa_Api.Mappings
 {
     public class CategoryMapperProfile : Profile
     {

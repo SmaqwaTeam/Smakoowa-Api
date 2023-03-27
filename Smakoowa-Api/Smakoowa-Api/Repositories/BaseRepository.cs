@@ -9,7 +9,7 @@
             _context = context;
         }
 
-        public async Task<bool> CheckIfExists(Expression<Func<T, bool>> expresion)
+        public virtual async Task<bool> CheckIfExists(Expression<Func<T, bool>> expresion)
         {
             if (await _context.Set<T>().Where(expresion).AnyAsync()) return true;
             else return false;
@@ -44,7 +44,7 @@
             return await _context.Set<T>().Where(expresion).ToListAsync();
         }
 
-        public async Task<T> FindByConditionsFirstOrDefault(Expression<Func<T, bool>> expresion)
+        public virtual async Task<T> FindByConditionsFirstOrDefault(Expression<Func<T, bool>> expresion)
         {
             return await _context.Set<T>().Where(expresion).FirstOrDefaultAsync();
         }
