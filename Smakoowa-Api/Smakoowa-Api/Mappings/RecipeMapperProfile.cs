@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Mappings
+﻿namespace Smakoowa_Api.Mappings
 {
     public class RecipeMapperProfile : Profile
     {
@@ -8,6 +6,7 @@ namespace Smakoowa_Api.Mappings
         {
             CreateMap<RecipeRequestDto, Recipe>();
             CreateMap<Recipe, GetRecipeResponseDto>();
+            CreateMap<Recipe, GetDetailedRecipeResponseDto>();
         }
     }
 }

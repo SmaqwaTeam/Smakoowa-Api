@@ -29,5 +29,10 @@ namespace Smakoowa_Api.Services.MapperServices
             editedRecipe.CategoryId = editRecipeRequestDto.CategoryId;
             return editedRecipe;
         }
+
+        public GetDetailedRecipeResponseDto MapGetDetailedRecipeResponseDto(Recipe recipe)
+        {
+            return _mapper.Map<GetDetailedRecipeResponseDto>(recipe);
+        }
     }
 }

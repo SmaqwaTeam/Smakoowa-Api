@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-using System;
-
-namespace Smakoowa_Api.Services.ValidatorServices
+﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
     public class TagValidatorService : BaseValidatorService, ITagValidatorService
     {

@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
@@ -8,26 +6,33 @@ namespace Smakoowa_Api.Services
         private readonly IRecipeMapperService _recipeMapperService;
         private readonly IRecipeValidatorService _recipeValidatorService;
         private readonly IHelperService<RecipeService> _helperService;
-        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService,
-    IRecipeValidatorService recipeValidatorService, IHelperService<RecipeService> helperService)
+        private readonly IIngredientValidatorService _ingredientValidatorService;
+        private readonly IIngredientMapperService _ingredientMapperService;
+
+        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
+            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
             _recipeValidatorService = recipeValidatorService;
             _helperService = helperService;
+            _ingredientValidatorService = ingredientValidatorService;
+            _ingredientMapperService = ingredientMapperService;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
         {
-            var validationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
+            if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
+
+            var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
+            if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
 
             var recipe = _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
             try
             {
                 var createdRecipe = await _recipeRepository.Create(recipe);
-                if (createdRecipe == null) return ServiceResponse.Error("Failed to create recipe.");
                 return ServiceResponse.Success("Recipe created.");
             }
             catch (Exception ex)
@@ -57,10 +62,16 @@ namespace Smakoowa_Api.Services
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
-            var validationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
+            if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
+
+            var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
+            if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
 
             var updatedRecipe = _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipe);
+            var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(recipeRequestDto.Ingredients, recipeId);
+
+            updatedRecipe.Ingredients = mappedIngredients;
 
             try
             {
@@ -102,8 +113,20 @@ namespace Smakoowa_Api.Services
                 return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
             }
         }
+
+        public async Task<ServiceResponse> GetByIdDetailed(int recipeId)
+        {
+            try
+            {
+                var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
+                if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+                var getDetailedRecipeResponseDto = _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
+                return ServiceResponse<GetDetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
+            }
+        }
     }
 }
-
-
-

@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class CategoryService : ICategoryService
     {
@@ -27,8 +25,7 @@ namespace Smakoowa_Api.Services
 
             try
             {
-                var createdCategory = await _categoryRepository.Create(category);
-                if (createdCategory == null) return ServiceResponse.Error("Failed to create category.");
+                await _categoryRepository.Create(category);
                 return ServiceResponse.Success("Category created.");
             }
             catch (Exception ex)
