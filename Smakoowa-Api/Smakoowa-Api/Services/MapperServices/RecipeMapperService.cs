@@ -23,9 +23,9 @@ namespace Smakoowa_Api.Services.MapperServices
             return mappedRecipe;
         }
 
-        public GetRecipeResponseDto MapGetRecipeResponseDto(Recipe recipe)
+        public RecipeResponseDto MapGetRecipeResponseDto(Recipe recipe)
         {
-            return _mapper.Map<GetRecipeResponseDto>(recipe);
+            return _mapper.Map<RecipeResponseDto>(recipe);
         }
 
         public async Task<Recipe> MapEditRecipeRequestDto(RecipeRequestDto editRecipeRequestDto, Recipe editedRecipe)
@@ -45,9 +45,9 @@ namespace Smakoowa_Api.Services.MapperServices
             return editedRecipe;
         }
 
-        public GetDetailedRecipeResponseDto MapGetDetailedRecipeResponseDto(Recipe recipe)
+        public DetailedRecipeResponseDto MapGetDetailedRecipeResponseDto(Recipe recipe)
         {
-            return _mapper.Map<GetDetailedRecipeResponseDto>(recipe);
+            return _mapper.Map<DetailedRecipeResponseDto>(recipe);
         }
     }
 }

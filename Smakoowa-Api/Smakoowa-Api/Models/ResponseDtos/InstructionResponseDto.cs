@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Models.ResponseDtos
 {
-    public class GetInstructionResponseDto
+    public class InstructionResponseDto
     {
         public int Id { get; set; }
         public string Content { get; set; }

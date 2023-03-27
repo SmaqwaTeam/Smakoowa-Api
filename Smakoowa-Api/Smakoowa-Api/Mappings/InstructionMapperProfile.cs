@@ -5,7 +5,7 @@
         public InstructionMapperProfile()
         {
             CreateMap<InstructionRequestDto, Instruction>();
-            CreateMap<Instruction, GetInstructionResponseDto>();
+            CreateMap<Instruction, InstructionResponseDto>();
         }
     }
 }

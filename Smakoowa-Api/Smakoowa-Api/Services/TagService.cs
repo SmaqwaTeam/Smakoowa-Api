@@ -76,9 +76,9 @@
             try
             {
                 var tags = await _tagRepository.FindAll();
-                var getTagsResponseDto = new List<GetTagResponseDto>();
+                var getTagsResponseDto = new List<TagResponseDto>();
                 foreach (Tag tag in tags) getTagsResponseDto.Add(_tagMapperService.MapGetTagResponseDto(tag));
-                return ServiceResponse<List<GetTagResponseDto>>.Success(getTagsResponseDto, "Tags retrieved.");
+                return ServiceResponse<List<TagResponseDto>>.Success(getTagsResponseDto, "Tags retrieved.");
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@
                 if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
 
                 var getTagResponseDto = _tagMapperService.MapGetTagResponseDto(tag);
-                return ServiceResponse<GetTagResponseDto>.Success(getTagResponseDto, "Tag retrieved.");
+                return ServiceResponse<TagResponseDto>.Success(getTagResponseDto, "Tag retrieved.");
             }
             catch (Exception ex)
             {

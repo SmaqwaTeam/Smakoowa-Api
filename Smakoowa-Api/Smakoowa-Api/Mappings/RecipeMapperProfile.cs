@@ -5,9 +5,9 @@
         public RecipeMapperProfile()
         {
             CreateMap<RecipeRequestDto, Recipe>();
-            CreateMap<Recipe, GetRecipeResponseDto>()
+            CreateMap<Recipe, RecipeResponseDto>()
                 .AfterMap((src, dest) => dest.TagIds = src.Tags?.Select(t => t.Id).ToList());
-            CreateMap<Recipe, GetDetailedRecipeResponseDto>()
+            CreateMap<Recipe, DetailedRecipeResponseDto>()
                 .AfterMap((src, dest) => dest.TagIds = src.Tags?.Select(t => t.Id).ToList());
         }
     }

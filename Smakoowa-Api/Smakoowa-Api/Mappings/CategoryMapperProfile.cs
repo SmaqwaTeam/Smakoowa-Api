@@ -5,7 +5,7 @@
         public CategoryMapperProfile()
         {
             CreateMap<CategoryRequestDto, Category>();
-            CreateMap<Category, GetCategoryResponseDto>();
+            CreateMap<Category, CategoryResponseDto>();
         }
     }
 }

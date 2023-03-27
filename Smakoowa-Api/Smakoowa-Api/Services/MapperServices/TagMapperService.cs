@@ -16,9 +16,9 @@ namespace Smakoowa_Api.Services.MapperServices
             return _mapper.Map<Tag>(createTagRequestDto);
         }
 
-        public GetTagResponseDto MapGetTagResponseDto(Tag category)
+        public TagResponseDto MapGetTagResponseDto(Tag category)
         {
-            return _mapper.Map<GetTagResponseDto>(category);
+            return _mapper.Map<TagResponseDto>(category);
         }
 
         public Tag MapEditTagRequestDto(TagRequestDto editTagRequestDto, Tag editedTag)
