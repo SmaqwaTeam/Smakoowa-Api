@@ -5,7 +5,7 @@
         public TagMapperProfile()
         {
             CreateMap<TagRequestDto, Tag>();
-            CreateMap<Tag, GetTagResponseDto>();
+            CreateMap<Tag, TagResponseDto>();
         }
     }
 }

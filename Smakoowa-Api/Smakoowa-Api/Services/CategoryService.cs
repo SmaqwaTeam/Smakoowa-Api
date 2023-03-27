@@ -76,9 +76,9 @@
             try
             {
                 var categories = await _categoryRepository.FindAll();
-                var getCategoriesResponseDto = new List<GetCategoryResponseDto>();
+                var getCategoriesResponseDto = new List<CategoryResponseDto>();
                 foreach (Category category in categories) getCategoriesResponseDto.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
-                return ServiceResponse<List<GetCategoryResponseDto>>.Success(getCategoriesResponseDto, "Categories retrieved.");
+                return ServiceResponse<List<CategoryResponseDto>>.Success(getCategoriesResponseDto, "Categories retrieved.");
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@
                 if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
 
                 var getCategoryResponseDto = _categoryMapperService.MapGetCategoryResponseDto(category);
-                return ServiceResponse<GetCategoryResponseDto>.Success(getCategoryResponseDto, "Category retrieved.");
+                return ServiceResponse<CategoryResponseDto>.Success(getCategoryResponseDto, "Category retrieved.");
             }
             catch (Exception ex)
             {

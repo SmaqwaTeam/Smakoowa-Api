@@ -3,8 +3,8 @@
     public interface IRecipeMapperService
     {
         public Task<Recipe> MapCreateRecipeRequestDto(RecipeRequestDto recipeRequestDto);
-        public GetRecipeResponseDto MapGetRecipeResponseDto(Recipe recipe);
-        public GetDetailedRecipeResponseDto MapGetDetailedRecipeResponseDto(Recipe recipe);
+        public RecipeResponseDto MapGetRecipeResponseDto(Recipe recipe);
+        public DetailedRecipeResponseDto MapGetDetailedRecipeResponseDto(Recipe recipe);
         public Task<Recipe> MapEditRecipeRequestDto(RecipeRequestDto recipeRequestDto, Recipe editedRecipe);
     }
 }

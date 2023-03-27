@@ -20,9 +20,9 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
-                                              //.Include(r => r.Instructions)
-                                              //.Include(r => r.Likes)
-                                              //.Include(r => r.RecipeComments)
+                .Include(r => r.Instructions)
+                //.Include(r => r.Likes)
+                //.Include(r => r.RecipeComments)
                 .FirstOrDefaultAsync();
         }
 
@@ -41,7 +41,7 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
-                //.Include(r => r.Instructions)
+                .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
                 //.Include(r => r.RecipeComments)
                 .ToListAsync();
@@ -56,11 +56,10 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
-                //.Include(r => r.Instructions)
+                .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
                 //.Include(r => r.RecipeComments)
                 .ToListAsync();
         }
-
     }
 }

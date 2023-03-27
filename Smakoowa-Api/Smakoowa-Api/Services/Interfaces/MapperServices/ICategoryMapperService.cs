@@ -3,7 +3,7 @@
     public interface ICategoryMapperService
     {
         public Category MapCreateCategoryRequestDto(CategoryRequestDto categoryRequestDto);
-        public GetCategoryResponseDto MapGetCategoryResponseDto(Category category);
+        public CategoryResponseDto MapGetCategoryResponseDto(Category category);
         public Category MapEditCategoryRequestDto(CategoryRequestDto categoryRequestDto, Category editedCategory);
     }
 }

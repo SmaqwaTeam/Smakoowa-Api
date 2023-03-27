@@ -16,9 +16,9 @@ namespace Smakoowa_Api.Services.MapperServices
             return _mapper.Map<Category>(createCategoryRequestDto);
         }
 
-        public GetCategoryResponseDto MapGetCategoryResponseDto(Category category)
+        public CategoryResponseDto MapGetCategoryResponseDto(Category category)
         {
-            return _mapper.Map<GetCategoryResponseDto>(category);
+            return _mapper.Map<CategoryResponseDto>(category);
         }
 
         public Category MapEditCategoryRequestDto(CategoryRequestDto editCategoryRequestDto, Category editedCategory)

@@ -5,7 +5,7 @@
         public IngredientMapperProfile()
         {
             CreateMap<IngredientRequestDto, Ingredient>();
-            CreateMap<Ingredient, GetIngredientResponseDto>();
+            CreateMap<Ingredient, IngredientResponseDto>();
         }
     }
 }

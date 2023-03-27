@@ -1,10 +1,9 @@
 ﻿namespace Smakoowa_Api.Models.ResponseDtos
 {
-    public class GetIngredientResponseDto : IResponseDto
+    public class TagResponseDto : IResponseDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Position { get; set; }
-        public int Group { get; set; }
+        public TagType TagType { get; set; }
     }
 }
