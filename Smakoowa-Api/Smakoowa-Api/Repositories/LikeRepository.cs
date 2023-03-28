@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Likes;
-
-namespace Smakoowa_Api.Repositories
+﻿namespace Smakoowa_Api.Repositories
 {
     public class LikeRepository : BaseRepository<Like>, ILikeRepository
     {

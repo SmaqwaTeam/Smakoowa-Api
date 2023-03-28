@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Smakoowa_Api.Repositories
+﻿namespace Smakoowa_Api.Repositories
 {
     public class RecipeRepository : BaseRepository<Recipe>, IRecipeRepository
     {
@@ -22,7 +20,7 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
-                //.Include(r => r.RecipeComments)
+                .Include(r => r.RecipeComments)
                 .FirstOrDefaultAsync();
         }
 
@@ -43,7 +41,7 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
-                //.Include(r => r.RecipeComments)
+                .Include(r => r.RecipeComments)
                 .ToListAsync();
         }
 
@@ -58,7 +56,7 @@ namespace Smakoowa_Api.Repositories
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
-                //.Include(r => r.RecipeComments)
+                .Include(r => r.RecipeComments)
                 .ToListAsync();
         }
     }

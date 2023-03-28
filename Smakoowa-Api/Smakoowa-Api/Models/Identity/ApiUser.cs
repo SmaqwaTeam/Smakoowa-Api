@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Models.Identity
+﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
+
+namespace Smakoowa_Api.Models.Identity
 {
     public class ApiUser : IdentityUser<int>
     {

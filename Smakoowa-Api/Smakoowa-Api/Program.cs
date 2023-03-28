@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 using Smakoowa_Api.Services.MapperServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +38,10 @@ builder.Services.AddScoped(typeof(IInstructionRepository), typeof(InstructionRep
 builder.Services.AddScoped(typeof(IInstructionValidatorService), typeof(InstructionValidatorService));
 builder.Services.AddScoped(typeof(IInstructionMapperService), typeof(InstructionMapperService));
 
-
+builder.Services.AddScoped(typeof(IRecipeCommentRepository), typeof(RecipeCommentRepository));
+builder.Services.AddScoped(typeof(IRecipeCommentValidatorService), typeof(RecipeCommentValidatorService));
+builder.Services.AddScoped(typeof(IRecipeCommentMapperService), typeof(RecipeCommentMapperService));
+builder.Services.AddScoped(typeof(IRecipeCommentService), typeof(RecipeCommentService));
 
 var app = builder.Build();
 
@@ -46,7 +51,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler(c => c.Run(async context =>
+{
+    var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
+}));
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
