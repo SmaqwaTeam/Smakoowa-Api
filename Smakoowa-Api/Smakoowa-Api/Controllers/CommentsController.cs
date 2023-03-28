@@ -4,9 +4,9 @@
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        private readonly IRecipeCommentService _recipeCommentService;
+        private readonly ICommentService _recipeCommentService;
 
-        public CommentsController(IRecipeCommentService recipeCommentService)
+        public CommentsController(ICommentService recipeCommentService)
         {
             _recipeCommentService = recipeCommentService;
         }
@@ -17,34 +17,34 @@
             return await _recipeCommentService.AddRecipeComment(recipeCommentRequestDto, recipeId);
         }
 
-        [HttpPost("AddCommentReply/{commentId}")]
-        public async Task<ServiceResponse> AddCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentId)
+        [HttpPost("AddCommentReply/{commentReplyId}")]
+        public async Task<ServiceResponse> AddCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _recipeCommentService.AddCommentReply(commentReplyRequestDto, commentId);
+            return await _recipeCommentService.AddCommentReply(commentReplyRequestDto, commentReplyId);
         }
 
-        [HttpPut("EditRecipeComment/{commentId}")]
-        public async Task<ServiceResponse> EditRecipeComment([FromBody] RecipeCommentRequestDto recipeCommentRequestDto, int commentId)
+        [HttpPut("EditRecipeComment/{recipeCommentId}")]
+        public async Task<ServiceResponse> EditRecipeComment([FromBody] RecipeCommentRequestDto recipeCommentRequestDto, int recipeCommentId)
         {
-            return await _recipeCommentService.EditRecipeComment(recipeCommentRequestDto, commentId);
+            return await _recipeCommentService.EditRecipeComment(recipeCommentRequestDto, recipeCommentId);
         }
 
-        [HttpPut("EditCommentReply/{commentId}")]
-        public async Task<ServiceResponse> EditCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentId)
+        [HttpPut("EditCommentReply/{commentReplyId}")]
+        public async Task<ServiceResponse> EditCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _recipeCommentService.EditCommentReply(commentReplyRequestDto, commentId);
+            return await _recipeCommentService.EditCommentReply(commentReplyRequestDto, commentReplyId);
         }
 
-        [HttpDelete("DeleteRecipeComment/{commentId}")]
-        public async Task<ServiceResponse> DeleteRecipeComment(int commentId)
+        [HttpDelete("DeleteRecipeComment/{recipeCommentId}")]
+        public async Task<ServiceResponse> DeleteRecipeComment(int recipeCommentId)
         {
-            return await _recipeCommentService.DeleteRecipeComment(commentId);
+            return await _recipeCommentService.DeleteRecipeComment(recipeCommentId);
         }
 
-        [HttpDelete("DeleteCommentReply/{commentId}")]
-        public async Task<ServiceResponse> DeleteCommentReply(int commentId)
+        [HttpDelete("DeleteCommentReply/{commentReplyId}")]
+        public async Task<ServiceResponse> DeleteCommentReply(int commentReplyId)
         {
-            return await _recipeCommentService.DeleteCommentReply(commentId);
+            return await _recipeCommentService.DeleteCommentReply(commentReplyId);
         }
     }
 }

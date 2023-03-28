@@ -1,16 +1,18 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
+
+namespace Smakoowa_Api.Services
 {
-    public class RecipeCommentService : IRecipeCommentService
+    public class CommentService : ICommentService
     {
         private readonly IRecipeCommentRepository _recipeCommentRepository;
-        private readonly IRecipeCommentMapperService _recipeCommentMapperService;
-        private readonly IRecipeCommentValidatorService _recipeCommentValidatorService;
+        private readonly ICommentMapperService _recipeCommentMapperService;
+        private readonly ICommentValidatorService _recipeCommentValidatorService;
         private readonly ICommentReplyRepository _commentReplyRepository;
-        private readonly IHelperService<RecipeCommentService> _helperService;
+        private readonly IHelperService<CommentService> _helperService;
         private readonly IBaseRepository<Comment> _commentRepository;
 
-        public RecipeCommentService(IRecipeCommentValidatorService recipeCommentValidatorService, IRecipeCommentMapperService recipeCommentMapperService,
-            IRecipeCommentRepository recipeCommentRepository, IHelperService<RecipeCommentService> helperService, IBaseRepository<Comment> commentRepository,
+        public CommentService(ICommentValidatorService recipeCommentValidatorService, ICommentMapperService recipeCommentMapperService,
+            IRecipeCommentRepository recipeCommentRepository, IHelperService<CommentService> helperService, IBaseRepository<Comment> commentRepository,
             ICommentReplyRepository commentReplyRepository)
         {
             _recipeCommentValidatorService = recipeCommentValidatorService;
@@ -28,7 +30,7 @@
 
             var mappedRecipeComment = _recipeCommentMapperService.MapCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
 
-            return await AddCommentToDatabase(mappedRecipeComment);
+            return await AddComment(mappedRecipeComment);
         }
 
         public async Task<ServiceResponse> AddCommentReply(CommentReplyRequestDto commentReplyRequestDto, int commentId)
@@ -36,16 +38,16 @@
             var commentReplyValidationResult = await _recipeCommentValidatorService.ValidateCommentReplyRequestDto(commentReplyRequestDto, commentId);
             if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
 
-            var mappedRecipeComment = _recipeCommentMapperService.MapCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
+            var mappedCommentReply = _recipeCommentMapperService.MapCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
 
-            return await AddCommentToDatabase(mappedRecipeComment);
+            return await AddComment(mappedCommentReply);
         }
 
-        private async Task<ServiceResponse> AddCommentToDatabase(Comment mappedRecipeComment)
+        private async Task<ServiceResponse> AddComment(Comment mappedComment)
         {
             try
             {
-                await _commentRepository.Create(mappedRecipeComment);
+                await _commentRepository.Create(mappedComment);
                 return ServiceResponse.Success("Comment created.");
             }
             catch (Exception ex)
@@ -56,12 +58,12 @@
 
         public async Task<ServiceResponse> DeleteRecipeComment(int recipeCommentId)
         {
-            var comment = await _recipeCommentRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeCommentId);
-            if (comment == null) return ServiceResponse.Error($"Comment with id: {recipeCommentId} not found.");
+            var recipeCommentToDelete = await _recipeCommentRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeCommentId);
+            if (recipeCommentToDelete == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
 
             try
             {
-                await _recipeCommentRepository.Delete(comment);
+                await _recipeCommentRepository.Delete(recipeCommentToDelete);
                 return ServiceResponse.Success("Comment deleted.");
             }
             catch (Exception ex)
@@ -72,12 +74,12 @@
 
         public async Task<ServiceResponse> DeleteCommentReply(int commentReplyId)
         {
-            var comment = await _commentReplyRepository.FindByConditionsFirstOrDefault(c => c.Id == commentReplyId);
-            if (comment == null) return ServiceResponse.Error($"Comment with id: {commentReplyId} not found.");
-
+            var commentReplyToDelete = await _commentReplyRepository.FindByConditionsFirstOrDefault(c => c.Id == commentReplyId);
+            if (commentReplyToDelete == null) return ServiceResponse.Error($"Comment reply with id: {commentReplyId} not found.");
+            
             try
             {
-                await _commentRepository.Delete(comment);
+                await _commentReplyRepository.Delete(commentReplyToDelete);
                 return ServiceResponse.Success("Comment deleted.");
             }
             catch (Exception ex)
@@ -91,8 +93,8 @@
             var editedRecipeComment = await _recipeCommentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == recipeCommentId);
             if (editedRecipeComment == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
 
-            var validationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment.RecipeId);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            var recipeCommentValidationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment.RecipeId);
+            if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
             return await EditComment(recipeCommentRequestDto, editedRecipeComment);
         }
 
@@ -101,8 +103,8 @@
             var editedCommentReply = await _commentReplyRepository.FindByConditionsFirstOrDefault(rc => rc.Id == commentReplyId);
             if (editedCommentReply == null) return ServiceResponse.Error($"Comment reply with id: {commentReplyId} not found.");
 
-            var validationResult = await _recipeCommentValidatorService.ValidateCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply.RepliedCommentId);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            var commentReplyValidationResult = await _recipeCommentValidatorService.ValidateCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply.RepliedCommentId);
+            if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
             return await EditComment(commentReplyRequestDto, editedCommentReply);
         }
 

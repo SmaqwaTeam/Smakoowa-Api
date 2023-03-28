@@ -1,21 +1,17 @@
 ﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
-    public class RecipeCommentValidatorService : IRecipeCommentValidatorService
+    public class CommentValidatorService : ICommentValidatorService
     {
         private readonly IRecipeRepository _recipeRepository;
-        private readonly ICommentReplyRepository _commentReplyRepository;
         private readonly IRecipeCommentRepository _recipeCommentRepository;
-        private readonly IBaseRepository<Comment> _commentRepository;
         private readonly int MaxCommentContentLength;
         private readonly int MinCommentContentLength;
 
-        public RecipeCommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository, IBaseRepository<Comment> commentRepository, ICommentReplyRepository commentReplyRepository, IRecipeCommentRepository recipeCommentRepository)
+        public CommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository, IRecipeCommentRepository recipeCommentRepository)
         {
             MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MaxCommentContentLength").Value);
             MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MinCommentContentLength").Value);
             _recipeRepository = recipeRepository;
-            _commentRepository = commentRepository;
-            _commentReplyRepository = commentReplyRepository;
             _recipeCommentRepository = recipeCommentRepository;
         }
 

@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
-
-namespace Smakoowa_Api.Repositories.Interfaces
+﻿namespace Smakoowa_Api.Repositories.Interfaces
 {
     public interface ICommentReplyRepository : IBaseRepository<CommentReply>, IRepository
     {

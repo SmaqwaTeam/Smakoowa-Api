@@ -1,10 +1,10 @@
 ﻿namespace Smakoowa_Api.Services.MapperServices
 {
-    public class RecipeCommentMapperService : IRecipeCommentMapperService
+    public class CommentMapperService : ICommentMapperService
     {
         private readonly IMapper _mapper;
 
-        public RecipeCommentMapperService(IMapper mapper)
+        public CommentMapperService(IMapper mapper)
         {
             _mapper = mapper;
         }

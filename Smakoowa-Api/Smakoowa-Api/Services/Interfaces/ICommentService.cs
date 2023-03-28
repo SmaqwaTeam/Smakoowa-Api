@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.Interfaces
 {
-    public interface IRecipeCommentService
+    public interface ICommentService
     {
         public Task<ServiceResponse> AddRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId);
         public Task<ServiceResponse> AddCommentReply(CommentReplyRequestDto commentReplyRequestDto, int recipeCommentId);

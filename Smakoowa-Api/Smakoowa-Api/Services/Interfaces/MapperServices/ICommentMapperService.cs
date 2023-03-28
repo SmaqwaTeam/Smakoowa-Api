@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.Interfaces.MapperServices
 {
-    public interface IRecipeCommentMapperService
+    public interface ICommentMapperService
     {
         public RecipeComment MapCreateRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId);
         public CommentReply MapCreateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId);

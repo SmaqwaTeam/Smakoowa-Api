@@ -38,12 +38,11 @@ builder.Services.AddScoped(typeof(IInstructionValidatorService), typeof(Instruct
 builder.Services.AddScoped(typeof(IInstructionMapperService), typeof(InstructionMapperService));
 
 builder.Services.AddScoped(typeof(IRecipeCommentRepository), typeof(RecipeCommentRepository));
-builder.Services.AddScoped(typeof(IRecipeCommentValidatorService), typeof(RecipeCommentValidatorService));
-builder.Services.AddScoped(typeof(IRecipeCommentMapperService), typeof(RecipeCommentMapperService));
-builder.Services.AddScoped(typeof(IRecipeCommentService), typeof(RecipeCommentService));
+builder.Services.AddScoped(typeof(ICommentValidatorService), typeof(CommentValidatorService));
+builder.Services.AddScoped(typeof(ICommentMapperService), typeof(CommentMapperService));
+builder.Services.AddScoped(typeof(ICommentService), typeof(CommentService));
 
 builder.Services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyRepository));
-builder.Services.AddScoped(typeof(ICommentReplyService), typeof(CommentReplyService));
 builder.Services.AddScoped(typeof(IBaseRepository<CommentReply>), typeof(BaseRepository<CommentReply>));
 builder.Services.AddScoped(typeof(IBaseRepository<RecipeComment>), typeof(BaseRepository<RecipeComment>));
 
