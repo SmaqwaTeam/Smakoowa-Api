@@ -16,6 +16,7 @@ global using Smakoowa_Api.Models.Identity;
 global using Smakoowa_Api.Models.Interfaces;
 global using Smakoowa_Api.Models.RequestDtos;
 global using Smakoowa_Api.Models.ResponseDtos;
+global using Smakoowa_Api.Models.ResponseDtos.Auditables;
 global using Smakoowa_Api.Models.Services;
 global using Smakoowa_Api.Repositories;
 global using Smakoowa_Api.Repositories.Interfaces;

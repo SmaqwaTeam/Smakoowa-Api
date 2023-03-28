@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Models.ResponseDtos
 {
-    public class RecipeResponseDto : IResponseDto
+    public class RecipeResponseDto : UpdateableResponseDto, IResponseDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
