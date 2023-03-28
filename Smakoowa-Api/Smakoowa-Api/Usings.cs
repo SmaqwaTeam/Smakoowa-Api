@@ -9,6 +9,7 @@ global using ModernPantryBackend.Repositories;
 global using Smakoowa_Api.Data;
 global using Smakoowa_Api.Models.Auditables;
 global using Smakoowa_Api.Models.DatabaseModels;
+global using Smakoowa_Api.Models.DatabaseModels.Comments;
 global using Smakoowa_Api.Models.DatabaseModels.Likes;
 global using Smakoowa_Api.Models.Enums;
 global using Smakoowa_Api.Models.Identity;

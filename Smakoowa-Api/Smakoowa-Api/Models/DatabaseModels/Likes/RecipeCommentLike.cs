@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Models.DatabaseModels.Likes
+﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
+
+namespace Smakoowa_Api.Models.DatabaseModels.Likes
 {
     public class RecipeCommentLike : Like
     {

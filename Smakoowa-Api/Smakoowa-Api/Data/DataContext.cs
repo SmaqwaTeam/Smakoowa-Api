@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Data
+﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
+
+namespace Smakoowa_Api.Data
 {
     public class DataContext : IdentityDbContext<ApiUser, IdentityRole<int>, int>
     {

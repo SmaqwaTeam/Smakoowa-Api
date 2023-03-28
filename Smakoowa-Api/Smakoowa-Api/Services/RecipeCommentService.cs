@@ -2,29 +2,73 @@
 {
     public class RecipeCommentService : IRecipeCommentService
     {
-        public Task<ServiceResponse> Create(IRequestDto model)
+        private readonly IRecipeCommentRepository _recipeCommentRepository;
+        private readonly IRecipeCommentMapperService _recipeCommentMapperService;
+        private readonly IRecipeCommentValidatorService _recipeCommentValidatorService;
+        private readonly IHelperService<RecipeCommentService> _helperService;
+
+        public RecipeCommentService(IRecipeCommentValidatorService recipeCommentValidatorService, IRecipeCommentMapperService recipeCommentMapperService,
+            IRecipeCommentRepository recipeCommentRepository, IHelperService<RecipeCommentService> helperService)
         {
-            throw new NotImplementedException();
+            _recipeCommentValidatorService = recipeCommentValidatorService;
+            _recipeCommentMapperService = recipeCommentMapperService;
+            _recipeCommentRepository = recipeCommentRepository;
+            _helperService = helperService;
         }
 
-        public Task<ServiceResponse> Delete(int id)
+        public async Task<ServiceResponse> AddRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
         {
-            throw new NotImplementedException();
+            var recipeCommentValidationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
+            if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
+
+            var mappedRecipeComment = _recipeCommentMapperService.MapCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
+
+            try
+            {
+                await _recipeCommentRepository.Create(mappedRecipeComment);
+                return ServiceResponse.Success("Recipe comment created.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while creating a recipe comment.");
+            }
         }
 
-        public Task<ServiceResponse> Edit(IRequestDto model)
+        public async Task<ServiceResponse> DeleteRecipeComment(int recipeCommentId)
         {
-            throw new NotImplementedException();
+            var recipeComment = await _recipeCommentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == recipeCommentId);
+            if (recipeComment == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
+
+            try
+            {
+                await _recipeCommentRepository.Delete(recipeComment);
+                return ServiceResponse.Success("Recipe comment deleted.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while deleting a recipe comment.");
+            }
         }
 
-        public Task<ServiceResponse> GetAll()
+        public async Task<ServiceResponse> EditRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeCommentId)
         {
-            throw new NotImplementedException();
-        }
+            var editedRecipeComment = await _recipeCommentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == recipeCommentId);
+            if (editedRecipeComment == null) return ServiceResponse.Error($"RecipeComment with id: {recipeCommentId} not found.");
 
-        public Task<ServiceResponse> GetById(int id)
-        {
-            throw new NotImplementedException();
+            var validationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment.RecipeId);
+            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+
+            var updatedRecipeComment = _recipeCommentMapperService.MapEditRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
+
+            try
+            {
+                await _recipeCommentRepository.Edit(updatedRecipeComment);
+                return ServiceResponse.Success("Recipe comment edited.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while editing a recipe comment.");
+            }
         }
     }
 }

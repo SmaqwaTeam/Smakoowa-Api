@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services.MapperServices
+﻿namespace Smakoowa_Api.Services.MapperServices
 {
     public class CategoryMapperService : ICategoryMapperService
     {
