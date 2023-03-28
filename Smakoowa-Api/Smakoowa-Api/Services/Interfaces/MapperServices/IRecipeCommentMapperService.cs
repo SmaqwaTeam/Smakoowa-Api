@@ -3,6 +3,7 @@
     public interface IRecipeCommentMapperService
     {
         public RecipeComment MapCreateRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId);
-        public RecipeComment MapEditRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, RecipeComment editedRecipeComment);
+        public CommentReply MapCreateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId);
+        public Comment MapEditCommentRequestDto(CommentRequestDto commentRequestDto, Comment editedComment);
     }
 }

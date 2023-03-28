@@ -3,14 +3,20 @@
     public class RecipeCommentValidatorService : IRecipeCommentValidatorService
     {
         private readonly IRecipeRepository _recipeRepository;
-        private readonly int MaxContentLength;
-        private readonly int MinContentLength;
+        private readonly ICommentReplyRepository _commentReplyRepository;
+        private readonly IRecipeCommentRepository _recipeCommentRepository;
+        private readonly IBaseRepository<Comment> _commentRepository;
+        private readonly int MaxCommentContentLength;
+        private readonly int MinCommentContentLength;
 
-        public RecipeCommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository)
+        public RecipeCommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository, IBaseRepository<Comment> commentRepository, ICommentReplyRepository commentReplyRepository, IRecipeCommentRepository recipeCommentRepository)
         {
-            MaxContentLength = int.Parse(configuration.GetSection($"Validation:RecipeComment:MaxContentLength").Value);
-            MinContentLength = int.Parse(configuration.GetSection($"Validation:RecipeComment:MinContentLength").Value);
+            MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MaxCommentContentLength").Value);
+            MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MinCommentContentLength").Value);
             _recipeRepository = recipeRepository;
+            _commentRepository = commentRepository;
+            _commentReplyRepository = commentReplyRepository;
+            _recipeCommentRepository = recipeCommentRepository;
         }
 
         public async Task<ServiceResponse> ValidateRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
@@ -20,14 +26,29 @@
                 return ServiceResponse.Error($"A recipe with id: {recipeId} does not exist.");
             }
 
-            if (recipeCommentRequestDto.Content.Length < MinContentLength)
+            return ValidateCommentContent(recipeCommentRequestDto);
+        }
+
+        public async Task<ServiceResponse> ValidateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId)
+        {
+            if (!await _recipeCommentRepository.CheckIfExists(c => c.Id == commentId))
             {
-                return ServiceResponse.Error($"Recipe comment content must be min {MinContentLength} characters.");
+                return ServiceResponse.Error($"A comment with id: {commentId} does not exist.");
             }
 
-            if (recipeCommentRequestDto.Content.Length > MaxContentLength)
+            return ValidateCommentContent(commentReplyRequestDto);
+        }
+
+        private ServiceResponse ValidateCommentContent(CommentRequestDto commentRequestDto)
+        {
+            if (commentRequestDto.Content.Length < MinCommentContentLength)
             {
-                return ServiceResponse.Error($"Recipe comment content must be max {MaxContentLength} characters.");
+                return ServiceResponse.Error($"Comment content must be min {MinCommentContentLength} characters.");
+            }
+
+            if (commentRequestDto.Content.Length > MaxCommentContentLength)
+            {
+                return ServiceResponse.Error($"Comment content must be max {MaxCommentContentLength} characters.");
             }
 
             return ServiceResponse.Success();

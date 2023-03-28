@@ -21,12 +21,15 @@
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
                 .Include(r => r.RecipeComments)
+                .ThenInclude(a => a.CommentReplies)
                 .FirstOrDefaultAsync();
         }
 
         public override async Task Delete(Recipe recipe)
         {
             _context.RemoveRange(recipe.Ingredients);
+            foreach (var item in recipe.RecipeComments) _context.RemoveRange(item.CommentReplies);
+            _context.RemoveRange(recipe.RecipeComments);
             _context.Remove(recipe);
             await _context.SaveChangesAsync();
         }
@@ -42,6 +45,7 @@
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
                 .Include(r => r.RecipeComments)
+                .ThenInclude(a => a.CommentReplies)
                 .ToListAsync();
         }
 
@@ -57,6 +61,7 @@
                 .Include(r => r.Instructions)
                 //.Include(r => r.Likes)
                 .Include(r => r.RecipeComments)
+                .ThenInclude(a => a.CommentReplies)
                 .ToListAsync();
         }
     }

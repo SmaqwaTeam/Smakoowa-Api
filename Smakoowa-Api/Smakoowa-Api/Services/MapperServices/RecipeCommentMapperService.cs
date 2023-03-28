@@ -16,10 +16,17 @@
             return mappedRecipeComment;
         }
 
-        public RecipeComment MapEditRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, RecipeComment editedRecipeComment)
+        public CommentReply MapCreateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId)
         {
-            editedRecipeComment.Content = recipeCommentRequestDto.Content;
-            return editedRecipeComment;
+            var mappedCommentReply = _mapper.Map<CommentReply>(commentReplyRequestDto);
+            mappedCommentReply.RepliedCommentId = commentId;
+            return mappedCommentReply;
+        }
+
+        public Comment MapEditCommentRequestDto(CommentRequestDto commentRequestDto, Comment editedComment)
+        {
+            editedComment.Content = commentRequestDto.Content;
+            return editedComment;
         }
     }
 }
