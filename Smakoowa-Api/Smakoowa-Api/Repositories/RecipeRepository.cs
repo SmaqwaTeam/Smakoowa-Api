@@ -19,9 +19,9 @@
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
-                //.Include(r => r.Likes)
-                .Include(r => r.RecipeComments)
-                .ThenInclude(a => a.CommentReplies)
+                .Include(r => r.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(b => b.CommentReplies).ThenInclude(e => e.Likes)
                 .FirstOrDefaultAsync();
         }
 
@@ -43,9 +43,9 @@
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
-                //.Include(r => r.Likes)
-                .Include(r => r.RecipeComments)
-                .ThenInclude(a => a.CommentReplies)
+                .Include(r => r.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(b => b.CommentReplies).ThenInclude(e => e.Likes)
                 .ToListAsync();
         }
 
@@ -59,9 +59,9 @@
                 .Include(r => r.Tags)
                 .Include(r => r.Ingredients)  //to be implemented
                 .Include(r => r.Instructions)
-                //.Include(r => r.Likes)
-                .Include(r => r.RecipeComments)
-                .ThenInclude(a => a.CommentReplies)
+                .Include(r => r.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(b => b.CommentReplies).ThenInclude(e => e.Likes)
                 .ToListAsync();
         }
     }
