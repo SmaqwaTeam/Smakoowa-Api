@@ -3,6 +3,6 @@
     public class RecipeCommentResponseDto : CommentResponseDto
     {
         public List<CommentReplyResponseDto>? CommentReplies { get; set; }
-        //public virtual List<RecipeCommentLike>? RecipeCommentLikes { get; set; }
+        public List<LikeResponseDto> Likes { get; set; }
     }
 }

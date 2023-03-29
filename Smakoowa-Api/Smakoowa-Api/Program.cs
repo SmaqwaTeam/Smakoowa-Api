@@ -46,6 +46,13 @@ builder.Services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyR
 builder.Services.AddScoped(typeof(IBaseRepository<CommentReply>), typeof(BaseRepository<CommentReply>));
 builder.Services.AddScoped(typeof(IBaseRepository<RecipeComment>), typeof(BaseRepository<RecipeComment>));
 
+builder.Services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
+builder.Services.AddScoped(typeof(IRecipeLikeService), typeof(RecipeLikeService));
+builder.Services.AddScoped(typeof(IRecipeCommentLikeService), typeof(RecipeCommentLikeService));
+builder.Services.AddScoped(typeof(ICommentReplyLikeService), typeof(CommentReplyLikeService));
+builder.Services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
+
+builder.Services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
 
 var app = builder.Build();
 
