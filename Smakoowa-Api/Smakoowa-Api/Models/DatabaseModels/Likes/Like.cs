@@ -1,8 +1,8 @@
-﻿using Smakoowa_Api.Models.Auditables;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Smakoowa_Api.Models.DatabaseModels.Likes
 {
-    public abstract class Like : Creatable, IDbModel
+    public class Like : Creatable, ILike
     {
         public int Id { get; set; }
         public LikeableType LikeableType { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Data
+﻿using Smakoowa_Api.Models.Enums;
+
+namespace Smakoowa_Api.Data
 {
     public class DataContext : IdentityDbContext<ApiUser, IdentityRole<int>, int>
     {
@@ -115,19 +117,19 @@
                .HasForeignKey(l => l.CreatorId);
 
             modelBuilder.Entity<RecipeLike>()
-                .HasOne(l => l.Recipe)
+                .HasOne(l => l.LikedRecipe)
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.RecipeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CommentReplyLike>()
-                .HasOne(l => l.CommentReply)
+                .HasOne(l => l.LikedCommentReply)
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.CommentReplyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<RecipeCommentLike>()
-                .HasOne(l => l.RecipeComment)
+                .HasOne(l => l.LikedRecipeComment)
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.RecipeCommentId)
                 .OnDelete(DeleteBehavior.NoAction);
