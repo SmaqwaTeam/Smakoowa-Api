@@ -17,7 +17,7 @@
                 .Include(r => r.Creator)
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
-                .Include(r => r.Ingredients)  //to be implemented
+                .Include(r => r.Ingredients)  
                 .Include(r => r.Instructions)
                 .Include(r => r.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
@@ -41,7 +41,7 @@
                 .Include(r => r.Creator)
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
-                .Include(r => r.Ingredients)  //to be implemented
+                .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                 .Include(r => r.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
@@ -57,7 +57,7 @@
                 .Include(r => r.Creator)
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
-                .Include(r => r.Ingredients)  //to be implemented
+                .Include(r => r.Ingredients) 
                 .Include(r => r.Instructions)
                 .Include(r => r.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
