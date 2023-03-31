@@ -25,7 +25,7 @@ namespace Smakoowa_Api.Controllers
             return await _tagService.Delete(tagId);
         }
 
-        [HttpPut("Edit")]
+        [HttpPut("Edit/{tagId}")]
         public async Task<ServiceResponse> Edit([FromBody] TagRequestDto tagRequestDto, int tagId)
         {
             return await _tagService.Edit(tagRequestDto, tagId);
