@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Smakoowa_Api.Data;
 using Smakoowa_Api.Models.Interfaces;
-using Smakoowa_Api.Models.ResponseDtos;
 using Smakoowa_Api.Models.Services;
 using System.Linq.Expressions;
 using Xunit;
@@ -35,10 +34,11 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             await _context.SaveChangesAsync();
         }
 
-        protected async Task AddToDatabase(IDbModel model)
+        protected async Task<IDbModel> AddToDatabase(IDbModel model)
         {
-            await _context.AddAsync(model);
+            var addedModel = await _context.AddAsync(model);
             await _context.SaveChangesAsync();
+            return addedModel.Entity;
         }
 
         protected void AssertResponseSuccess(HttpResponseMessage response, ServiceResponse responseContent)

@@ -24,7 +24,7 @@
                 return validationResponse;
             }
 
-            if (recipeRequestDto.Description.Length > MaxDescriptionLength)
+            if (recipeRequestDto.Description?.Length > MaxDescriptionLength)
             {
                 return ServiceResponse.Error($"Description must be max {MaxDescriptionLength} characters.");
             }

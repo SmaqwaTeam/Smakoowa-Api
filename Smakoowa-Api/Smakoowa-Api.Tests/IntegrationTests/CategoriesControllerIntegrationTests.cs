@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Smakoowa_Api.Models.DatabaseModels;
 using Smakoowa_Api.Models.RequestDtos;
 using Smakoowa_Api.Models.ResponseDtos;
 using Smakoowa_Api.Models.Services;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 using Xunit;
 
@@ -133,7 +131,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             CategoryRequestDto CategoryRequestMinName = new CategoryRequestDto { Name = minName };
             CategoryRequestDto CategoryRequestMaxName = new CategoryRequestDto { Name = maxName };
 
-            await AddToDatabase(new List<Category>{ categoryMinName, categoryMaxName });
+            await AddToDatabase(new List<Category> { categoryMinName, categoryMaxName });
             var uneditedCategories = await FindInDatabaseByConditions<Category>(c => c.Name == minName || c.Name == maxName);
 
             string createUrl = $"/api/Categories/Create";

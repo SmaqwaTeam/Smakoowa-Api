@@ -15,7 +15,7 @@ namespace Smakoowa_Api.Services.MapperServices
         public async Task<Recipe> MapCreateRecipeRequestDto(RecipeRequestDto createRecipeRequestDto)
         {
             var mappedRecipe = _mapper.Map<Recipe>(createRecipeRequestDto);
-            if(createRecipeRequestDto.TagIds.Count() > 0)
+            if(createRecipeRequestDto.TagIds?.Count() > 0)
             {
                 var tags = await _tagRepository.FindByConditions(t => createRecipeRequestDto.TagIds.Contains(t.Id));
                 mappedRecipe.Tags = tags.ToList();
@@ -36,7 +36,7 @@ namespace Smakoowa_Api.Services.MapperServices
             editedRecipe.TimeToMakeTier = editRecipeRequestDto.TimeToMakeTier;
             editedRecipe.CategoryId = editRecipeRequestDto.CategoryId;
 
-            if (editRecipeRequestDto.TagIds.Count() > 0)
+            if (editRecipeRequestDto.TagIds?.Count() > 0)
             {
                 var tags = await _tagRepository.FindByConditions(t => editRecipeRequestDto.TagIds.Contains(t.Id));
                 editedRecipe.Tags = tags.ToList();
