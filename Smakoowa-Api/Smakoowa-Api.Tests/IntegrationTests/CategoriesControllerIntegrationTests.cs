@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Smakoowa_Api.Tests.IntegrationTests
 {
+    [Trait("Category", "Integration")]
     public class CategoriesControllerIntegrationTests : ControllerIntegrationTests
     {
         private readonly int MaxCategoryNameLength;
