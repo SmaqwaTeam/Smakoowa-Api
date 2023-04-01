@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Smakoowa_Api.Tests.IntegrationTests
 {
+    [Trait("Category", "Integration")]
     public class CommentsControllerIntegrationTests : ControllerIntegrationTests
     {
         public CommentsControllerIntegrationTests(CustomWebApplicationFactory<Program> fixture) : base(fixture)

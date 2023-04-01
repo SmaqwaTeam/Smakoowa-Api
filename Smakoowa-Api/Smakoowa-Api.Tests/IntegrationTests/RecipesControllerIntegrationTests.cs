@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Smakoowa_Api.Tests.IntegrationTests
 {
+    [Trait("Category", "Integration")]
     public class RecipesControllerIntegrationTests : ControllerIntegrationTests
     {
         private readonly int MaxRecipeNameLength;
