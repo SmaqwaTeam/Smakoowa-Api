@@ -1,0 +1,29 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Restore Dependencies
+      working-directory: ./Smakoowa-Api
+      run: dotnet restore
+
+    - name: Build Solution
+      working-directory: ./Smakoowa-Api
+      run: dotnet build --configuration Release
+
+    - name: Run Integration Tests
+      working-directory: ./Smakoowa-Api
+      run: dotnet test --filter Category=Integration
