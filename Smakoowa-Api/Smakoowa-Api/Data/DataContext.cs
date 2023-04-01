@@ -24,7 +24,7 @@ namespace Smakoowa_Api.Data
                 .AddJsonFile("appsettings.json")
                 .Build();
             var connectionString = configuration.GetConnectionString("SmakoowaApiDBConnection");
-            optionsBuilder.UseSqlServer(connectionString);
+            if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
