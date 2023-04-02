@@ -1,5 +1,8 @@
-﻿namespace Smakoowa_Api.Controllers
+﻿using Smakoowa_Api.Attributes;
+
+namespace Smakoowa_Api.Controllers
 {
+    [JwtAuthorize("User", "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase

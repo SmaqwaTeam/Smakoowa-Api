@@ -102,7 +102,9 @@ builder.Services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorSe
 
 builder.Services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
-builder.Services.AddIdentity<ApiUser, IdentityRole<int>>(opt =>
+builder.Services.AddScoped<RoleManager<ApiRole>>();
+
+builder.Services.AddIdentity<ApiUser, ApiRole>(opt =>
 {
     opt.Password.RequiredLength = 7;
     opt.Password.RequireDigit = true;

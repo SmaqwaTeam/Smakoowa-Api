@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Logging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +15,8 @@ namespace Smakoowa_Api.Services
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly IConfiguration _configuration;
 
-        public AccountService(IMapper mapper, UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, AuthenticationSettings authenticationSettings, IConfiguration configuration)
+        public AccountService(IMapper mapper, UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, 
+            AuthenticationSettings authenticationSettings, IConfiguration configuration)
         {
             _mapper = mapper;
             _userManager = userManager;
@@ -39,14 +41,21 @@ namespace Smakoowa_Api.Services
 
             var config = _configuration;
             var securityStamp = _userManager.GetSecurityStampAsync(user);
+            List<Claim> userRoles = new();
+            foreach(string role in await _userManager.GetRolesAsync(user))
+            {
+                userRoles.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role),
                 new Claim("AspNet.Identity.SecurityStamp", user.SecurityStamp),
             };
+            claims.AddRange(userRoles);
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtKey"]));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);

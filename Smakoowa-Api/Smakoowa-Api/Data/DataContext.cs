@@ -2,7 +2,7 @@
 
 namespace Smakoowa_Api.Data
 {
-    public class DataContext : IdentityDbContext<ApiUser, IdentityRole<int>, int>
+    public class DataContext : IdentityDbContext<ApiUser, ApiRole, int>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -32,8 +32,19 @@ namespace Smakoowa_Api.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ApiUser>().HasData(
-                new ApiUser { Id = 1, Email = "placeholder@test.com", PasswordHash = "123", UserName = "PlaceholderUser" }
+                new ApiUser { Id = 1, Email = "placeholderAdmin@test.com", PasswordHash = "123", UserName = "PlaceholderAdmin" },
+                new ApiUser { Id = 2, Email = "placeholderUser@test.com", PasswordHash = "123", UserName = "PlaceholderUser" }
             );
+
+            modelBuilder.Entity<ApiRole>().HasData(
+                new ApiRole { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+                new ApiRole { Id = 2, Name = "User", NormalizedName = "USER" }
+                );
+
+            modelBuilder.Entity<IdentityUserRole<int>>().HasData(
+                new IdentityUserRole<int> { RoleId = 1, UserId = 1 },
+                new IdentityUserRole<int> { RoleId = 2, UserId = 2 }
+                );
 
             modelBuilder.Entity<Category>().HasKey(c => c.Id);
 
