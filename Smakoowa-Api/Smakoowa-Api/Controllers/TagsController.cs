@@ -1,4 +1,5 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
+﻿using Smakoowa_Api.Attributes;
+using Smakoowa_Api.Models.RequestDtos;
 
 namespace Smakoowa_Api.Controllers
 {
@@ -13,6 +14,7 @@ namespace Smakoowa_Api.Controllers
             _tagService = tagService;
         }
 
+        [CustomAuthorization]
         [HttpPost("Create")]
         public async Task<ServiceResponse> Create([FromBody] TagRequestDto tagRequestDto)
         {

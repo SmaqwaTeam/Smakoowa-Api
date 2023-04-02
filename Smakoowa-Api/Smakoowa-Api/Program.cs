@@ -1,11 +1,59 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Smakoowa_Api.Services;
 using Smakoowa_Api.Services.MapperServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var authenticationSettings = new AuthenticationSettings();
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+builder.Services.AddSingleton(authenticationSettings);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Bearer";
+    options.DefaultScheme = "Bearer";
+    options.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"])),
+    };
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    var securitySchema = new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+    c.AddSecurityDefinition("Bearer", securitySchema);
+
+    var securityRequirement = new OpenApiSecurityRequirement();
+    securityRequirement.Add(securitySchema, new[] { "Bearer" });
+    c.AddSecurityRequirement(securityRequirement);
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -53,6 +101,18 @@ builder.Services.AddScoped(typeof(ICommentReplyLikeService), typeof(CommentReply
 builder.Services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
 
 builder.Services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
+builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+builder.Services.AddIdentity<ApiUser, IdentityRole<int>>(opt =>
+{
+    opt.Password.RequiredLength = 7;
+    opt.Password.RequireDigit = true;
+    opt.Password.RequireUppercase = true;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.User.RequireUniqueEmail = true;
+    opt.SignIn.RequireConfirmedEmail = false;
+}).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+
+configuration = builder.Configuration;
 
 var app = builder.Build();
 
@@ -75,4 +135,7 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program 
+{ 
+    public static IConfiguration configuration { get; private set; } 
+}
