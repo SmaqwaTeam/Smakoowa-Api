@@ -2,6 +2,7 @@
 {
     public interface IAccountService
     {
-        public Task<ServiceResponse> LoginUser([FromBody] LoginUserDto model);
+        public Task<ServiceResponse> LoginUser(LoginRequest model);
+        public Task<ServiceResponse> RegisterUser(RegisterRequest model);
     }
 }

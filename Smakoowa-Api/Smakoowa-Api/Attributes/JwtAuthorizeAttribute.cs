@@ -21,8 +21,7 @@ namespace Smakoowa_Api.Attributes
             var authHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             if (authHeader == null || !authHeader.StartsWith("Bearer "))
             {
-                context.Result = new Microsoft.AspNetCore.Mvc.UnauthorizedResult();
-                return;
+                throw new SecurityTokenValidationException("Unauthorized.");
             }
 
             var token = authHeader.Substring("Bearer ".Length);
@@ -45,9 +44,6 @@ namespace Smakoowa_Api.Attributes
                     return;
                 }
 
-                //var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                //var role = claimsPrincipal.FindFirst(ClaimTypes.Role)?.Value;
-
                 if (_roles.Length > 0)
                 {
                     var hasRole = false;
@@ -63,31 +59,13 @@ namespace Smakoowa_Api.Attributes
                     if (!hasRole)
                     {
                         throw new SecurityTokenValidationException("Unauthorized.");
-                        //context.Result = new ForbidResult();
-                        //return;
                     }
                 }
             }
             catch (Exception)
             {
                 throw new SecurityTokenValidationException("Unauthorized.");
-                //context.Result = new UnauthorizedResult();
-                //return;
             }
-
-            //    if (userId == null || (_role != null && role != _role))
-            //    {
-            //        throw new SecurityTokenException("User cannot access this method.");
-            //        //context.Result = new Microsoft.AspNetCore.Mvc.ForbidResult();
-            //        //return;
-            //    }
-            //}
-            //catch
-            //{
-            //    throw new SecurityTokenException("Unauthorized.");
-            //    //context.Result = new Microsoft.AspNetCore.Mvc.UnauthorizedResult();
-            //    //return;
-            //}
         }
     }
 }
