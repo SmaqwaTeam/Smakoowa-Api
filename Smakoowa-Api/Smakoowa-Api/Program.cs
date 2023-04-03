@@ -26,6 +26,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = false,
         ValidateAudience = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"])),
+        ValidateLifetime = false,
     };
 });
 
@@ -127,7 +128,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(c => c.Run(async context =>
 {
     var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+    if(exception is SecurityTokenValidationException) context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    else context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
 }));
 

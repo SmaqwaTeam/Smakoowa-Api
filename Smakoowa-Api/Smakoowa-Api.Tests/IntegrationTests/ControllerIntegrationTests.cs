@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
 using Smakoowa_Api.Data;
 using Smakoowa_Api.Models.Interfaces;
+using Smakoowa_Api.Models.RequestDtos;
 using Smakoowa_Api.Models.Services;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using Xunit;
 
 namespace Smakoowa_Api.Tests.IntegrationTests
@@ -20,6 +23,9 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             _HttpClient = fixture._httpClient;
             _context = fixture._context;
             _configuration = fixture._configuration;
+
+            string adminTestToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhY2Vob2xkZXJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InBsYWNlaG9sZGVyQWRtaW5AdGVzdC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzE4OC8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTg4LyIsImlhdCI6MTY4MDUzMjMyN30.HZOE3I64RIKKyvev47oMvzyWeqyz4Aewc2VzndfdxQs";
+            _HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminTestToken);
         }
 
         protected async Task<T> DeserializeResponse<T>(HttpResponseMessage response) where T : class

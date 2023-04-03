@@ -34,7 +34,7 @@ namespace Smakoowa_Api.Attributes
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
+                    ValidateLifetime = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Program.configuration["JwtKey"])),
                 };
                 var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
@@ -62,15 +62,17 @@ namespace Smakoowa_Api.Attributes
 
                     if (!hasRole)
                     {
-                        context.Result = new ForbidResult();
-                        return;
+                        throw new SecurityTokenValidationException("Unauthorized.");
+                        //context.Result = new ForbidResult();
+                        //return;
                     }
                 }
             }
             catch (Exception)
             {
-                context.Result = new UnauthorizedResult();
-                return;
+                throw new SecurityTokenValidationException("Unauthorized.");
+                //context.Result = new UnauthorizedResult();
+                //return;
             }
 
             //    if (userId == null || (_role != null && role != _role))
