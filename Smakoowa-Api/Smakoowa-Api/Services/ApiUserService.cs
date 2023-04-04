@@ -2,9 +2,16 @@
 {
     public class ApiUserService : IApiUserService
     {
-        public int GetCurrentUserId()
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public ApiUserService(IHttpContextAccessor contextAccessor)
         {
-            return 1;
+            _contextAccessor = contextAccessor;
+        }
+
+        public async Task<int?> GetCurrentUserId()
+        {
+            return int.Parse(Program.configuration["CurrentUserId"]);
         }
     }
 }

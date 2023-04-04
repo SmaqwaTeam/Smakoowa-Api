@@ -1,4 +1,5 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
+﻿using Smakoowa_Api.Attributes;
+using Smakoowa_Api.Models.RequestDtos;
 
 namespace Smakoowa_Api.Controllers
 {
@@ -13,18 +14,21 @@ namespace Smakoowa_Api.Controllers
             _categoryService = categoryService;
         }
 
+        [JwtAuthorize("Admin")]
         [HttpPost("Create")]
         public async Task<ServiceResponse> Create([FromBody] CategoryRequestDto categoryRequestDto)
         {
             return await _categoryService.Create(categoryRequestDto);
         }
 
+        [JwtAuthorize("Admin")]
         [HttpDelete("Delete/{categoryId}")]
         public async Task<ServiceResponse> Delete(int categoryId)
         {
             return await _categoryService.Delete(categoryId);
         }
 
+        [JwtAuthorize("Admin")]
         [HttpPut("Edit/{categoryId}")]
         public async Task<ServiceResponse> Edit([FromBody] CategoryRequestDto categoryRequestDto, int categoryId)
         {

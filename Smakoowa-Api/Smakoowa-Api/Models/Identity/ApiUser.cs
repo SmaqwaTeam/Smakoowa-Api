@@ -2,7 +2,7 @@
 
 namespace Smakoowa_Api.Models.Identity
 {
-    public class ApiUser : IdentityUser<int>
+    public class ApiUser : IdentityUser<int>, IDbModel
     {
         public virtual List<Recipe> Recipes { get; set; }
         public virtual List<RecipeComment> RecipeComments { get; set; }

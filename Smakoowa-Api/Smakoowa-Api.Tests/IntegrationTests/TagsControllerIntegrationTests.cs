@@ -3,6 +3,8 @@ using Smakoowa_Api.Models.DatabaseModels;
 using Smakoowa_Api.Models.RequestDtos;
 using Smakoowa_Api.Models.ResponseDtos;
 using Smakoowa_Api.Models.Services;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Xunit;
 
@@ -106,9 +108,16 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         {
             // Arrange
             var testTag = new Tag { Name = testName };
-            await AddToDatabase(testTag);
-            var uneditedTag = await FindInDatabaseByConditionsFirstOrDefault<Tag>(c => c.Name == testName);
-            string url = $"/api/Tags/Delete/{uneditedTag.Id}";
+            var tagToDelete = await AddToDatabase(testTag);
+            string url = $"/api/Tags/Delete/{tagToDelete.Id}";
+
+            // Act
+            var response = await _HttpClient.DeleteAsync(url);
+            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+
+            // Assert
+            AssertResponseSuccess(response, responseContent);
+            Assert.True(!await _context.Tags.AnyAsync(c => c.Id == tagToDelete.Id));
         }
 
         [Theory]

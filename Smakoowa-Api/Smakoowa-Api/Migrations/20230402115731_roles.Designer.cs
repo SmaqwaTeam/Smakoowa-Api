@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smakoowa_Api.Data;
 
@@ -11,9 +12,11 @@ using Smakoowa_Api.Data;
 namespace Smakoowa_Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230402115731_roles")]
+    partial class roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -494,16 +497,14 @@ namespace Smakoowa_Api.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b4e18a37-0650-479f-9b42-8f4e4a0469e9",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            ConcurrencyStamp = "b90cb068-5cdf-4deb-af7a-cb1e4324b29e",
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "0776b492-a223-4946-be8c-048a7f4fe4a3",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            ConcurrencyStamp = "5f20fd1c-6433-4a4c-8ec2-77f178038678",
+                            Name = "User"
                         });
                 });
 
@@ -579,9 +580,11 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8256c57-6202-4366-9024-1fd651155728",
+                            ConcurrencyStamp = "78858c04-50bf-4392-9e0e-24c33bdd784b",
+                            Email = "placeholderAdmin@test.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
+                            PasswordHash = "123",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "PlaceholderAdmin"
@@ -590,9 +593,11 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6349eb2c-a4bd-4d13-a974-94b65df60d12",
+                            ConcurrencyStamp = "3e8a6eb5-2eea-40d1-a4d3-16c7ef4a625e",
+                            Email = "placeholderUser@test.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
+                            PasswordHash = "123",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "PlaceholderUser"

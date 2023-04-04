@@ -104,10 +104,17 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         public async Task TestDelete(string testName)
         {
             // Arrange
-            var testRecipe = new Recipe { Name = testName };
-            await AddToDatabase(testRecipe);
-            var uneditedRecipe = await FindInDatabaseByConditionsFirstOrDefault<Recipe>(c => c.Name == testName);
-            string url = $"/api/Recipes/Delete/{uneditedRecipe.Id}";
+            var testRecipe = await GetRecipe(testName);
+            var recipeToDelete = await AddToDatabase(testRecipe);
+            string url = $"/api/Recipes/Delete/{recipeToDelete.Id}";
+
+            // Act
+            var response = await _HttpClient.DeleteAsync(url);
+            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+
+            // Assert
+            AssertResponseSuccess(response, responseContent);
+            Assert.True(!await _context.Recipes.AnyAsync(c => c.Id == recipeToDelete.Id));
         }
 
         [Theory]
