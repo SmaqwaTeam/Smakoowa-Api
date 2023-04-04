@@ -14,7 +14,7 @@
         [HttpPost("Register")]
         public async Task<ServiceResponse> RegisterUser([FromBody] RegisterRequest model)
         {
-            return await RegisterUser(model);
+            return await _accountService.RegisterUser(model);
         }
 
         [HttpPost("Login")]

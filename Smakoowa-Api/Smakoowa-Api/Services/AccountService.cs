@@ -51,7 +51,6 @@ namespace Smakoowa_Api.Services
                 userRoles.Add(new Claim(ClaimTypes.Role, role));
             }
             claims.AddRange(userRoles);
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);

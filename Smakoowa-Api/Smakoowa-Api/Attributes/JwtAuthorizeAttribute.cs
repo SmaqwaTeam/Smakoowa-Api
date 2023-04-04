@@ -60,6 +60,15 @@ namespace Smakoowa_Api.Attributes
                     {
                         throw new SecurityTokenValidationException("Unauthorized.");
                     }
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var claims = handler.ReadJwtToken(token).Claims;
+
+                    var userIdClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                    if (userIdClaim != null)
+                    {
+                        Program.configuration["CurrentUserId"] = userIdClaim.Value;
+                    }
                 }
             }
             catch (Exception)

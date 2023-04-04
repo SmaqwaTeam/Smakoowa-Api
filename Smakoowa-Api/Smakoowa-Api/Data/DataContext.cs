@@ -1,10 +1,13 @@
-﻿using Smakoowa_Api.Models.Enums;
-
-namespace Smakoowa_Api.Data
+﻿namespace Smakoowa_Api.Data
 {
     public class DataContext : IdentityDbContext<ApiUser, ApiRole, int>
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        private readonly IApiUserService _apiUserService;
+
+        public DataContext(DbContextOptions<DataContext> options, IApiUserService apiUserService) : base(options)
+        {
+            _apiUserService = apiUserService;
+        }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<CommentReply> CommentReplies { get; set; }
@@ -32,8 +35,8 @@ namespace Smakoowa_Api.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ApiUser>().HasData(
-                new ApiUser { Id = 1, Email = "placeholderAdmin@test.com", PasswordHash = "123", UserName = "PlaceholderAdmin" },
-                new ApiUser { Id = 2, Email = "placeholderUser@test.com", PasswordHash = "123", UserName = "PlaceholderUser" }
+                new ApiUser { Id = 1, UserName = "PlaceholderAdmin" },
+                new ApiUser { Id = 2, UserName = "PlaceholderUser" }
             );
 
             modelBuilder.Entity<ApiRole>().HasData(
@@ -148,13 +151,14 @@ namespace Smakoowa_Api.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            int userId = 1;
+            var currentUserId = await _apiUserService.GetCurrentUserId();
+
             foreach (EntityEntry<Creatable> entry in ChangeTracker.Entries<Creatable>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatorId = userId;
+                        entry.Entity.CreatorId = currentUserId;
                         entry.Entity.CreatedAt = DateTime.UtcNow;
                         break;
                 }
@@ -165,7 +169,7 @@ namespace Smakoowa_Api.Data
                 switch (entry.State)
                 {
                     case EntityState.Modified:
-                        entry.Entity.UpdaterId = userId;
+                        entry.Entity.UpdaterId = currentUserId;
                         entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                 }

@@ -33,7 +33,7 @@
                 return ServiceResponse.Error($"Comment reply with id: {commentReplyId} does not exist.");
             }
 
-            if (await _commentReplyLikeRepository.CheckIfExists(l => l.CommentReplyId == commentReplyId && l.CreatorId == _apiUserService.GetCurrentUserId()))
+            if (await _commentReplyLikeRepository.CheckIfExists(l => l.CommentReplyId == commentReplyId && l.CreatorId == _apiUserService.GetCurrentUserId().Result))
             {
                 return ServiceResponse.Error($"Comment reply with id: {commentReplyId} is already liked by current user.");
             }
@@ -48,7 +48,7 @@
                 return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} does not exist.");
             }
 
-            if (await _recipeCommentLikeRepository.CheckIfExists(l => l.RecipeCommentId == recipeCommentId && l.CreatorId == _apiUserService.GetCurrentUserId()))
+            if (await _recipeCommentLikeRepository.CheckIfExists(l => l.RecipeCommentId == recipeCommentId && l.CreatorId == _apiUserService.GetCurrentUserId().Result))
             {
                 return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} is already liked by current user.");
             }
@@ -63,7 +63,8 @@
                 return ServiceResponse.Error($"Recipe with id: {recipeId} does not exist.");
             }
 
-            if (await _recipeLikeRepository.CheckIfExists(l => l.RecipeId == recipeId && l.CreatorId == _apiUserService.GetCurrentUserId()))
+            var lik = await _recipeLikeRepository.FindByConditionsFirstOrDefault(l => l.CreatorId == _apiUserService.GetCurrentUserId().Result);
+            if (await _recipeLikeRepository.CheckIfExists(l => l.RecipeId == recipeId && l.CreatorId == _apiUserService.GetCurrentUserId().Result))
             {
                 return ServiceResponse.Error($"Recipe with id: {recipeId} is already liked by current user.");
             }
