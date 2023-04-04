@@ -51,5 +51,12 @@ namespace Smakoowa_Api.Controllers
         {
             return await _recipeService.GetByIdDetailed(recipeId);
         }
+
+        [JwtAuthorize("User", "Admin")]
+        [HttpGet("GetCurrentUsersRecipes")]
+        public async Task<ServiceResponse> GetCurrentUsersRecipes()
+        {
+            return await _recipeService.GetCurrentUsersRecipes();
+        }
     }
 }

@@ -10,10 +10,11 @@
         private readonly IIngredientMapperService _ingredientMapperService;
         private readonly IInstructionValidatorService _instructionValidatorService;
         private readonly IInstructionMapperService _instructionMapperService;
+        private readonly IApiUserService _apiUserService;
 
-        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService, 
-            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService, 
-            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService)
+        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
+            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -23,6 +24,7 @@
             _ingredientMapperService = ingredientMapperService;
             _instructionValidatorService = instructionValidatorService;
             _instructionMapperService = instructionMapperService;
+            _apiUserService = apiUserService;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
@@ -139,6 +141,22 @@
             catch (Exception ex)
             {
                 return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
+            }
+        }
+
+        public async Task<ServiceResponse> GetCurrentUsersRecipes()
+        {
+            var userId = await _apiUserService.GetCurrentUserId();
+            try
+            {
+                var recipes = await _recipeRepository.FindByConditions(r => r.CreatorId == userId);
+                var getRecipesResponseDto = new List<RecipeResponseDto>();
+                foreach (Recipe recipe in recipes) getRecipesResponseDto.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
+                return ServiceResponse<List<RecipeResponseDto>>.Success(getRecipesResponseDto, "Recipes retrieved.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
             }
         }
     }
