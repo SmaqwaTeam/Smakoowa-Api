@@ -146,7 +146,7 @@
 
         public async Task<ServiceResponse> GetCurrentUsersRecipes()
         {
-            var userId = await _apiUserService.GetCurrentUserId();
+            var userId = _apiUserService.GetCurrentUserId();
             try
             {
                 var recipes = await _recipeRepository.FindByConditions(r => r.CreatorId == userId);

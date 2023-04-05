@@ -9,7 +9,7 @@
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<int?> GetCurrentUserId()
+        public int GetCurrentUserId()
         {
             return int.Parse(Program.configuration["CurrentUserId"]);
         }
