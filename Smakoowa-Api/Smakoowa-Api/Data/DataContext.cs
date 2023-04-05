@@ -1,4 +1,7 @@
-﻿namespace Smakoowa_Api.Data
+﻿using Smakoowa_Api.Data.Configurations;
+using Smakoowa_Api.Data.DatabaseSeeds;
+
+namespace Smakoowa_Api.Data
 {
     public class DataContext : IdentityDbContext<ApiUser, ApiRole, int>
     {
@@ -34,124 +37,27 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApiUser>().HasData(
-                new ApiUser { Id = 1, UserName = "PlaceholderAdmin" },
-                new ApiUser { Id = 2, UserName = "PlaceholderUser" }
-            );
+            UserSeed.SeedUsers(modelBuilder);
+            TagSeed.SeedTags(modelBuilder);
+            CategorySeed.SeedCategories(modelBuilder);
 
-            modelBuilder.Entity<ApiRole>().HasData(
-                new ApiRole { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
-                new ApiRole { Id = 2, Name = "User", NormalizedName = "USER" }
-                );
+            CategoryConfiguration.ConfigureCategories(modelBuilder);
+            RecipeConfiguration.ConfigureRecipe(modelBuilder);
+            IngredientConfiguration.ConfigureIngredient(modelBuilder);
+            InstructionConfiguration.ConfigureInstruction(modelBuilder);
+            TagConfiguration.ConfigureTag(modelBuilder);
 
-            modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-                new IdentityUserRole<int> { RoleId = 1, UserId = 1 },
-                new IdentityUserRole<int> { RoleId = 2, UserId = 2 }
-                );
+            RecipeCommentConfiguration.ConfigureRecipeComment(modelBuilder);
+            CommentReplyConfiguration.ConfigureCommentReply(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<Recipe>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<CommentReply>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<Ingredient>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<Instruction>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<RecipeLike>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<CommentReplyLike>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<RecipeCommentLike>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<RecipeComment>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<Tag>().HasKey(c => c.Id);
-
-            modelBuilder.Entity<Recipe>()
-                .HasOne(r => r.Category)
-                .WithMany(c => c.Recipes)
-                .HasForeignKey(c => c.CategoryId);
-
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.Instructions)
-                .WithOne(i => i.Recipe)
-                .HasForeignKey(i => i.RecipeId);
-
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.Ingredients)
-                .WithOne(i => i.Recipe)
-                .HasForeignKey(i => i.RecipeId);
-
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.RecipeComments)
-                .WithOne(c => c.Recipe)
-                .HasForeignKey(c => c.RecipeId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.Tags)
-                .WithMany(t => t.Recipes);
-
-            modelBuilder.Entity<Recipe>()
-                .HasOne(r => r.Creator)
-                .WithMany(c => c.Recipes)
-                .HasForeignKey(r => r.CreatorId);
-
-            modelBuilder.Entity<RecipeComment>()
-                .HasMany(r => r.CommentReplies)
-                .WithOne(c => c.RepliedComment)
-                .HasForeignKey(c => c.RepliedCommentId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<RecipeComment>()
-                .HasOne(r => r.Creator)
-                .WithMany(c => c.RecipeComments)
-                .HasForeignKey(c => c.CreatorId);
-
-            modelBuilder.Entity<CommentReply>()
-               .HasOne(r => r.Creator)
-               .WithMany(c => c.CommentReplies)
-               .HasForeignKey(c => c.CreatorId);
-
-            modelBuilder.Entity<RecipeLike>()
-               .HasOne(r => r.Creator)
-               .WithMany(c => c.RecipeLikes)
-               .HasForeignKey(l => l.CreatorId);
-
-            modelBuilder.Entity<CommentReplyLike>()
-               .HasOne(r => r.Creator)
-               .WithMany(c => c.CommentReplyLikes)
-               .HasForeignKey(l => l.CreatorId);
-
-            modelBuilder.Entity<RecipeCommentLike>()
-               .HasOne(r => r.Creator)
-               .WithMany(c => c.RecipeCommentLikes)
-               .HasForeignKey(l => l.CreatorId);
-
-            modelBuilder.Entity<RecipeLike>()
-                .HasOne(l => l.LikedRecipe)
-                .WithMany(r => r.Likes)
-                .HasForeignKey(l => l.RecipeId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<CommentReplyLike>()
-                .HasOne(l => l.LikedCommentReply)
-                .WithMany(r => r.Likes)
-                .HasForeignKey(l => l.CommentReplyId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<RecipeCommentLike>()
-                .HasOne(l => l.LikedRecipeComment)
-                .WithMany(r => r.Likes)
-                .HasForeignKey(l => l.RecipeCommentId)
-                .OnDelete(DeleteBehavior.NoAction);
+            RecipeLikeConfiguration.ConfigureRecipeLike(modelBuilder);
+            RecipeCommentLikeConfiguration.ConfigureRecipeCommentLike(modelBuilder);
+            CommentReplyLikeConfiguration.ConfigureCommentReplyLike(modelBuilder);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            var currentUserId = await _apiUserService.GetCurrentUserId();
+            var currentUserId = _apiUserService.GetCurrentUserId();
 
             foreach (EntityEntry<Creatable> entry in ChangeTracker.Entries<Creatable>())
             {

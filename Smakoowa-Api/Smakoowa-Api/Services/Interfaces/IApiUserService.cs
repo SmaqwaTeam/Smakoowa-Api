@@ -2,6 +2,6 @@
 {
     public interface IApiUserService
     {
-        public Task<int?> GetCurrentUserId();
+        public int GetCurrentUserId();
     }
 }
