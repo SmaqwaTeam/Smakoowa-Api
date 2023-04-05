@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels;
-using System.Diagnostics;
-using System.Linq.Expressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Smakoowa_Api.Services
 {
@@ -171,7 +169,6 @@ namespace Smakoowa_Api.Services
 
         public async Task<ServiceResponse> GetRecipesByTagIds(List<int> tagIds)
         {
-            //return await GetRecipesByConditions(c => c.Tags?.Any(t => tagIds.Contains(t.Id)));
             return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => tagIds.Contains(s)));
         }
 
@@ -190,6 +187,11 @@ namespace Smakoowa_Api.Services
             {
                 return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
             }
-}
+        }
+
+        public async Task<ServiceResponse> SearchRecipesByName(string querry)
+        {
+            return await GetRecipesByConditions(r => r.Name.ToLower().Contains(querry.ToLower()));
+        }
     }
 }
