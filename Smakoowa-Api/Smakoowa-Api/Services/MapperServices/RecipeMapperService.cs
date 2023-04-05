@@ -41,6 +41,7 @@ namespace Smakoowa_Api.Services.MapperServices
                 var tags = await _tagRepository.FindByConditions(t => editRecipeRequestDto.TagIds.Contains(t.Id));
                 editedRecipe.Tags = tags.ToList();
             }
+            else editedRecipe.Tags = null;
 
             return editedRecipe;
         }

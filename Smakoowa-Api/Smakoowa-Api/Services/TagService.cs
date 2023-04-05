@@ -1,4 +1,7 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Models.DatabaseModels;
+using Smakoowa_Api.Models.Enums;
+
+namespace Smakoowa_Api.Services
 {
     public class TagService : ITagService
     {
@@ -99,6 +102,32 @@
             catch (Exception ex)
             {
                 return _helperService.HandleException(ex, "Something went wrong while accessing the tag.");
+            }
+        }
+
+        public async Task<ServiceResponse> GetByIds(List<int> tagIds)
+        {
+            return await GetByConditions(t => tagIds.Contains(t.Id));
+        }
+
+        public async Task<ServiceResponse> GetByType(TagType tagType)
+        {
+            return await GetByConditions(t => t.TagType == tagType);
+        }
+
+        private async Task<ServiceResponse> GetByConditions(Expression<Func<Tag, bool>> expresion)
+        {
+            try
+            {
+                var tags = await _tagRepository.FindByConditions(expresion);
+
+                List<TagResponseDto> getTagResponseDtos = new();
+                foreach(var tag in tags) getTagResponseDtos.Add(_tagMapperService.MapGetTagResponseDto(tag));
+                return ServiceResponse<List<TagResponseDto>>.Success(getTagResponseDtos, "Tags retrieved.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while accessing the tags.");
             }
         }
     }

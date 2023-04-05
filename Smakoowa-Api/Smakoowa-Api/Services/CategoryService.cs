@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services
+﻿using System.Linq.Expressions;
+
+namespace Smakoowa_Api.Services
 {
     public class CategoryService : ICategoryService
     {
@@ -99,6 +101,22 @@
             catch (Exception ex)
             {
                 return _helperService.HandleException(ex, "Something went wrong while accessing the category.");
+            }
+        }
+
+        public async Task<ServiceResponse> GetByIds(List<int> categoryIds)
+        {
+            try
+            {
+                var categories = await _categoryRepository.FindByConditions(c => categoryIds.Contains(c.Id));
+
+                List<CategoryResponseDto> getCategoryResponseDtos = new();
+                foreach (var category in categories) getCategoryResponseDtos.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
+                return ServiceResponse<List<CategoryResponseDto>>.Success(getCategoryResponseDtos, "Categories retrieved.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while accessing the Categories.");
             }
         }
     }

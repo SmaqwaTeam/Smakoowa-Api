@@ -63,7 +63,6 @@
                 return ServiceResponse.Error($"Recipe with id: {recipeId} does not exist.");
             }
 
-            var lik = await _recipeLikeRepository.FindByConditionsFirstOrDefault(l => l.CreatorId == _apiUserService.GetCurrentUserId());
             if (await _recipeLikeRepository.CheckIfExists(l => l.RecipeId == recipeId && l.CreatorId == _apiUserService.GetCurrentUserId()))
             {
                 return ServiceResponse.Error($"Recipe with id: {recipeId} is already liked by current user.");

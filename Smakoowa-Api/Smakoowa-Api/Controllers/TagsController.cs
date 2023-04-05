@@ -46,6 +46,18 @@ namespace Smakoowa_Api.Controllers
         {
             return await _tagService.GetById(tagId);
         }
+
+        [HttpGet("GetByIds")]
+        public async Task<ServiceResponse> GetByIds([FromQuery] int[] tagIds)
+        {
+            return await _tagService.GetByIds(tagIds.ToList());
+        }
+
+        [HttpGet("GetByType")]
+        public async Task<ServiceResponse> GetByType(TagType tagType)
+        {
+            return await _tagService.GetByType(tagType);
+        }
     }
 }
 

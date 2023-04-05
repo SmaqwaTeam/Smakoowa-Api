@@ -58,5 +58,23 @@ namespace Smakoowa_Api.Controllers
         {
             return await _recipeService.GetCurrentUsersRecipes();
         }
+
+        [HttpGet("GetRecipesByTagIds")]
+        public async Task<ServiceResponse> GetRecipesByTagIds([FromQuery] int[] tagIds)
+        {
+            return await _recipeService.GetRecipesByTagIds(tagIds.ToList());
+        }
+
+        [HttpGet("GetRecipesByCategoryId")]
+        public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId)
+        {
+            return await _recipeService.GetRecipesByCategoryId(categoryId);
+        }
+
+        [HttpGet("SearchRecipesByName")]
+        public async Task<ServiceResponse> SearchRecipesByName(string querry)
+        {
+            return await _recipeService.SearchRecipesByName(querry);
+        }
     }
 }
