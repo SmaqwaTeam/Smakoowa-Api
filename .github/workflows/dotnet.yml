@@ -25,5 +25,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Run Integration Tests
+      env:
+        JwtKey: ${{ secrets.JwtKey }}
       working-directory: ./Smakoowa-Api
-      run: dotnet test --filter Category=Integration --my-secret=${{ secrets.JwtKey }}
+      run: dotnet test --filter Category=Integration
