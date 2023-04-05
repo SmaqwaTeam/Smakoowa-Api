@@ -1,4 +1,8 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Models.DatabaseModels;
+using System.Diagnostics;
+using System.Linq.Expressions;
+
+namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
@@ -159,5 +163,33 @@
                 return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
             }
         }
+
+        public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId)
+        {
+            return await GetRecipesByConditions(r => r.CategoryId == categoryId);
+        }
+
+        public async Task<ServiceResponse> GetRecipesByTagIds(List<int> tagIds)
+        {
+            //return await GetRecipesByConditions(c => c.Tags?.Any(t => tagIds.Contains(t.Id)));
+            return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => tagIds.Contains(s)));
+        }
+
+        public async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
+        {
+            try
+            {
+                var recipes = await _recipeRepository.FindByConditions(expresion);
+
+                List<RecipeResponseDto> recipeResponseDtos = new();
+                foreach (var recipe in recipes) recipeResponseDtos.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
+
+                return ServiceResponse<List<RecipeResponseDto>>.Success(recipeResponseDtos, "Recipes retrieved.");
+            }
+            catch (Exception ex)
+            {
+                return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
+            }
+}
     }
 }

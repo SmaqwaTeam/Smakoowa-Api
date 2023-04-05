@@ -6,5 +6,7 @@ namespace Smakoowa_Api.Services.Interfaces
     {
         public Task<ServiceResponse> GetByIdDetailed(int recipeId);
         public Task<ServiceResponse> GetCurrentUsersRecipes();
+        public Task<ServiceResponse> GetRecipesByTagIds(List<int> tagIds);
+        public Task<ServiceResponse> GetRecipesByCategoryId(int categoryId);
     }
 }
