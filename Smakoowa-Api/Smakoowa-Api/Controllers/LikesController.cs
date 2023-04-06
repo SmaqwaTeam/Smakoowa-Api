@@ -45,22 +45,22 @@ namespace Smakoowa_Api.Controllers
             return await _tagLikeService.AddTagLike(tagId);
         }
 
-        [HttpDelete("RemoveRecipeLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveRecipeLike(int likeId)
+        [HttpDelete("RemoveRecipeLike/{recipeId}")]
+        public async Task<ServiceResponse> RemoveRecipeLike(int recipeId)
         {
-            return await _recipeLikeService.RemoveRecipeLike(likeId);
+            return await _recipeLikeService.RemoveRecipeLike(recipeId);
         }
 
-        [HttpDelete("RemoveRecipeCommentLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveRecipeCommentLike(int likeId)
+        [HttpDelete("RemoveRecipeCommentLike/{recipeCommentId}")]
+        public async Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId)
         {
-            return await _recipeCommentLikeService.RemoveRecipeCommentLike(likeId);
+            return await _recipeCommentLikeService.RemoveRecipeCommentLike(recipeCommentId);
         }
 
-        [HttpDelete("RemoveCommentReplyLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveCommentReplyLike(int likeId)
+        [HttpDelete("RemoveCommentReplyLike/{commentReplyId}")]
+        public async Task<ServiceResponse> RemoveCommentReplyLike(int commentReplyId)
         {
-            return await _commentReplyLikeService.RemoveCommentReplyLike(likeId);
+            return await _commentReplyLikeService.RemoveCommentReplyLike(commentReplyId);
         }
 
         [HttpDelete("RemoveTagLike/{tagId}")]

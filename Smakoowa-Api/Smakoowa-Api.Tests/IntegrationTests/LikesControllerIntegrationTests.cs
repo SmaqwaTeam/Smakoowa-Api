@@ -62,9 +62,9 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             var recipeCommentLike = await AddToDatabase(new RecipeCommentLike { RecipeCommentId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
             var commentReplyLike = await AddToDatabase(new CommentReplyLike { CommentReplyId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
 
-            string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{recipeLike.Id}";
-            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{recipeCommentLike.Id}";
-            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{commentReplyLike.Id}";
+            string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{testRecipe.Id}";
+            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{testRecipeComment.Id}";
+            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
 
             // Act
             var removeRecipeLikeResponse = await _HttpClient.DeleteAsync(removeRecipeLikeUrl);

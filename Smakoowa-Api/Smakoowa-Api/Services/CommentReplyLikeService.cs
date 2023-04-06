@@ -2,14 +2,12 @@
 {
     public class CommentReplyLikeService : LikeService, ICommentReplyLikeService
     {
-        private readonly ILikeValidatorService _likeValidatorService;
         private readonly IBaseRepository<CommentReplyLike> _commentReplyLikeRepository;
 
-        public CommentReplyLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService,
+        public CommentReplyLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
             ILikeValidatorService likeValidatorService, IBaseRepository<CommentReplyLike> commentReplyLikeRepository)
-            : base(likeRepository, helperService)
+            : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
-            _likeValidatorService = likeValidatorService;
             _commentReplyLikeRepository = commentReplyLikeRepository;
         }
 
@@ -22,10 +20,10 @@
             return await AddLike(commentReplyLike);
         }
 
-        public async Task<ServiceResponse> RemoveCommentReplyLike(int likeId)
+        public async Task<ServiceResponse> RemoveCommentReplyLike(int commentReplyId)
         {
-            var likeToRemove = await _commentReplyLikeRepository.FindByConditionsFirstOrDefault(c => c.Id == likeId);
-            if (likeToRemove == null) return ServiceResponse.Error($"Like with id: {likeId} not found.");
+            var likeToRemove = await _commentReplyLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedCommentReply.Id == commentReplyId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            if (likeToRemove == null) return ServiceResponse.Error($"Like of comment reply with id: {commentReplyId} not found.");
             return await RemoveLike(likeToRemove);
         }
     }
