@@ -15,15 +15,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         {
         }
 
-        [Theory]
-        [InlineData("TestCreateRecipeComment")]
-        public async Task TestCreateRecipeComment(string testContent)
+        [Fact]
+        public async Task TestCreateRecipeComment()
         {
             // Arrange
             var testRecipe = await AddRecipeToDatabase();
             string url = $"/api/Comments/AddRecipeComment/{testRecipe.Id}";
 
-            RecipeCommentRequestDto recipeCommentRequest = new RecipeCommentRequestDto { Content = testContent };
+            RecipeCommentRequestDto recipeCommentRequest = new RecipeCommentRequestDto { Content = "TestCreateRecipeComment" };
 
             // Act
             var response = await _HttpClient.PostAsJsonAsync(url, recipeCommentRequest);
@@ -31,15 +30,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == testContent));
+            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == "TestCreateRecipeComment"));
         }
 
-        [Theory]
-        [InlineData("TestDeleteRecipeComment")]
-        public async Task TestDeleteRecipeComment(string testContent)
+        [Fact]
+        public async Task TestDeleteRecipeComment()
         {
             var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, testContent);
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteRecipeComment");
             string url = $"/api/Comments/DeleteRecipeComment/{testRecipeComment.Id}";
 
             // Act
@@ -51,16 +49,15 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(!await _context.RecipeComments.AnyAsync(c => c.Id == testRecipeComment.Id));
         }
 
-        [Theory]
-        [InlineData("TestCreateCommentReply")]
-        public async Task TestCreateCommentReply(string testContent)
+        [Fact]
+        public async Task TestCreateCommentReply()
         {
             // Arrange
             var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, testContent);
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestCreateCommentReply");
             string url = $"/api/Comments/AddCommentReply/{testRecipeComment.Id}";
 
-            CommentReplyRequestDto commentReplyRequestDto = new CommentReplyRequestDto { Content = testContent };
+            CommentReplyRequestDto commentReplyRequestDto = new CommentReplyRequestDto { Content = "TestCreateCommentReply" };
 
             // Act
             var response = await _HttpClient.PostAsJsonAsync(url, commentReplyRequestDto);
@@ -68,16 +65,15 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == testContent));
+            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == "TestCreateCommentReply"));
         }
 
-        [Theory]
-        [InlineData("TestDeleteCommentReply")]
-        public async Task TestDeleteCommentReply(string testContent)
+        [Fact]
+        public async Task TestDeleteCommentReply()
         {
             var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, testContent);
-            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, testContent);
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteCommentReply");
+            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestDeleteCommentReply");
             string url = $"/api/Comments/DeleteCommentReply/{testCommentReply.Id}";
 
             // Act

@@ -19,13 +19,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             MinCategoryNameLength = int.Parse(_configuration.GetSection($"Validation:Category:MinNameLength").Value);
         }
 
-        [Theory]
-        [InlineData("TestGetAllCategory1", "TestGetAllCategory2")]
-        public async Task TestGetAll(string testName1, string testName2)
+        [Fact]
+        public async Task TestGetAll()
         {
             // Arrange
-            var category1 = new Category { Name = testName1 };
-            var category2 = new Category { Name = testName2 };
+            var category1 = new Category { Name = "TestGetAllCategory1" };
+            var category2 = new Category { Name = "TestGetAllCategory2" };
             await AddToDatabase(
                 new List<Category> {
                     category1,
@@ -39,17 +38,16 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == testName1) && responseContent.Content.Exists(c => c.Name == testName2));
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllCategory1") && responseContent.Content.Exists(c => c.Name == "TestGetAllCategory2"));
         }
 
-        [Theory]
-        [InlineData("TestGetByIdCategory")]
-        public async Task TestGetById(string testName)
+        [Fact]
+        public async Task TestGetById()
         {
             // Arrange
-            var testCategory = new Category { Name = testName };
+            var testCategory = new Category { Name = "TestGetByIdCategory" };
             await AddToDatabase(testCategory);
-            var savedCategory = await FindInDatabaseByConditionsFirstOrDefault<Category>(c => c.Name == testName);
+            var savedCategory = await FindInDatabaseByConditionsFirstOrDefault<Category>(c => c.Name == "TestGetByIdCategory");
             string url = $"/api/Categories/GetById/{savedCategory.Id}";
 
             // Act
@@ -61,13 +59,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(responseContent.Content.Id == savedCategory.Id);
         }
 
-        [Theory]
-        [InlineData("TestCreateCategory")]
-        public async Task TestCreate(string testName)
+        [Fact]
+        public async Task TestCreate()
         {
             // Arrange
             string url = $"/api/Categories/Create";
-            CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = testName };
+            CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = "TestCreateCategory" };
 
             // Act
             var response = await _HttpClient.PostAsJsonAsync(url, categoryRequest);
@@ -75,19 +72,18 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Categories.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Categories.AnyAsync(c => c.Name == "TestCreateCategory"));
         }
 
-        [Theory]
-        [InlineData("TestEditCategory")]
-        public async Task TestEdit(string testName)
+        [Fact]
+        public async Task TestEdit()
         {
             // Arrange
             var testCategory = new Category { Name = "UneditedCategory" };
             await AddToDatabase(testCategory);
             var uneditedCategory = await FindInDatabaseByConditionsFirstOrDefault<Category>(c => c.Name == "UneditedCategory");
             string url = $"/api/Categories/Edit/{uneditedCategory.Id}";
-            CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = testName };
+            CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = "TestEditCategory" };
 
             // Act
             var response = await _HttpClient.PutAsJsonAsync(url, categoryRequest);
@@ -95,17 +91,16 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Categories.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Categories.AnyAsync(c => c.Name == "TestEditCategory"));
         }
 
-        [Theory]
-        [InlineData("TestDeleteCategory")]
-        public async Task TestDelete(string testName)
+        [Fact]
+        public async Task TestDelete()
         {
             // Arrange
-            var testCategory = new Category { Name = testName };
+            var testCategory = new Category { Name = "TestDeleteCategory" };
             await AddToDatabase(testCategory);
-            var uneditedCategory = await FindInDatabaseByConditionsFirstOrDefault<Category>(c => c.Name == testName);
+            var uneditedCategory = await FindInDatabaseByConditionsFirstOrDefault<Category>(c => c.Name == "TestDeleteCategory");
             string url = $"/api/Categories/Delete/{uneditedCategory.Id}";
 
             // Act
@@ -114,11 +109,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.False(await _context.Categories.AnyAsync(c => c.Name == testName));
+            Assert.False(await _context.Categories.AnyAsync(c => c.Name == "TestDeleteCategory"));
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact]
         public async Task TestCategoryValidation()
         {
             // Arrange
