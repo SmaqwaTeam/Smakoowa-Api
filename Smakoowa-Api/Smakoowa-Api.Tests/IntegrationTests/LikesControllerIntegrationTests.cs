@@ -16,14 +16,13 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         {
         }
 
-        [Theory]
-        [InlineData("TestAddLikes")]
-        public async Task TestAddLikes(string testContent)
+        [Fact]
+        public async Task TestAddLikes()
         {
             // Arrange
             var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, testContent);
-            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, testContent);
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestAddLikes");
+            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestAddLikes");
 
             string addRecipeLikeUrl = $"/api/Likes/AddRecipeLike/{testRecipe.Id}";
             string addRecipeCommentLikeUrl = $"/api/Likes/AddRecipeCommentLike/{testRecipeComment.Id}";
@@ -50,21 +49,20 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(await _context.CommentReplies.AnyAsync(c => c.Likes.Count > 0 && c.Id == testCommentReply.Id));
         }
 
-        [Theory]
-        [InlineData("TestDeleteLikes")]
-        public async Task TestDeleteLikes(string testContent)
+        [Fact]
+        public async Task TestDeleteLikes()
         {
             var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, testContent);
-            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, testContent);
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteLikes");
+            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestDeleteLikes");
 
             var recipeLike = await AddToDatabase(new RecipeLike { RecipeId = testRecipe.Id, LikeableType = LikeableType.Recipe });
             var recipeCommentLike = await AddToDatabase(new RecipeCommentLike { RecipeCommentId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
             var commentReplyLike = await AddToDatabase(new CommentReplyLike { CommentReplyId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
 
-            string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{recipeLike.Id}";
-            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{recipeCommentLike.Id}";
-            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{commentReplyLike.Id}";
+            string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{testRecipe.Id}";
+            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{testRecipeComment.Id}";
+            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
 
             // Act
             var removeRecipeLikeResponse = await _HttpClient.DeleteAsync(removeRecipeLikeUrl);

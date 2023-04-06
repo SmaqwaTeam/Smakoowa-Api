@@ -10,13 +10,15 @@ namespace Smakoowa_Api.Controllers
         private readonly IRecipeLikeService _recipeLikeService;
         private readonly IRecipeCommentLikeService _recipeCommentLikeService;
         private readonly ICommentReplyLikeService _commentReplyLikeService;
+        private readonly ITagLikeService _tagLikeService;
 
-        public LikesController(ICommentReplyLikeService commentReplyLikeService, IRecipeCommentLikeService recipeCommentLikeService, 
-            IRecipeLikeService recipeLikeService)
+        public LikesController(ICommentReplyLikeService commentReplyLikeService, IRecipeCommentLikeService recipeCommentLikeService,
+            IRecipeLikeService recipeLikeService, ITagLikeService tagLikeService)
         {
             _commentReplyLikeService = commentReplyLikeService;
             _recipeCommentLikeService = recipeCommentLikeService;
             _recipeLikeService = recipeLikeService;
+            _tagLikeService = tagLikeService;
         }
 
         [HttpPost("AddRecipeLike/{recipeId}")]
@@ -37,22 +39,34 @@ namespace Smakoowa_Api.Controllers
             return await _commentReplyLikeService.AddCommentReplyLike(commentReplyId);
         }
 
-        [HttpDelete("RemoveRecipeLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveRecipeLike(int likeId)
+        [HttpPost("AddTagLike/{tagId}")]
+        public async Task<ServiceResponse> AddTagLike(int tagId)
         {
-            return await _recipeLikeService.RemoveRecipeLike(likeId);
+            return await _tagLikeService.AddTagLike(tagId);
         }
 
-        [HttpDelete("RemoveRecipeCommentLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveRecipeCommentLike(int likeId)
+        [HttpDelete("RemoveRecipeLike/{recipeId}")]
+        public async Task<ServiceResponse> RemoveRecipeLike(int recipeId)
         {
-            return await _recipeCommentLikeService.RemoveRecipeCommentLike(likeId);
+            return await _recipeLikeService.RemoveRecipeLike(recipeId);
         }
 
-        [HttpDelete("RemoveCommentReplyLike/{likeId}")]
-        public async Task<ServiceResponse> RemoveCommentReplyLike(int likeId)
+        [HttpDelete("RemoveRecipeCommentLike/{recipeCommentId}")]
+        public async Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId)
         {
-            return await _commentReplyLikeService.RemoveCommentReplyLike(likeId);
+            return await _recipeCommentLikeService.RemoveRecipeCommentLike(recipeCommentId);
+        }
+
+        [HttpDelete("RemoveCommentReplyLike/{commentReplyId}")]
+        public async Task<ServiceResponse> RemoveCommentReplyLike(int commentReplyId)
+        {
+            return await _commentReplyLikeService.RemoveCommentReplyLike(commentReplyId);
+        }
+
+        [HttpDelete("RemoveTagLike/{tagId}")]
+        public async Task<ServiceResponse> RemoveTagLike(int tagId)
+        {
+            return await _tagLikeService.RemoveTagLike(tagId);
         }
     }
 }

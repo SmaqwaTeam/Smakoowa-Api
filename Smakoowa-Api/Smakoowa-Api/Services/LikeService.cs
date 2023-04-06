@@ -4,11 +4,16 @@
     {
         private readonly IHelperService<LikeService> _helperService;
         private readonly ILikeRepository _likeRepository;
+        protected readonly IApiUserService _apiUserService;
+        protected readonly ILikeValidatorService _likeValidatorService;
 
-        public LikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService)
+        public LikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
+            ILikeValidatorService likeValidatorService)
         {
             _likeRepository = likeRepository;
             _helperService = helperService;
+            _apiUserService = apiUserService;
+            _likeValidatorService = likeValidatorService;
         }
 
         public async Task<ServiceResponse> AddLike(Like like)

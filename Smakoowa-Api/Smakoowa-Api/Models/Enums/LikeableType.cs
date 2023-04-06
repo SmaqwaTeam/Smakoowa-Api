@@ -4,6 +4,7 @@
     {
         Recipe,
         RecipeComment,
-        CommentReply
+        CommentReply,
+        Tag
     }
 }

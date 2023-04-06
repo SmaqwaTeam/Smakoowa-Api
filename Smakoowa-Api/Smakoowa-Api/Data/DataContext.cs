@@ -22,6 +22,7 @@ namespace Smakoowa_Api.Data
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeComment> RecipeComments { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<TagLike> TagLikes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,6 +54,7 @@ namespace Smakoowa_Api.Data
             RecipeLikeConfiguration.ConfigureRecipeLike(modelBuilder);
             RecipeCommentLikeConfiguration.ConfigureRecipeCommentLike(modelBuilder);
             CommentReplyLikeConfiguration.ConfigureCommentReplyLike(modelBuilder);
+            TagLikeConfiguration.ConfigureRecipeLike(modelBuilder);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

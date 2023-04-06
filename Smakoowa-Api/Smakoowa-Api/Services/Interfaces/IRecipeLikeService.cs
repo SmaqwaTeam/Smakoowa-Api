@@ -3,6 +3,6 @@
     public interface IRecipeLikeService
     {
         public Task<ServiceResponse> AddRecipeLike(int recipeId);
-        public Task<ServiceResponse> RemoveRecipeLike(int likeId);
+        public Task<ServiceResponse> RemoveRecipeLike(int recipeId);
     }
 }

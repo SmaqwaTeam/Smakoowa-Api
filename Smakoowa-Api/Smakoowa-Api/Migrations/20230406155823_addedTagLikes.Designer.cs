@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smakoowa_Api.Data;
 
@@ -11,9 +12,11 @@ using Smakoowa_Api.Data;
 namespace Smakoowa_Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230406155823_addedTagLikes")]
+    partial class addedTagLikes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +152,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("RecipeTag", (string)null);
+                    b.ToTable("RecipeTag");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Category", b =>
@@ -166,7 +169,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -261,7 +264,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("CommentReplies", (string)null);
+                    b.ToTable("CommentReplies");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Comments.RecipeComment", b =>
@@ -299,7 +302,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("RecipeComments", (string)null);
+                    b.ToTable("RecipeComments");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Ingredient", b =>
@@ -327,7 +330,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingredients", (string)null);
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Instruction", b =>
@@ -355,7 +358,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Instructions", (string)null);
+                    b.ToTable("Instructions");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.CommentReplyLike", b =>
@@ -384,7 +387,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("CommentReplyLikes", (string)null);
+                    b.ToTable("CommentReplyLikes");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.RecipeCommentLike", b =>
@@ -413,7 +416,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeCommentId");
 
-                    b.ToTable("RecipeCommentLikes", (string)null);
+                    b.ToTable("RecipeCommentLikes");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.RecipeLike", b =>
@@ -442,7 +445,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeLikes", (string)null);
+                    b.ToTable("RecipeLikes");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Likes.TagLike", b =>
@@ -471,7 +474,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("TagLikes", (string)null);
+                    b.ToTable("TagLikes");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Recipe", b =>
@@ -524,7 +527,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("Recipes", (string)null);
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Tag", b =>
@@ -544,7 +547,7 @@ namespace Smakoowa_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
 
                     b.HasData(
                         new

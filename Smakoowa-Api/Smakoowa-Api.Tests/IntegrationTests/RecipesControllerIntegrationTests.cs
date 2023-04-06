@@ -22,13 +22,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             MinRecipeNameLength = int.Parse(_configuration.GetSection($"Validation:Recipe:MinNameLength").Value);
         }
 
-        [Theory]
-        [InlineData("TestGetAllRecipe1", "TestGetAllRecipe2")]
-        public async Task TestGetAll(string testName1, string testName2)
+        [Fact]
+        public async Task TestGetAll()
         {
             // Arrange
-            var testRecipe1 = await GetRecipe(testName1);
-            var testRecipe2 = await GetRecipe(testName2);
+            var testRecipe1 = await GetRecipe("TestGetAllRecipe1");
+            var testRecipe2 = await GetRecipe("TestGetAllRecipe2");
             await AddToDatabase(new List<Recipe> { testRecipe1, testRecipe2 });
             string url = "/api/Recipes/GetAll";
 
@@ -38,17 +37,16 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == testName1) && responseContent.Content.Exists(c => c.Name == testName2));
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe1") && responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe2"));
         }
 
-        [Theory]
-        [InlineData("TestGetByIdRecipe")]
-        public async Task TestGetById(string testName)
+        [Fact]
+        public async Task TestGetById()
         {
             // Arrange
-            var testRecipe = await GetRecipe(testName);
+            var testRecipe = await GetRecipe("TestGetByIdRecipe");
             await AddToDatabase(testRecipe);
-            var savedRecipe = await FindInDatabaseByConditionsFirstOrDefault<Recipe>(c => c.Name == testName);
+            var savedRecipe = await FindInDatabaseByConditionsFirstOrDefault<Recipe>(c => c.Name == "TestGetByIdRecipe");
             string url = $"/api/Recipes/GetById/{savedRecipe.Id}";
             // Act
             var response = await _HttpClient.GetAsync(url);
@@ -60,12 +58,11 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
         }
 
-        [Theory]
-        [InlineData("TestCreateRecipe")]
-        public async Task TestCreate(string testName)
+        [Fact]
+        public async Task TestCreate()
         {
             // Arrange
-            RecipeRequestDto recipeRequest = await GetTestRecipeRequestDto(testName);
+            RecipeRequestDto recipeRequest = await GetTestRecipeRequestDto("TestCreateRecipe");
 
             string url = $"/api/Recipes/Create";
 
@@ -75,20 +72,19 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Recipes.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Recipes.AnyAsync(c => c.Name == "TestCreateRecipe"));
 
         }
 
-        [Theory]
-        [InlineData("TestEditRecipe")]
-        public async Task TestEdit(string testName)
+        [Fact]
+        public async Task TestEdit()
         {
             // Arrange
             var testRecipe = await GetRecipe("UneditedRecipe");
             await AddToDatabase(testRecipe);
             var uneditedRecipe = await FindInDatabaseByConditionsFirstOrDefault<Recipe>(c => c.Name == "UneditedRecipe");
             string url = $"/api/Recipes/Edit/{uneditedRecipe.Id}";
-            RecipeRequestDto recipeRequest = await GetTestRecipeRequestDto(testName);
+            RecipeRequestDto recipeRequest = await GetTestRecipeRequestDto("TestEditRecipe");
 
             // Act
             var response = await _HttpClient.PutAsJsonAsync(url, recipeRequest);
@@ -96,15 +92,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Recipes.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Recipes.AnyAsync(c => c.Name == "TestEditRecipe"));
         }
 
-        [Theory]
-        [InlineData("TestDeleteRecipe")]
-        public async Task TestDelete(string testName)
+        [Fact]
+        public async Task TestDelete()
         {
             // Arrange
-            var testRecipe = await GetRecipe(testName);
+            var testRecipe = await GetRecipe("TestDeleteRecipe");
             var recipeToDelete = await AddToDatabase(testRecipe);
             string url = $"/api/Recipes/Delete/{recipeToDelete.Id}";
 
@@ -117,8 +112,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(!await _context.Recipes.AnyAsync(c => c.Id == recipeToDelete.Id));
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact]
         public async Task TestRecipeValidation()
         {
             // Arrange

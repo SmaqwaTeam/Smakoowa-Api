@@ -3,8 +3,6 @@ using Smakoowa_Api.Models.DatabaseModels;
 using Smakoowa_Api.Models.RequestDtos;
 using Smakoowa_Api.Models.ResponseDtos;
 using Smakoowa_Api.Models.Services;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Xunit;
 
@@ -22,18 +20,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             MinTagNameLength = int.Parse(_configuration.GetSection($"Validation:Tag:MinNameLength").Value);
         }
 
-        [Theory]
-        [InlineData("TestGetAllTag1", "TestGetAllTag2")]
-        public async Task TestGetAll(string testName1, string testName2)
+        [Fact]
+        public async Task TestGetAll()
         {
             // Arrange
-            var tag1 = new Tag { Name = testName1 };
-            var tag2 = new Tag { Name = testName2 };
+            var tag1 = new Tag { Name = "TestGetAllTag1" };
+            var tag2 = new Tag { Name = "TestGetAllTag2" };
             await AddToDatabase(
-                new List<Tag> {
-            tag1,
-            tag2
-                });
+                new List<Tag> { tag1, tag2 });
 
             string url = "/api/Tags/GetAll";
 
@@ -43,17 +37,16 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == testName1) && responseContent.Content.Exists(c => c.Name == testName2));
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllTag1") && responseContent.Content.Exists(c => c.Name == "TestGetAllTag2"));
         }
 
-        [Theory]
-        [InlineData("TestGetByIdTag")]
-        public async Task TestGetById(string testName)
+        [Fact]
+        public async Task TestGetById()
         {
             // Arrange
-            var testTag = new Tag { Name = testName };
+            var testTag = new Tag { Name = "TestGetByIdTag" };
             await AddToDatabase(testTag);
-            var savedTag = await FindInDatabaseByConditionsFirstOrDefault<Tag>(c => c.Name == testName);
+            var savedTag = await FindInDatabaseByConditionsFirstOrDefault<Tag>(c => c.Name == "TestGetByIdTag");
             string url = $"/api/Tags/GetById/{savedTag.Id}";
 
             // Act
@@ -65,13 +58,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(responseContent.Content.Id == savedTag.Id);
         }
 
-        [Theory]
-        [InlineData("TestCreateTag")]
-        public async Task TestCreate(string testName)
+        [Fact]
+        public async Task TestCreate()
         {
             // Arrange
             string url = $"/api/Tags/Create";
-            TagRequestDto tagRequest = new TagRequestDto { Name = testName };
+            TagRequestDto tagRequest = new TagRequestDto { Name = "TestCreateTag" };
 
             // Act
             var response = await _HttpClient.PostAsJsonAsync(url, tagRequest);
@@ -79,19 +71,18 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Tags.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Tags.AnyAsync(c => c.Name == "TestCreateTag"));
         }
 
-        [Theory]
-        [InlineData("TestEditTag")]
-        public async Task TestEdit(string testName)
+        [Fact]
+        public async Task TestEdit()
         {
             // Arrange
             var testTag = new Tag { Name = "UneditedTag" };
             await AddToDatabase(testTag);
             var uneditedTag = await FindInDatabaseByConditionsFirstOrDefault<Tag>(c => c.Name == "UneditedTag");
             string url = $"/api/Tags/Edit/{uneditedTag.Id}";
-            TagRequestDto tagRequest = new TagRequestDto { Name = testName };
+            TagRequestDto tagRequest = new TagRequestDto { Name = "TestEditTag" };
 
             // Act
             var response = await _HttpClient.PutAsJsonAsync(url, tagRequest);
@@ -99,15 +90,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(response, responseContent);
-            Assert.True(await _context.Tags.AnyAsync(c => c.Name == testName));
+            Assert.True(await _context.Tags.AnyAsync(c => c.Name == "TestEditTag"));
         }
 
-        [Theory]
-        [InlineData("TestDeleteTag")]
-        public async Task TestDelete(string testName)
+        [Fact]
+        public async Task TestDelete()
         {
             // Arrange
-            var testTag = new Tag { Name = testName };
+            var testTag = new Tag { Name = "TestDeleteTag" };
             var tagToDelete = await AddToDatabase(testTag);
             string url = $"/api/Tags/Delete/{tagToDelete.Id}";
 
@@ -120,8 +110,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.True(!await _context.Tags.AnyAsync(c => c.Id == tagToDelete.Id));
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact]
         public async Task TestTagValidation()
         {
             // Arrange

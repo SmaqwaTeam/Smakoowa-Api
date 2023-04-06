@@ -2,14 +2,12 @@
 {
     public class RecipeCommentLikeService : LikeService, IRecipeCommentLikeService
     {
-        private readonly ILikeValidatorService _likeValidatorService;
         private readonly IBaseRepository<RecipeCommentLike> _recipeCommentLikeRepository;
 
-        public RecipeCommentLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService,
+        public RecipeCommentLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
             ILikeValidatorService likeValidatorService, IBaseRepository<RecipeCommentLike> recipeCommentLikeRepository)
-            : base(likeRepository, helperService)
+            : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
-            _likeValidatorService = likeValidatorService;
             _recipeCommentLikeRepository = recipeCommentLikeRepository;
         }
 
@@ -22,10 +20,10 @@
             return await AddLike(recipeCommentLike);
         }
 
-        public async Task<ServiceResponse> RemoveRecipeCommentLike(int likeId)
+        public async Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId)
         {
-            var likeToRemove = await _recipeCommentLikeRepository.FindByConditionsFirstOrDefault(c => c.Id == likeId);
-            if (likeToRemove == null) return ServiceResponse.Error($"Like with id: {likeId} not found.");
+            var likeToRemove = await _recipeCommentLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedRecipeComment.Id == recipeCommentId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            if (likeToRemove == null) return ServiceResponse.Error($"Like of recipe comment with id: {recipeCommentId} not found.");
             return await RemoveLike(likeToRemove);
         }
     }

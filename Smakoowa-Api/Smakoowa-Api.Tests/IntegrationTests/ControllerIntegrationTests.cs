@@ -57,12 +57,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             Assert.False(responseContent.SuccessStatus);
         }
 
-        public virtual async Task<List<T>> FindInDatabaseByConditions<T>(Expression<Func<T, bool>> expresion) where T : class
+        protected virtual async Task<List<T>> FindInDatabaseByConditions<T>(Expression<Func<T, bool>> expresion) where T : class
         {
             return await _context.Set<T>().Where(expresion).ToListAsync();
         }
 
-        public virtual async Task<T> FindInDatabaseByConditionsFirstOrDefault<T>(Expression<Func<T, bool>> expresion) where T : class
+        protected virtual async Task<T> FindInDatabaseByConditionsFirstOrDefault<T>(Expression<Func<T, bool>> expresion) where T : class
         {
             return await _context.Set<T>().Where(expresion).FirstOrDefaultAsync();
         }
