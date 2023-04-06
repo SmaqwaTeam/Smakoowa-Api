@@ -76,5 +76,11 @@ namespace Smakoowa_Api.Controllers
         {
             return await _recipeService.SearchRecipesByName(querry);
         }
+
+        [HttpGet("GetRecipiesByLikedTags")]
+        public async Task<ServiceResponse> GetRecipiesByLikedTags()
+        {
+            return await _recipeService.GetRecipiesByLikedTags();
+        }
     }
 }

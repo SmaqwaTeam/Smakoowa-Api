@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services.Interfaces
+﻿namespace Smakoowa_Api.Services.Interfaces
 {
     public interface IRecipeService : ICreatorService<RecipeRequestDto>, IEditorService<RecipeRequestDto>, IDeleterService, IGetterService
     {
@@ -9,5 +7,6 @@ namespace Smakoowa_Api.Services.Interfaces
         public Task<ServiceResponse> GetRecipesByTagIds(List<int> tagIds);
         public Task<ServiceResponse> GetRecipesByCategoryId(int categoryId);
         public Task<ServiceResponse> SearchRecipesByName(string querry);
+        public Task<ServiceResponse> GetRecipiesByLikedTags();
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Smakoowa_Api.Services
 {
@@ -13,10 +13,11 @@ namespace Smakoowa_Api.Services
         private readonly IInstructionValidatorService _instructionValidatorService;
         private readonly IInstructionMapperService _instructionMapperService;
         private readonly IApiUserService _apiUserService;
+        private readonly IApiUserRepository _apiUserRepository;
 
         public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
             IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
-            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService)
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -27,6 +28,7 @@ namespace Smakoowa_Api.Services
             _instructionValidatorService = instructionValidatorService;
             _instructionMapperService = instructionMapperService;
             _apiUserService = apiUserService;
+            _apiUserRepository = apiUserRepository;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
@@ -172,7 +174,21 @@ namespace Smakoowa_Api.Services
             return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => tagIds.Contains(s)));
         }
 
-        public async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
+        public async Task<ServiceResponse> SearchRecipesByName(string querry)
+        {
+            return await GetRecipesByConditions(r => r.Name.ToLower().Contains(querry.ToLower()));
+        }
+
+        public async Task<ServiceResponse> GetRecipiesByLikedTags()
+        {
+            var userLikedTagIds = (await _apiUserRepository
+                .FindByConditionsFirstOrDefault(u => u.Id == _apiUserService.GetCurrentUserId()))
+                .TagLikes.Select(t => t.TagId);
+
+            return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => userLikedTagIds.Contains(s)));
+        }
+
+        private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
         {
             try
             {
@@ -187,11 +203,6 @@ namespace Smakoowa_Api.Services
             {
                 return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
             }
-        }
-
-        public async Task<ServiceResponse> SearchRecipesByName(string querry)
-        {
-            return await GetRecipesByConditions(r => r.Name.ToLower().Contains(querry.ToLower()));
         }
     }
 }
