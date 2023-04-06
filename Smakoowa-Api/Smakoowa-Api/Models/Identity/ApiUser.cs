@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
-
-namespace Smakoowa_Api.Models.Identity
+﻿namespace Smakoowa_Api.Models.Identity
 {
     public class ApiUser : IdentityUser<int>, IDbModel
     {
@@ -10,5 +8,6 @@ namespace Smakoowa_Api.Models.Identity
         public virtual List<RecipeLike> RecipeLikes { get; set; }
         public virtual List<RecipeCommentLike> RecipeCommentLikes { get; set; }
         public virtual List<CommentReplyLike> CommentReplyLikes { get; set; }
+        public virtual List<TagLike> TagLikes { get; set; }
     }
 }

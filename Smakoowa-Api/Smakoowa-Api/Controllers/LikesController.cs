@@ -10,13 +10,15 @@ namespace Smakoowa_Api.Controllers
         private readonly IRecipeLikeService _recipeLikeService;
         private readonly IRecipeCommentLikeService _recipeCommentLikeService;
         private readonly ICommentReplyLikeService _commentReplyLikeService;
+        private readonly ITagLikeService _tagLikeService;
 
-        public LikesController(ICommentReplyLikeService commentReplyLikeService, IRecipeCommentLikeService recipeCommentLikeService, 
-            IRecipeLikeService recipeLikeService)
+        public LikesController(ICommentReplyLikeService commentReplyLikeService, IRecipeCommentLikeService recipeCommentLikeService,
+            IRecipeLikeService recipeLikeService, ITagLikeService tagLikeService)
         {
             _commentReplyLikeService = commentReplyLikeService;
             _recipeCommentLikeService = recipeCommentLikeService;
             _recipeLikeService = recipeLikeService;
+            _tagLikeService = tagLikeService;
         }
 
         [HttpPost("AddRecipeLike/{recipeId}")]
@@ -37,6 +39,12 @@ namespace Smakoowa_Api.Controllers
             return await _commentReplyLikeService.AddCommentReplyLike(commentReplyId);
         }
 
+        [HttpPost("AddTagLike/{tagId}")]
+        public async Task<ServiceResponse> AddTagLike(int tagId)
+        {
+            return await _tagLikeService.AddTagLike(tagId);
+        }
+
         [HttpDelete("RemoveRecipeLike/{likeId}")]
         public async Task<ServiceResponse> RemoveRecipeLike(int likeId)
         {
@@ -53,6 +61,12 @@ namespace Smakoowa_Api.Controllers
         public async Task<ServiceResponse> RemoveCommentReplyLike(int likeId)
         {
             return await _commentReplyLikeService.RemoveCommentReplyLike(likeId);
+        }
+
+        [HttpDelete("RemoveTagLike/{tagId}")]
+        public async Task<ServiceResponse> RemoveTagLike(int tagId)
+        {
+            return await _tagLikeService.RemoveTagLike(tagId);
         }
     }
 }

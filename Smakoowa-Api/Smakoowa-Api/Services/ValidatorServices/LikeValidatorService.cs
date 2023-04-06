@@ -11,11 +11,14 @@
         private readonly ICommentReplyRepository _commentReplyRepository;
         private readonly IBaseRepository<CommentReplyLike> _commentReplyLikeRepository;
 
+        private readonly ITagRepository _tagRepository;
+        private readonly IBaseRepository<TagLike> _tagLikeRepository;
+
         private readonly IApiUserService _apiUserService;
 
-        public LikeValidatorService(IRecipeRepository recipeRepository, IBaseRepository<RecipeLike> recipeLikeRepository, 
-            IRecipeCommentRepository recipeCommentRepository, IBaseRepository<RecipeCommentLike> recipeCommentLikeRepository, 
-            ICommentReplyRepository commentReplyRepository, IBaseRepository<CommentReplyLike> commentReplyLikeRepository, IApiUserService apiUserService)
+        public LikeValidatorService(IRecipeRepository recipeRepository, IBaseRepository<RecipeLike> recipeLikeRepository,
+            IRecipeCommentRepository recipeCommentRepository, IBaseRepository<RecipeCommentLike> recipeCommentLikeRepository,
+            ICommentReplyRepository commentReplyRepository, IBaseRepository<CommentReplyLike> commentReplyLikeRepository, IApiUserService apiUserService, ITagRepository tagRepository, IBaseRepository<TagLike> tagLikeRepository)
         {
             _recipeRepository = recipeRepository;
             _recipeLikeRepository = recipeLikeRepository;
@@ -24,6 +27,8 @@
             _commentReplyRepository = commentReplyRepository;
             _commentReplyLikeRepository = commentReplyLikeRepository;
             _apiUserService = apiUserService;
+            _tagRepository = tagRepository;
+            _tagLikeRepository = tagLikeRepository;
         }
 
         public async Task<ServiceResponse> ValidateCommentReplyLike(int commentReplyId)
@@ -66,6 +71,21 @@
             if (await _recipeLikeRepository.CheckIfExists(l => l.RecipeId == recipeId && l.CreatorId == _apiUserService.GetCurrentUserId()))
             {
                 return ServiceResponse.Error($"Recipe with id: {recipeId} is already liked by current user.");
+            }
+
+            return ServiceResponse.Success();
+        }
+
+        public async Task<ServiceResponse> ValidateTagLike(int tagId)
+        {
+            if (!await _tagRepository.CheckIfExists(r => r.Id == tagId))
+            {
+                return ServiceResponse.Error($"Tag with id: {tagId} does not exist.");
+            }
+
+            if (await _tagLikeRepository.CheckIfExists(l => l.TagId == tagId && l.CreatorId == _apiUserService.GetCurrentUserId()))
+            {
+                return ServiceResponse.Error($"Tag with id: {tagId} is already liked by current user.");
             }
 
             return ServiceResponse.Success();
