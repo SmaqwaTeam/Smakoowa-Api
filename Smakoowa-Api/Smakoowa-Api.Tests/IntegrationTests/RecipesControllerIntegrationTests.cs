@@ -48,6 +48,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             await AddToDatabase(testRecipe);
             var savedRecipe = await FindInDatabaseByConditionsFirstOrDefault<Recipe>(c => c.Name == "TestGetByIdRecipe");
             string url = $"/api/Recipes/GetById/{savedRecipe.Id}";
+
             // Act
             var response = await _HttpClient.GetAsync(url);
             var responseContent = await DeserializeResponse<ServiceResponse<RecipeResponseDto>>(response);
@@ -55,7 +56,6 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             // Assert
             AssertResponseSuccess(response, responseContent);
             Assert.True(responseContent.Content.Id == savedRecipe.Id);
-
         }
 
         [Fact]
@@ -73,7 +73,6 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             // Assert
             AssertResponseSuccess(response, responseContent);
             Assert.True(await _context.Recipes.AnyAsync(c => c.Name == "TestCreateRecipe"));
-
         }
 
         [Fact]

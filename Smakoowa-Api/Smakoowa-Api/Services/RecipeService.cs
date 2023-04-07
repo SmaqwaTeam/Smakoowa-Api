@@ -1,4 +1,5 @@
-﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+﻿using Smakoowa_Api.Models.DatabaseModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Smakoowa_Api.Services
 {
@@ -103,18 +104,18 @@ namespace Smakoowa_Api.Services
             }
         }
 
-        public async Task<ServiceResponse> GetAll()
+        public async Task<ServiceResponse> GetByIdDetailed(int recipeId)
         {
             try
             {
-                var recipes = await _recipeRepository.FindAll();
-                var getRecipesResponseDto = new List<RecipeResponseDto>();
-                foreach (Recipe recipe in recipes) getRecipesResponseDto.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
-                return ServiceResponse<List<RecipeResponseDto>>.Success(getRecipesResponseDto, "Recipes retrieved.");
+                var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
+                if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+                var getDetailedRecipeResponseDto = _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
+                return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
             }
             catch (Exception ex)
             {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
+                return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
             }
         }
 
@@ -133,35 +134,14 @@ namespace Smakoowa_Api.Services
             }
         }
 
-        public async Task<ServiceResponse> GetByIdDetailed(int recipeId)
+        public async Task<ServiceResponse> GetAll()
         {
-            try
-            {
-                var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-                if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
-                var getDetailedRecipeResponseDto = _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
-                return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
-            }
-            catch (Exception ex)
-            {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
-            }
+            return await GetRecipesByConditions(c => true);
         }
 
         public async Task<ServiceResponse> GetCurrentUsersRecipes()
         {
-            var userId = _apiUserService.GetCurrentUserId();
-            try
-            {
-                var recipes = await _recipeRepository.FindByConditions(r => r.CreatorId == userId);
-                var getRecipesResponseDto = new List<RecipeResponseDto>();
-                foreach (Recipe recipe in recipes) getRecipesResponseDto.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
-                return ServiceResponse<List<RecipeResponseDto>>.Success(getRecipesResponseDto, "Recipes retrieved.");
-            }
-            catch (Exception ex)
-            {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the recipes.");
-            }
+            return await GetRecipesByConditions(r => r.CreatorId == _apiUserService.GetCurrentUserId());
         }
 
         public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId)
@@ -186,6 +166,15 @@ namespace Smakoowa_Api.Services
                 .TagLikes.Select(t => t.TagId);
 
             return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => userLikedTagIds.Contains(s)));
+        }
+
+        public async Task<ServiceResponse> GetLikedRecipies()
+        {
+            var userLikedRecipeIds = (await _apiUserRepository
+                .FindByConditionsFirstOrDefault(u => u.Id == _apiUserService.GetCurrentUserId()))
+                .RecipeLikes.Select(t => t.RecipeId);
+
+            return await GetRecipesByConditions(c => userLikedRecipeIds.Contains(c.Id));
         }
 
         private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
