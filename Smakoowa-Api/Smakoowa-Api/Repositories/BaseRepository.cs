@@ -46,7 +46,10 @@
 
         public virtual async Task<T> FindByConditionsFirstOrDefault(Expression<Func<T, bool>> expresion)
         {
-            return await _context.Set<T>().Where(expresion).FirstOrDefaultAsync();
+            using (_context)
+            {
+                return await _context.Set<T>().Where(expresion).FirstOrDefaultAsync();
+            }
         }
     }
 }

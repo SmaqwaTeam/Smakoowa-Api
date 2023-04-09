@@ -1,4 +1,6 @@
-﻿using Smakoowa_Api.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Smakoowa_Api.Attributes;
+using Smakoowa_Api.Events;
 using Smakoowa_Api.Models.RequestDtos;
 
 namespace Smakoowa_Api.Controllers
@@ -8,10 +10,19 @@ namespace Smakoowa_Api.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly IBackgroundTaskQueue backgroundTaskQueue;
+        private readonly ILogger<CategoriesController> _logger;
+        private readonly IRequestCounterService requestCounterService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, IBackgroundTaskQueue backgroundTaskQueue, ILogger<CategoriesController> logger, IRequestCounterService requestCounterService)
         {
             _categoryService = categoryService;
+            this.backgroundTaskQueue = backgroundTaskQueue;
+            _logger = logger;
+            this.requestCounterService = requestCounterService;
+
+
+
         }
 
         [JwtAuthorize("Admin")]
@@ -44,6 +55,7 @@ namespace Smakoowa_Api.Controllers
         [HttpGet("GetById/{categoryId}")]
         public async Task<ServiceResponse> GetById(int categoryId)
         {
+            //await backgroundTaskQueue.QueueBackgroundWorkItemAsync(BuildWorkItemAsync);
             return await _categoryService.GetById(categoryId);
         }
 
@@ -51,6 +63,12 @@ namespace Smakoowa_Api.Controllers
         public async Task<ServiceResponse> GetByIds([FromQuery] int[] categoryIds)
         {
             return await _categoryService.GetByIds(categoryIds.ToList());
+        }
+
+        private async ValueTask BuildWorkItemAsync(CancellationToken token)
+        {
+            _logger.LogInformation("123");
+            await requestCounterService.LogRequestCount("Category", "GetById", "1");
         }
     }
 }

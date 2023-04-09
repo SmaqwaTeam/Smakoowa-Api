@@ -7,6 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Smakoowa_Api;
+using Smakoowa_Api.Middlewares;
+using static System.Net.Mime.MediaTypeNames;
+using Smakoowa_Api.Events;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +62,8 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped(sp => new HttpClient());
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")), contextLifetime: ServiceLifetime.Transient);
+builder.Services.AddDbContext<BackgroundDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnectionBackground")), contextLifetime: ServiceLifetime.Singleton);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddLogging();
 
@@ -109,7 +114,24 @@ builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
 builder.Services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository));
 builder.Services.AddScoped<RoleManager<ApiRole>>();
 
+builder.Services.AddSingleton(typeof(IRequestCounterService), typeof(RequestCounterService));
 
+
+builder.Services.AddSingleton<MonitorLoop>();
+builder.Services.AddHostedService<QueuedHostedService>();
+builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
+{
+    if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
+    {
+        queueCapacity = 100;
+    }
+
+    return new DefaultBackgroundTaskQueue(queueCapacity);
+});
+
+
+//builder.Services.AddHostedService<ConsumeScopedServiceHostedService>();
+//builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 
 builder.Services.AddIdentity<ApiUser, ApiRole>(opt =>
 {
@@ -139,10 +161,28 @@ app.UseExceptionHandler(c => c.Run(async context =>
     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
 }));
 
+
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
+
+//app.UseMiddleware<RequestCountMiddleware>();
+
+//app.Use(async (context, next) =>
+//{
+
+//    var myMiddleware = new RequestCountMiddleware(next);
+//    await myMiddleware.Invoke(context, next);
+//});
+
+
+
+MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
+monitorLoop.StartMonitorLoop();
+
+app.UseMiddleware<RequestCountMiddleware>();
 
 app.Run();
 
