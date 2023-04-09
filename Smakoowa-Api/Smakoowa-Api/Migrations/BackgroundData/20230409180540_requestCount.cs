@@ -14,15 +14,16 @@ namespace Smakoowa_Api.Migrations.BackgroundData
                 name: "RequestCounts",
                 columns: table => new
                 {
-                    ControllerName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ActionName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RemainingPath = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ControllerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RemainingPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RequestCounts", x => new { x.ControllerName, x.ActionName, x.RemainingPath });
+                    table.PrimaryKey("PK_RequestCounts", x => x.Id);
                 });
         }
 

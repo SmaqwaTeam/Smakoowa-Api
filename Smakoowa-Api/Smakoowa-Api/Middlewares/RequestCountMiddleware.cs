@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Smakoowa_Api.Services.BackgroundTaskQueue;
 
 namespace Smakoowa_Api.Middlewares
 {
@@ -28,7 +29,12 @@ namespace Smakoowa_Api.Middlewares
 
             var controllerName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
             var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
-            var remainingPath = _context.Request.Path.ToString().Substring(("/api/" + controllerName + "/" + actionName + "/").Length).TrimStart('/');
+
+            var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;
+            var requestPath = _context.Request.Path.ToString();
+
+            var remainingPath = uriLength >= requestPath.Length ? null : requestPath.Substring(uriLength).TrimStart('/');
+            //var remainingPath = _context.Request.Path.ToString().Substring(("/api/" + controllerName + "/" + actionName + "/").Length).TrimStart('/');
 
             await _requestCounterService.LogRequestCount(controllerName, actionName, remainingPath);
         }

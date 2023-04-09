@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Controllers;
-using Smakoowa_Api.Attributes;
-using Smakoowa_Api.Events;
-using Smakoowa_Api.Models.RequestDtos;
+﻿using Smakoowa_Api.Attributes;
 
 namespace Smakoowa_Api.Controllers
 {

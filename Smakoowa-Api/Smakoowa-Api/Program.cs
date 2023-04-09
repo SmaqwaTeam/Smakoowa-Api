@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Smakoowa_Api.Middlewares;
+using Smakoowa_Api.Services.BackgroundTaskQueue;
 using Smakoowa_Api.Services.MapperServices;
 using System.Text;
 
@@ -110,7 +111,7 @@ builder.Services.AddScoped<RoleManager<ApiRole>>();
 builder.Services.AddSingleton(typeof(IRequestCounterService), typeof(RequestCounterService));
 
 
-builder.Services.AddSingleton<MonitorLoop>();
+//builder.Services.AddSingleton<MonitorLoop>();
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 {
@@ -157,10 +158,10 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 
-MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
-monitorLoop.StartMonitorLoop();
+//MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
+//monitorLoop.StartMonitorLoop();
 
-//app.UseMiddleware<RequestCountMiddleware>();
+app.UseMiddleware<RequestCountMiddleware>();
 
 app.Run();
 

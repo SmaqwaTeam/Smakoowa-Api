@@ -6,7 +6,8 @@ namespace Smakoowa_Api.Data.Configurations
     {
         public static void ConfigureRequestCount(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RequestCount>().HasKey(x => new { x.ControllerName, x.ActionName, x.RemainingPath });
+            modelBuilder.Entity<RequestCount>().HasKey(c => c.Id);
+            modelBuilder.Entity<RequestCount>().Property(r => r.RemainingPath).IsRequired(false);
         }
     }
 }

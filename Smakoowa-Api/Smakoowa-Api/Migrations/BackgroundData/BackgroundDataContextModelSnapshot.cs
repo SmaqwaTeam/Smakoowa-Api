@@ -23,22 +23,27 @@ namespace Smakoowa_Api.Migrations.BackgroundData
 
             modelBuilder.Entity("Smakoowa_Api.Models.DatabaseModels.Statistics.RequestCount", b =>
                 {
-                    b.Property<string>("ControllerName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ActionName")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RemainingPath")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("ControllerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("RemainingPath")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ControllerName", "ActionName", "RemainingPath");
+                    b.HasKey("Id");
 
                     b.ToTable("RequestCounts");
                 });
