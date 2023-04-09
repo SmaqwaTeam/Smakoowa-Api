@@ -9,5 +9,4 @@
             RequestProcessed?.Invoke(controllerName, actionName, parameters);
         }
     }
-
 }

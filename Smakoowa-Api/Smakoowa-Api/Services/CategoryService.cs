@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class CategoryService : ICategoryService
     {

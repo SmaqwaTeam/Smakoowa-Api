@@ -1,16 +1,9 @@
 using Microsoft.AspNetCore.Diagnostics;
-using Smakoowa_Api.Services;
-using Smakoowa_Api.Services.MapperServices;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Smakoowa_Api;
+using Microsoft.OpenApi.Models;
 using Smakoowa_Api.Middlewares;
-using static System.Net.Mime.MediaTypeNames;
-using Smakoowa_Api.Events;
-using Microsoft.Extensions.Hosting;
+using Smakoowa_Api.Services.MapperServices;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,7 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped(sp => new HttpClient());
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")), contextLifetime: ServiceLifetime.Transient);
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnection")), contextLifetime: ServiceLifetime.Scoped);
 builder.Services.AddDbContext<BackgroundDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnectionBackground")), contextLifetime: ServiceLifetime.Singleton);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddLogging();
@@ -129,10 +122,6 @@ builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
     return new DefaultBackgroundTaskQueue(queueCapacity);
 });
 
-
-//builder.Services.AddHostedService<ConsumeScopedServiceHostedService>();
-//builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
-
 builder.Services.AddIdentity<ApiUser, ApiRole>(opt =>
 {
     opt.Password.RequiredLength = 7;
@@ -156,7 +145,7 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(c => c.Run(async context =>
 {
     var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-    if(exception is SecurityTokenValidationException) context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    if (exception is SecurityTokenValidationException) context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
     else context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
 }));
@@ -168,25 +157,14 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 
-//app.UseMiddleware<RequestCountMiddleware>();
-
-//app.Use(async (context, next) =>
-//{
-
-//    var myMiddleware = new RequestCountMiddleware(next);
-//    await myMiddleware.Invoke(context, next);
-//});
-
-
-
 MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
 monitorLoop.StartMonitorLoop();
 
-app.UseMiddleware<RequestCountMiddleware>();
+//app.UseMiddleware<RequestCountMiddleware>();
 
 app.Run();
 
-public partial class Program 
-{ 
-    public static IConfiguration configuration { get; private set; } 
+public partial class Program
+{
+    public static IConfiguration configuration { get; private set; }
 }
