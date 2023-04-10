@@ -109,9 +109,11 @@ builder.Services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository)
 builder.Services.AddScoped<RoleManager<ApiRole>>();
 
 builder.Services.AddSingleton(typeof(IRequestCounterService), typeof(RequestCounterService));
+builder.Services.AddScoped(typeof(IControllerStatisticsService), typeof(ControllerStatisticsService));
+builder.Services.AddScoped(typeof(IRequestCountMapperService), typeof(RequestCountMapperService));
+builder.Services.AddScoped(typeof(IRequestCountRepository), typeof(RequestCountRepository));
 
 
-//builder.Services.AddSingleton<MonitorLoop>();
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 {
@@ -157,9 +159,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
-
-//MonitorLoop monitorLoop = app.Services.GetRequiredService<MonitorLoop>()!;
-//monitorLoop.StartMonitorLoop();
 
 app.UseMiddleware<RequestCountMiddleware>();
 

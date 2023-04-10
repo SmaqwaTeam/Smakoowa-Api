@@ -28,13 +28,14 @@ namespace Smakoowa_Api.Middlewares
             if (endpoint == null) return;
 
             var controllerName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
+            if (controllerName == "Statistics") return;
+
             var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
 
             var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;
             var requestPath = _context.Request.Path.ToString();
 
             var remainingPath = uriLength >= requestPath.Length ? null : requestPath.Substring(uriLength).TrimStart('/');
-            //var remainingPath = _context.Request.Path.ToString().Substring(("/api/" + controllerName + "/" + actionName + "/").Length).TrimStart('/');
 
             await _requestCounterService.LogRequestCount(controllerName, actionName, remainingPath);
         }

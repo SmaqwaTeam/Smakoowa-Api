@@ -11,7 +11,6 @@ namespace Smakoowa_Api.Services
             var requestCount = _dbContext.RequestCounts.FirstOrDefault(x => x.ControllerName + "." + x.ActionName + "." + x.RemainingPath == key);
             if (requestCount == null)
             {
-                //requestCount = new RequestCount { ControllerName = controllerName, ActionName = actionName, RemainingPath = parameters, Count = 1 };
                 _dbContext.RequestCounts.Add(new RequestCount { ControllerName = controllerName, ActionName = actionName, RemainingPath = parameters, Count = 1 });
             }
             else
