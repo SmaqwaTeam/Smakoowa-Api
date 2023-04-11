@@ -30,6 +30,11 @@ namespace Smakoowa_Api.Tests
                         {
                             options.UseInMemoryDatabase("InMemoryDB");
                         });
+
+                        services.AddDbContext<BackgroundDataContext>(options =>
+                        {
+                            options.UseInMemoryDatabase("InMemoryDBBackground");
+                        });
                     });
                 });
             var configuration = appFactory.Services.GetService<IConfiguration>();

@@ -1,0 +1,13 @@
+﻿using Smakoowa_Api.Models.DatabaseModels.Statistics;
+
+namespace Smakoowa_Api.Data.Configurations
+{
+    public class RequestCountConfiguration
+    {
+        public static void ConfigureRequestCount(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RequestCount>().HasKey(c => c.Id);
+            modelBuilder.Entity<RequestCount>().Property(r => r.RemainingPath).IsRequired(false);
+        }
+    }
+}

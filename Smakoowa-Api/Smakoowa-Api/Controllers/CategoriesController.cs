@@ -1,5 +1,4 @@
 ﻿using Smakoowa_Api.Attributes;
-using Smakoowa_Api.Models.RequestDtos;
 
 namespace Smakoowa_Api.Controllers
 {
