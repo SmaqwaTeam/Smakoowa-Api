@@ -109,8 +109,6 @@ builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
 builder.Services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository));
 builder.Services.AddScoped<RoleManager<ApiRole>>();
 
-
-
 builder.Services.AddIdentity<ApiUser, ApiRole>(opt =>
 {
     opt.Password.RequiredLength = 7;
@@ -120,6 +118,18 @@ builder.Services.AddIdentity<ApiUser, ApiRole>(opt =>
     opt.User.RequireUniqueEmail = true;
     opt.SignIn.RequireConfirmedEmail = false;
 }).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("corspolicy",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173", "https://localhost:5173") //enter your url here
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
 
 configuration = builder.Configuration;
 
@@ -139,6 +149,7 @@ app.UseExceptionHandler(c => c.Run(async context =>
     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
 }));
 
+app.UseCors("corspolicy");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
