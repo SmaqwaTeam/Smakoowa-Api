@@ -9,12 +9,8 @@
         public PublishStatus PublishStatus { get; set; }
         public ServingsTier ServingsTier { get; set; }
         public TimeToMakeTier TimeToMakeTier { get; set; }
-
         public int CategoryId { get; set; }
         public List<int>? TagIds { get; set; }
-
-        //To be implemented:
-        //public string? ThumbnailImageUrl { get; set; }
-        //public List<RecipeLike>? Likes { get; set; }
+        public string? ThumbnailImageUrl { get; set; }
     }
 }

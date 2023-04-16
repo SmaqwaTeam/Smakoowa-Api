@@ -113,6 +113,8 @@ builder.Services.AddScoped(typeof(IControllerStatisticsService), typeof(Controll
 builder.Services.AddScoped(typeof(IRequestCountMapperService), typeof(RequestCountMapperService));
 builder.Services.AddScoped(typeof(IRequestCountRepository), typeof(RequestCountRepository));
 
+builder.Services.AddScoped(typeof(IImageService), typeof(ImageService));
+
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 {

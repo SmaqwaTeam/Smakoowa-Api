@@ -1,4 +1,5 @@
-﻿using Smakoowa_Api.Models.DatabaseModels;
+﻿using Azure.Core;
+using Smakoowa_Api.Models.DatabaseModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Smakoowa_Api.Services
@@ -15,10 +16,11 @@ namespace Smakoowa_Api.Services
         private readonly IInstructionMapperService _instructionMapperService;
         private readonly IApiUserService _apiUserService;
         private readonly IApiUserRepository _apiUserRepository;
+        private readonly IWebHostEnvironment _env;
 
         public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
             IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
-            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository)
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository, IWebHostEnvironment env)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -30,6 +32,7 @@ namespace Smakoowa_Api.Services
             _instructionMapperService = instructionMapperService;
             _apiUserService = apiUserService;
             _apiUserRepository = apiUserRepository;
+            _env = env;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
@@ -46,7 +49,7 @@ namespace Smakoowa_Api.Services
             var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
             try
-            {
+            { 
                 var createdRecipe = await _recipeRepository.Create(recipe);
                 return ServiceResponse.Success("Recipe created.");
             }
@@ -55,6 +58,9 @@ namespace Smakoowa_Api.Services
                 return _helperService.HandleException(ex, "Something went wrong while creating a recipe.");
             }
         }
+
+        
+
 
         public async Task<ServiceResponse> Delete(int recipeId)
         {
