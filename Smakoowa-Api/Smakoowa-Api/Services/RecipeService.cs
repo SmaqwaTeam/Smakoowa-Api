@@ -107,7 +107,7 @@
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
-                var getDetailedRecipeResponseDto = _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
+                var getDetailedRecipeResponseDto = await _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
                 return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
             }
             catch (Exception ex)
@@ -122,7 +122,7 @@
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
-                var getRecipeResponseDto = _recipeMapperService.MapGetRecipeResponseDto(recipe);
+                var getRecipeResponseDto = await _recipeMapperService.MapGetRecipeResponseDto(recipe);
                 return ServiceResponse<RecipeResponseDto>.Success(getRecipeResponseDto, "Recipe retrieved.");
             }
             catch (Exception ex)
@@ -186,7 +186,7 @@
                 var recipes = await _recipeRepository.FindByConditions(expresion);
 
                 List<RecipeResponseDto> recipeResponseDtos = new();
-                foreach (var recipe in recipes) recipeResponseDtos.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
+                foreach (var recipe in recipes) recipeResponseDtos.Add(await _recipeMapperService.MapGetRecipeResponseDto(recipe));
 
                 return ServiceResponse<List<RecipeResponseDto>>.Success(recipeResponseDtos, "Recipes retrieved.");
             }
