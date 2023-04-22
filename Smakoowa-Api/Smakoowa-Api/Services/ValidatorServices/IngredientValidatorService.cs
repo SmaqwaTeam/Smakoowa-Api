@@ -4,13 +4,8 @@ namespace Smakoowa_Api.Services.ValidatorServices
 {
     public class IngredientValidatorService : BaseValidatorService, IIngredientValidatorService
     {
-        private readonly IIngredientRepository _ingredientRepository;
-        private readonly IRecipeRepository _recipeRepository;
-        public IngredientValidatorService(IConfiguration configuration, IIngredientRepository ingredientRepository, IRecipeRepository recipeRepository)
-        : base(configuration, "Validation:Ingredient")
+        public IngredientValidatorService(IConfiguration configuration): base(configuration, "Validation:Ingredient")
         {
-            _ingredientRepository = ingredientRepository;
-            _recipeRepository = recipeRepository;
         }
 
         public async Task<ServiceResponse> ValidateIngredientRequestDtos(List<IngredientRequestDto> ingredientRequestDtos)

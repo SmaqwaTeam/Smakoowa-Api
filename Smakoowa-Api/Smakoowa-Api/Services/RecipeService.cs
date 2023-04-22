@@ -74,6 +74,9 @@
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
+            if (recipe.CreatorId != _apiUserService.GetCurrentUserId()) 
+                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
+
             var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
             if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
 
