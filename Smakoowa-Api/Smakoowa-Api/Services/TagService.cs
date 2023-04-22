@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels;
-using Smakoowa_Api.Models.Enums;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class TagService : ITagService
     {
@@ -9,14 +6,16 @@ namespace Smakoowa_Api.Services
         private readonly ITagMapperService _tagMapperService;
         private readonly ITagValidatorService _tagValidatorService;
         private readonly IHelperService<TagService> _helperService;
+        private readonly ITagLikeService _tagLikeService;
 
         public TagService(ITagRepository tagRepository, ITagMapperService tagMapperService,
-    ITagValidatorService tagValidatorService, IHelperService<TagService> helperService)
+            ITagValidatorService tagValidatorService, IHelperService<TagService> helperService, ITagLikeService tagLikeService)
         {
             _tagRepository = tagRepository;
             _tagMapperService = tagMapperService;
             _tagValidatorService = tagValidatorService;
             _helperService = helperService;
+            _tagLikeService = tagLikeService;
         }
 
         public async Task<ServiceResponse> Create(TagRequestDto tagRequestDto)
@@ -115,6 +114,12 @@ namespace Smakoowa_Api.Services
             return await GetByConditions(t => t.TagType == tagType);
         }
 
+        public async Task<ServiceResponse> GetUserLikedTags()
+        {
+            var likedTagIds = (await _tagLikeService.GetUserTagLikes()).Select(tl => tl.TagId);
+            return await GetByConditions(t => likedTagIds.Any(tl => tl == t.Id));
+        }
+
         private async Task<ServiceResponse> GetByConditions(Expression<Func<Tag, bool>> expresion)
         {
             try
@@ -122,7 +127,7 @@ namespace Smakoowa_Api.Services
                 var tags = await _tagRepository.FindByConditions(expresion);
 
                 List<TagResponseDto> getTagResponseDtos = new();
-                foreach(var tag in tags) getTagResponseDtos.Add(_tagMapperService.MapGetTagResponseDto(tag));
+                foreach (var tag in tags) getTagResponseDtos.Add(_tagMapperService.MapGetTagResponseDto(tag));
                 return ServiceResponse<List<TagResponseDto>>.Success(getTagResponseDtos, "Tags retrieved.");
             }
             catch (Exception ex)

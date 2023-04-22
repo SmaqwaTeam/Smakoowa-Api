@@ -4,5 +4,6 @@
     {
         public Task<ServiceResponse> AddTagLike(int tagId);
         public Task<ServiceResponse> RemoveTagLike(int tagId);
+        public Task<IEnumerable<TagLike>> GetUserTagLikes();
     }
 }
