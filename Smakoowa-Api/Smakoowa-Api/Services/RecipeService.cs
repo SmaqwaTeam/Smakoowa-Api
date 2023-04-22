@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
@@ -175,6 +172,11 @@ namespace Smakoowa_Api.Services
                 .RecipeLikes.Select(t => t.RecipeId);
 
             return await GetRecipesByConditions(c => userLikedRecipeIds.Contains(c.Id));
+        }
+
+        public async Task<ServiceResponse> GetUserRecipies(int userId)
+        {
+            return await GetRecipesByConditions(r => r.CreatorId == userId);
         }
 
         private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
