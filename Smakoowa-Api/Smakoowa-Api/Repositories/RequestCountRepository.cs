@@ -13,5 +13,10 @@
         {
             return await _context.Set<RequestCount>().ToListAsync();
         }
+
+        public async Task<RequestCount> FindByConditionsFirstOrDefault(Expression<Func<RequestCount, bool>> expresion)
+        {
+            return await _context.Set<RequestCount>().Where(expresion).FirstOrDefaultAsync();
+        }
     }
 }

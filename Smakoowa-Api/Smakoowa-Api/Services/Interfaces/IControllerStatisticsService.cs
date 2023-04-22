@@ -3,5 +3,6 @@
     public interface IControllerStatisticsService
     {
         public Task<ServiceResponse> GetAll();
+        public Task<int> GetRecipeViewCount(int recipeId);
     }
 }

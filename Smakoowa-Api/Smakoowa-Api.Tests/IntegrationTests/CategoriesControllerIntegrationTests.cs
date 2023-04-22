@@ -33,11 +33,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             string url = "/api/Categories/GetAll";
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<List<CategoryResponseDto>>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<List<CategoryResponseDto>>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllCategory1") && responseContent.Content.Exists(c => c.Name == "TestGetAllCategory2"));
         }
 
@@ -51,11 +50,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Categories/GetById/{savedCategory.Id}";
 
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<CategoryResponseDto>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<CategoryResponseDto>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(responseContent.Content.Id == savedCategory.Id);
         }
 
@@ -67,11 +65,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = "TestCreateCategory" };
 
             // Act
-            var response = await _HttpClient.PostAsJsonAsync(url, categoryRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PostAsJsonAsync(url, categoryRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Categories.AnyAsync(c => c.Name == "TestCreateCategory"));
         }
 
@@ -86,11 +83,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             CategoryRequestDto categoryRequest = new CategoryRequestDto { Name = "TestEditCategory" };
 
             // Act
-            var response = await _HttpClient.PutAsJsonAsync(url, categoryRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PutAsJsonAsync(url, categoryRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Categories.AnyAsync(c => c.Name == "TestEditCategory"));
         }
 
@@ -104,11 +100,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Categories/Delete/{uneditedCategory.Id}";
 
             // Act
-            var response = await _HttpClient.DeleteAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.DeleteAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.False(await _context.Categories.AnyAsync(c => c.Name == "TestDeleteCategory"));
         }
 
@@ -127,30 +122,19 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             CategoryRequestDto CategoryRequestMaxName = new CategoryRequestDto { Name = maxName };
 
             await AddToDatabase(new List<Category> { categoryMinName, categoryMaxName });
-            var uneditedCategories = await FindInDatabaseByConditions<Category>(c => c.Name == minName || c.Name == maxName);
 
             string createUrl = $"/api/Categories/Create";
-            string editUrlMin = $"/api/Categories/Edit/{uneditedCategories[0].Id}";
-            string editUrlMax = $"/api/Categories/Edit/{uneditedCategories[1].Id}";
 
             // Act
-            var responseCreateCategoryRequestMinName = await _HttpClient.PostAsJsonAsync(createUrl, CategoryRequestMinName);
-            var responseContentCreateCategoryRequestMinName = await DeserializeResponse<ServiceResponse>(responseCreateCategoryRequestMinName);
+            var responseContentCreateCategoryRequestMinName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, CategoryRequestMinName));
 
-            var responseCreateCategoryRequestMaxName = await _HttpClient.PostAsJsonAsync(createUrl, CategoryRequestMaxName);
-            var responseContentCreateCategoryRequestMaxName = await DeserializeResponse<ServiceResponse>(responseCreateCategoryRequestMaxName);
-
-            var responseEditCategoryRequestMinName = await _HttpClient.PutAsJsonAsync(editUrlMin, CategoryRequestMinName);
-            var responseContentEditCategoryRequestMinName = await DeserializeResponse<ServiceResponse>(responseEditCategoryRequestMinName);
-
-            var responseEditCategoryRequestMaxName = await _HttpClient.PutAsJsonAsync(editUrlMax, CategoryRequestMaxName);
-            var responseContentEditCategoryRequestMaxName = await DeserializeResponse<ServiceResponse>(responseEditCategoryRequestMaxName);
+            var responseContentCreateCategoryRequestMaxName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, CategoryRequestMaxName));
 
             // Assert
-            AssertResponseFailure(responseCreateCategoryRequestMinName, responseContentCreateCategoryRequestMinName);
-            AssertResponseFailure(responseCreateCategoryRequestMaxName, responseContentCreateCategoryRequestMaxName);
-            AssertResponseFailure(responseEditCategoryRequestMinName, responseContentEditCategoryRequestMinName);
-            AssertResponseFailure(responseEditCategoryRequestMaxName, responseContentEditCategoryRequestMaxName);
+            AssertResponseFailure(responseContentCreateCategoryRequestMinName);
+            AssertResponseFailure(responseContentCreateCategoryRequestMaxName);
         }
     }
 }

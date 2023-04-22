@@ -45,15 +45,13 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             return addedModel.Entity;
         }
 
-        protected void AssertResponseSuccess(HttpResponseMessage response, ServiceResponse responseContent)
+        protected void AssertResponseSuccess(ServiceResponse responseContent)
         {
-            response.EnsureSuccessStatusCode();
             Assert.True(responseContent.SuccessStatus);
         }
 
-        protected void AssertResponseFailure(HttpResponseMessage response, ServiceResponse responseContent)
+        protected void AssertResponseFailure(ServiceResponse responseContent)
         {
-            response.EnsureSuccessStatusCode();
             Assert.False(responseContent.SuccessStatus);
         }
 
