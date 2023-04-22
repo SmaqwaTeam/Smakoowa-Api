@@ -29,23 +29,23 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string addCommentReplyLikeUrl = $"/api/Likes/AddCommentReplyLike/{testCommentReply.Id}";
 
             // Act
-            var addRecipeLikeResponse = await _HttpClient.PostAsJsonAsync(addRecipeLikeUrl, testRecipe.Id);
-            var addRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>(addRecipeLikeResponse);
+            var addRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addRecipeLikeUrl, testRecipe.Id));
 
-            var addRecipeCommentLikeResponse = await _HttpClient.PostAsJsonAsync(addRecipeCommentLikeUrl, testRecipeComment.Id);
-            var addRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>(addRecipeCommentLikeResponse);
+            var addRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addRecipeCommentLikeUrl, testRecipeComment.Id));
 
-            var addCommentReplyLikeResponse = await _HttpClient.PostAsJsonAsync(addCommentReplyLikeUrl, testCommentReply.Id);
-            var addCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>(addCommentReplyLikeResponse);
+            var addCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addCommentReplyLikeUrl, testCommentReply.Id));
 
             // Assert
-            AssertResponseSuccess(addRecipeLikeResponse, addRecipeLikeResponseContent);
+            AssertResponseSuccess(addRecipeLikeResponseContent);
             Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipe.Id));
 
-            AssertResponseSuccess(addRecipeCommentLikeResponse, addRecipeCommentLikeResponseContent);
+            AssertResponseSuccess(addRecipeCommentLikeResponseContent);
             Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipeComment.Id));
 
-            AssertResponseSuccess(addCommentReplyLikeResponse, addCommentReplyLikeResponseContent);
+            AssertResponseSuccess(addCommentReplyLikeResponseContent);
             Assert.True(await _context.CommentReplies.AnyAsync(c => c.Likes.Count > 0 && c.Id == testCommentReply.Id));
         }
 
@@ -65,23 +65,23 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
 
             // Act
-            var removeRecipeLikeResponse = await _HttpClient.DeleteAsync(removeRecipeLikeUrl);
-            var removeRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>(removeRecipeLikeResponse);
+            var removeRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.DeleteAsync(removeRecipeLikeUrl));
 
-            var removeRecipeCommentLikeResponse = await _HttpClient.DeleteAsync(removeRecipeCommentLikeUrl);
-            var removeRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>(removeRecipeCommentLikeResponse);
+            var removeRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.DeleteAsync(removeRecipeCommentLikeUrl));
 
-            var removeCommentReplyLikeResponse = await _HttpClient.DeleteAsync(removeCommentReplyLikeUrl);
-            var removeCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>(removeCommentReplyLikeResponse);
+            var removeCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.DeleteAsync(removeCommentReplyLikeUrl));
 
             // Assert
-            AssertResponseSuccess(removeRecipeLikeResponse, removeRecipeLikeResponseContent);
+            AssertResponseSuccess(removeRecipeLikeResponseContent);
             Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipe.Id));
 
-            AssertResponseSuccess(removeRecipeCommentLikeResponse, removeRecipeCommentLikeResponseContent);
+            AssertResponseSuccess(removeRecipeCommentLikeResponseContent);
             Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipeComment.Id));
 
-            AssertResponseSuccess(removeCommentReplyLikeResponse, removeCommentReplyLikeResponseContent);
+            AssertResponseSuccess(removeCommentReplyLikeResponseContent);
             Assert.True(await _context.CommentReplies.AnyAsync(c => c.Likes.Count == 0 && c.Id == testCommentReply.Id));
         }
 
