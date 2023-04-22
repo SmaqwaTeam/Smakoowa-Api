@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
@@ -77,6 +74,9 @@ namespace Smakoowa_Api.Services
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
+            if (recipe.CreatorId != _apiUserService.GetCurrentUserId()) 
+                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
+
             var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
             if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
 
@@ -110,7 +110,7 @@ namespace Smakoowa_Api.Services
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
-                var getDetailedRecipeResponseDto = _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
+                var getDetailedRecipeResponseDto = await _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
                 return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace Smakoowa_Api.Services
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
-                var getRecipeResponseDto = _recipeMapperService.MapGetRecipeResponseDto(recipe);
+                var getRecipeResponseDto = await _recipeMapperService.MapGetRecipeResponseDto(recipe);
                 return ServiceResponse<RecipeResponseDto>.Success(getRecipeResponseDto, "Recipe retrieved.");
             }
             catch (Exception ex)
@@ -177,6 +177,11 @@ namespace Smakoowa_Api.Services
             return await GetRecipesByConditions(c => userLikedRecipeIds.Contains(c.Id));
         }
 
+        public async Task<ServiceResponse> GetUserRecipies(int userId)
+        {
+            return await GetRecipesByConditions(r => r.CreatorId == userId);
+        }
+
         private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> expresion)
         {
             try
@@ -184,7 +189,7 @@ namespace Smakoowa_Api.Services
                 var recipes = await _recipeRepository.FindByConditions(expresion);
 
                 List<RecipeResponseDto> recipeResponseDtos = new();
-                foreach (var recipe in recipes) recipeResponseDtos.Add(_recipeMapperService.MapGetRecipeResponseDto(recipe));
+                foreach (var recipe in recipes) recipeResponseDtos.Add(await _recipeMapperService.MapGetRecipeResponseDto(recipe));
 
                 return ServiceResponse<List<RecipeResponseDto>>.Success(recipeResponseDtos, "Recipes retrieved.");
             }

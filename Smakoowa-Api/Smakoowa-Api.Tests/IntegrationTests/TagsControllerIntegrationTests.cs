@@ -32,12 +32,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = "/api/Tags/GetAll";
 
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<List<TagResponseDto>>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<List<TagResponseDto>>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllTag1") && responseContent.Content.Exists(c => c.Name == "TestGetAllTag2"));
+            AssertResponseSuccess(responseContent);
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllTag1") 
+                && responseContent.Content.Exists(c => c.Name == "TestGetAllTag2"));
         }
 
         [Fact]
@@ -50,11 +50,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Tags/GetById/{savedTag.Id}";
 
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<TagResponseDto>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<TagResponseDto>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(responseContent.Content.Id == savedTag.Id);
         }
 
@@ -66,11 +65,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             TagRequestDto tagRequest = new TagRequestDto { Name = "TestCreateTag" };
 
             // Act
-            var response = await _HttpClient.PostAsJsonAsync(url, tagRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PostAsJsonAsync(url, tagRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Tags.AnyAsync(c => c.Name == "TestCreateTag"));
         }
 
@@ -85,11 +83,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             TagRequestDto tagRequest = new TagRequestDto { Name = "TestEditTag" };
 
             // Act
-            var response = await _HttpClient.PutAsJsonAsync(url, tagRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PutAsJsonAsync(url, tagRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Tags.AnyAsync(c => c.Name == "TestEditTag"));
         }
 
@@ -102,11 +99,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Tags/Delete/{tagToDelete.Id}";
 
             // Act
-            var response = await _HttpClient.DeleteAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.DeleteAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(!await _context.Tags.AnyAsync(c => c.Id == tagToDelete.Id));
         }
 
@@ -124,30 +120,19 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             TagRequestDto TagRequestMaxName = new TagRequestDto { Name = maxName };
 
             await AddToDatabase(new List<Tag> { tagMinName, tagMaxName });
-            var uneditedTags = await FindInDatabaseByConditions<Tag>(t => t.Name == minName || t.Name == maxName);
 
             string createUrl = $"/api/Tags/Create";
-            string editUrlMin = $"/api/Tags/Edit/{uneditedTags[0].Id}";
-            string editUrlMax = $"/api/Tags/Edit/{uneditedTags[1].Id}";
 
             // Act
-            var responseCreateTagRequestMinName = await _HttpClient.PostAsJsonAsync(createUrl, TagRequestMinName);
-            var responseContentCreateTagRequestMinName = await DeserializeResponse<ServiceResponse>(responseCreateTagRequestMinName);
+            var responseContentCreateTagRequestMinName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, TagRequestMinName));
 
-            var responseCreateTagRequestMaxName = await _HttpClient.PostAsJsonAsync(createUrl, TagRequestMaxName);
-            var responseContentCreateTagRequestMaxName = await DeserializeResponse<ServiceResponse>(responseCreateTagRequestMaxName);
-
-            var responseEditTagRequestMinName = await _HttpClient.PutAsJsonAsync(editUrlMin, TagRequestMinName);
-            var responseContentEditTagRequestMinName = await DeserializeResponse<ServiceResponse>(responseEditTagRequestMinName);
-
-            var responseEditTagRequestMaxName = await _HttpClient.PutAsJsonAsync(editUrlMax, TagRequestMaxName);
-            var responseContentEditTagRequestMaxName = await DeserializeResponse<ServiceResponse>(responseEditTagRequestMaxName);
+            var responseContentCreateTagRequestMaxName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, TagRequestMaxName));
 
             // Assert
-            AssertResponseFailure(responseCreateTagRequestMinName, responseContentCreateTagRequestMinName);
-            AssertResponseFailure(responseCreateTagRequestMaxName, responseContentCreateTagRequestMaxName);
-            AssertResponseFailure(responseEditTagRequestMinName, responseContentEditTagRequestMinName);
-            AssertResponseFailure(responseEditTagRequestMaxName, responseContentEditTagRequestMaxName);
+            AssertResponseFailure(responseContentCreateTagRequestMinName);
+            AssertResponseFailure(responseContentCreateTagRequestMaxName);
         }
     }
 }

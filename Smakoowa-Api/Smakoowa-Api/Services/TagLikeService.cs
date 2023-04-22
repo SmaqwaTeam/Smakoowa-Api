@@ -20,6 +20,11 @@
             return await AddLike(tagLike);
         }
 
+        public async Task<IEnumerable<TagLike>> GetUserTagLikes()
+        {
+            return await _tagLikeRepository.FindByConditions(tl => tl.CreatorId == _apiUserService.GetCurrentUserId());
+        }
+
         public async Task<ServiceResponse> RemoveTagLike(int tagId)
         {
             var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedTag.Id == tagId && c.CreatorId == _apiUserService.GetCurrentUserId());

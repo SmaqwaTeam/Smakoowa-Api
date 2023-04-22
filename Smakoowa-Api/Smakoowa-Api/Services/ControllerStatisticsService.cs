@@ -27,5 +27,16 @@
                 return _helperService.HandleException(ex, "Something went wrong while accessing the statistics.");
             }
         }
+
+        public async Task<int> GetRecipeViewCount(int recipeId)
+        {
+            var recipeViewCount = await _requestCountRepository.FindByConditionsFirstOrDefault(rc =>
+            rc.ControllerName == "Recipes"
+            && rc.ActionName == "GetByIdDetailed"
+            && rc.RemainingPath == recipeId.ToString());
+
+            if (recipeViewCount == null) return 0;
+            else return recipeViewCount.Count;
+        }
     }
 }

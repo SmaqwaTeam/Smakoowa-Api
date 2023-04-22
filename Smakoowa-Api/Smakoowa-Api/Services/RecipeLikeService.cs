@@ -20,6 +20,11 @@
             return await AddLike(recipeLike);
         }
 
+        public async Task<int> GetRecipeLikeCount(int recipeId)
+        {
+            return (await _recipeLikeRepository.FindByConditions(rl => rl.RecipeId == recipeId)).Count();
+        }
+
         public async Task<ServiceResponse> RemoveRecipeLike(int recipeId)
         {
             var likeToRemove = await _recipeLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedRecipe.Id == recipeId && c.CreatorId == _apiUserService.GetCurrentUserId());

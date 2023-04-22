@@ -9,5 +9,6 @@
         public Task<ServiceResponse> SearchRecipesByName(string querry);
         public Task<ServiceResponse> GetRecipiesByLikedTags();
         public Task<ServiceResponse> GetLikedRecipies();
+        public Task<ServiceResponse> GetUserRecipies(int userId);
     }
 }
