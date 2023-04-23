@@ -47,12 +47,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
         protected void AssertResponseSuccess(ServiceResponse responseContent)
         {
-            Assert.True(responseContent.SuccessStatus);
+            Assert.True(responseContent.SuccessStatus, responseContent.Message);
         }
 
         protected void AssertResponseFailure(ServiceResponse responseContent)
         {
-            Assert.False(responseContent.SuccessStatus);
+            Assert.False(responseContent.SuccessStatus, responseContent.Message);
         }
 
         protected virtual async Task<List<T>> FindInDatabaseByConditions<T>(Expression<Func<T, bool>> expresion) where T : class

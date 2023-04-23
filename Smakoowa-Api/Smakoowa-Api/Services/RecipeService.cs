@@ -12,11 +12,10 @@
         private readonly IInstructionMapperService _instructionMapperService;
         private readonly IApiUserService _apiUserService;
         private readonly IApiUserRepository _apiUserRepository;
-        private readonly IWebHostEnvironment _env;
 
         public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
             IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
-            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository, IWebHostEnvironment env)
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -28,7 +27,6 @@
             _instructionMapperService = instructionMapperService;
             _apiUserService = apiUserService;
             _apiUserRepository = apiUserRepository;
-            _env = env;
         }
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
