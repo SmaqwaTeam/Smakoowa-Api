@@ -15,7 +15,7 @@ namespace Smakoowa_Api.Controllers
 
         [JwtAuthorize("User", "Admin")]
         [HttpPost("Create")]
-        public async Task<ServiceResponse> Create([FromBody] RecipeRequestDto recipeRequestDto)
+        public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
         {
             return await _recipeService.Create(recipeRequestDto);
         }
