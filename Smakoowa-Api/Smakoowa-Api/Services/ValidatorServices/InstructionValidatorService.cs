@@ -8,6 +8,7 @@
         {
             MaxContentLength = int.Parse(configuration.GetSection("Validation:Instruction:MaxContentLength").Value);
         }
+
         public async Task<ServiceResponse> ValidateInstructionRequestDtos(List<InstructionRequestDto> instructionRequestDtos)
         {
             foreach (var instructionRequestDto in instructionRequestDtos)

@@ -25,11 +25,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             RecipeCommentRequestDto recipeCommentRequest = new RecipeCommentRequestDto { Content = "TestCreateRecipeComment" };
 
             // Act
-            var response = await _HttpClient.PostAsJsonAsync(url, recipeCommentRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PostAsJsonAsync(url, recipeCommentRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == "TestCreateRecipeComment"));
         }
 
@@ -41,11 +40,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Comments/DeleteRecipeComment/{testRecipeComment.Id}";
 
             // Act
-            var response = await _HttpClient.DeleteAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.DeleteAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(!await _context.RecipeComments.AnyAsync(c => c.Id == testRecipeComment.Id));
         }
 
@@ -60,11 +58,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             CommentReplyRequestDto commentReplyRequestDto = new CommentReplyRequestDto { Content = "TestCreateCommentReply" };
 
             // Act
-            var response = await _HttpClient.PostAsJsonAsync(url, commentReplyRequestDto);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PostAsJsonAsync(url, commentReplyRequestDto));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.RecipeComments.AnyAsync(c => c.Content == "TestCreateCommentReply"));
         }
 
@@ -77,11 +74,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Comments/DeleteCommentReply/{testCommentReply.Id}";
 
             // Act
-            var response = await _HttpClient.DeleteAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.DeleteAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(!await _context.CommentReplies.AnyAsync(c => c.Id == testCommentReply.Id));
         }
 

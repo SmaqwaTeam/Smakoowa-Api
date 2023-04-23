@@ -58,6 +58,13 @@ namespace Smakoowa_Api.Controllers
         {
             return await _tagService.GetByType(tagType);
         }
+
+        [JwtAuthorize("Admin", "User")]
+        [HttpGet("GetUserLikedTags")]
+        public async Task<ServiceResponse> GetUserLikedTags()
+        {
+            return await _tagService.GetUserLikedTags();
+        }
     }
 }
 

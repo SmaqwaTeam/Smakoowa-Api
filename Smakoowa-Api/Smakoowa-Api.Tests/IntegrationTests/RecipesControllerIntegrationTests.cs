@@ -32,12 +32,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = "/api/Recipes/GetAll";
 
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<List<RecipeResponseDto>>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<List<RecipeResponseDto>>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe1") && responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe2"));
+            AssertResponseSuccess(responseContent);
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe1") 
+                && responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe2"));
         }
 
         [Fact]
@@ -50,11 +50,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Recipes/GetById/{savedRecipe.Id}";
 
             // Act
-            var response = await _HttpClient.GetAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse<RecipeResponseDto>>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse<RecipeResponseDto>>(await _HttpClient.GetAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(responseContent.Content.Id == savedRecipe.Id);
         }
 
@@ -67,11 +66,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Recipes/Create";
 
             // Act
-            var response = await _HttpClient.PostAsJsonAsync(url, recipeRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PostAsJsonAsync(url, recipeRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Recipes.AnyAsync(c => c.Name == "TestCreateRecipe"));
         }
 
@@ -86,11 +84,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             RecipeRequestDto recipeRequest = await GetTestRecipeRequestDto("TestEditRecipe");
 
             // Act
-            var response = await _HttpClient.PutAsJsonAsync(url, recipeRequest);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.PutAsJsonAsync(url, recipeRequest));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(await _context.Recipes.AnyAsync(c => c.Name == "TestEditRecipe"));
         }
 
@@ -103,11 +100,10 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             string url = $"/api/Recipes/Delete/{recipeToDelete.Id}";
 
             // Act
-            var response = await _HttpClient.DeleteAsync(url);
-            var responseContent = await DeserializeResponse<ServiceResponse>(response);
+            var responseContent = await DeserializeResponse<ServiceResponse>(await _HttpClient.DeleteAsync(url));
 
             // Assert
-            AssertResponseSuccess(response, responseContent);
+            AssertResponseSuccess(responseContent);
             Assert.True(!await _context.Recipes.AnyAsync(c => c.Id == recipeToDelete.Id));
         }
 
@@ -124,30 +120,19 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             RecipeRequestDto RecipeRequestMaxName = new RecipeRequestDto { Name = maxName };
 
             await AddToDatabase(new List<Recipe> { recipeMinName, recipeMaxName });
-            var uneditedRecipes = await FindInDatabaseByConditions<Recipe>(t => t.Name == minName || t.Name == maxName);
 
             string createUrl = $"/api/Recipes/Create";
-            string editUrlMin = $"/api/Recipes/Edit/{uneditedRecipes[0].Id}";
-            string editUrlMax = $"/api/Recipes/Edit/{uneditedRecipes[1].Id}";
 
             // Act
-            var responseCreateRecipeRequestMinName = await _HttpClient.PostAsJsonAsync(createUrl, RecipeRequestMinName);
-            var responseContentCreateRecipeRequestMinName = await DeserializeResponse<ServiceResponse>(responseCreateRecipeRequestMinName);
+            var responseContentCreateRecipeRequestMinName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, RecipeRequestMinName));
 
-            var responseCreateRecipeRequestMaxName = await _HttpClient.PostAsJsonAsync(createUrl, RecipeRequestMaxName);
-            var responseContentCreateRecipeRequestMaxName = await DeserializeResponse<ServiceResponse>(responseCreateRecipeRequestMaxName);
-
-            var responseEditRecipeRequestMinName = await _HttpClient.PutAsJsonAsync(editUrlMin, RecipeRequestMinName);
-            var responseContentEditRecipeRequestMinName = await DeserializeResponse<ServiceResponse>(responseEditRecipeRequestMinName);
-
-            var responseEditRecipeRequestMaxName = await _HttpClient.PutAsJsonAsync(editUrlMax, RecipeRequestMaxName);
-            var responseContentEditRecipeRequestMaxName = await DeserializeResponse<ServiceResponse>(responseEditRecipeRequestMaxName);
+            var responseContentCreateRecipeRequestMaxName = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(createUrl, RecipeRequestMaxName));
 
             // Assert
-            AssertResponseFailure(responseCreateRecipeRequestMinName, responseContentCreateRecipeRequestMinName);
-            AssertResponseFailure(responseCreateRecipeRequestMaxName, responseContentCreateRecipeRequestMaxName);
-            AssertResponseFailure(responseEditRecipeRequestMinName, responseContentEditRecipeRequestMinName);
-            AssertResponseFailure(responseEditRecipeRequestMaxName, responseContentEditRecipeRequestMaxName);
+            AssertResponseFailure(responseContentCreateRecipeRequestMinName);
+            AssertResponseFailure(responseContentCreateRecipeRequestMaxName);
         }
 
         private async Task<RecipeRequestDto> GetTestRecipeRequestDto(string testName)

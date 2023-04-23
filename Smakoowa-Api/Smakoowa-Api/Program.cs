@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Smakoowa_Api.Middlewares;
 using Smakoowa_Api.Services.BackgroundTaskQueue;
+using Smakoowa_Api.Services.Helper;
+using Smakoowa_Api.Services.Interfaces.Helper;
 using Smakoowa_Api.Services.MapperServices;
 using System.Text;
 
@@ -116,6 +118,8 @@ builder.Services.AddScoped(typeof(IRequestCountRepository), typeof(RequestCountR
 builder.Services.AddScoped(typeof(IImageService), typeof(ImageService));
 builder.Services.AddScoped(typeof(IImageValidatorService), typeof(ImageValidatorService));
 
+builder.Services.AddTransient(typeof(IJsonKeyValueGetter), typeof(JsonKeyValueGetter));
+
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 {
@@ -162,9 +166,12 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(c => c.Run(async context =>
 {
     var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-    if (exception is SecurityTokenValidationException) context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    if (exception is SecurityTokenValidationException)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+    }
     else context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
+    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, (HttpStatusCode)context.Response.StatusCode));
 }));
 
 app.UseCors("corspolicy");
@@ -173,6 +180,7 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 
+app.UseMiddleware<ServiceResponseMiddleware>();
 app.UseMiddleware<RequestCountMiddleware>();
 
 app.Run();
