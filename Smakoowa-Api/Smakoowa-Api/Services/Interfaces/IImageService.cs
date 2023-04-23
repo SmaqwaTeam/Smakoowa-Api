@@ -3,6 +3,6 @@
     public interface IImageService
     {
         public Task<ServiceResponse> AddImageToRecipe(IFormFile image, int recipeId);
-        public FileStream GetRecipeImage(string imageUrl);
+        public FileStream GetRecipeImage(string imageId);
     }
 }

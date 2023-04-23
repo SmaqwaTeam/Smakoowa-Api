@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        public string? ThumbnailImageUrl { get; set; }
+        public string? ImageId { get; set; }
         public ServingsTier ServingsTier { get; set; }
         public TimeToMakeTier TimeToMakeTier { get; set; }
 

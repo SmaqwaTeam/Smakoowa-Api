@@ -7,10 +7,12 @@ namespace Smakoowa_Api.Controllers
     public class ImagesController : ControllerBase
     {
         private readonly IImageService _imageService;
-         
-        public ImagesController(IImageService imageService)
+        private readonly string _savedImageExtension;
+
+        public ImagesController(IImageService imageService, IConfiguration configuration)
         {
             _imageService = imageService;
+            _savedImageExtension = configuration.GetSection($"FileUpload:Images:SavedImageExtension").Value.Substring(1);
         }
 
         [JwtAuthorize("User", "Admin")]
@@ -20,11 +22,10 @@ namespace Smakoowa_Api.Controllers
             return await _imageService.AddImageToRecipe(image, recipeId);
         }
 
-        [HttpGet("GetImage/{imageUrl}")]
-        public IActionResult GetImage(string imageUrl)
+        [HttpGet("GetRecipeImage/{imageId}")]
+        public IActionResult GetRecipeImage(string imageId)
         {
-            var imageFileStream = _imageService.GetRecipeImage(imageUrl);
-            return File(imageFileStream, "image/jpeg");
+            return File(_imageService.GetRecipeImage(imageId), $"image/{_savedImageExtension}");
         }
     }
 }

@@ -8,7 +8,7 @@
         private readonly IImageValidatorService _imageValidatorService;
         private readonly IApiUserService _apiUserService;
         private readonly string _recipeImageUploadPath;
-        private readonly string _savedImageExtansion;
+        private readonly string _savedImageExtension;
 
         public ImageService(IRecipeRepository recipeRepository, IWebHostEnvironment env, IHelperService<ImageService> helperService,
             IImageValidatorService imageValidatorService, IApiUserService apiUserService, IConfiguration configuration)
@@ -19,7 +19,7 @@
             _imageValidatorService = imageValidatorService;
             _apiUserService = apiUserService;
             _recipeImageUploadPath = configuration.GetSection($"FileUpload:Images:RecipeImageUploadPath").Value;
-            _savedImageExtansion = configuration.GetSection($"FileUpload:Images:SavedImageExtension").Value;
+            _savedImageExtension = configuration.GetSection($"FileUpload:Images:SavedImageExtension").Value;
         }
 
         public async Task<ServiceResponse> AddImageToRecipe(IFormFile image, int recipeId)
@@ -35,10 +35,10 @@
 
             try
             {
-                var imageUrl = await SaveImage(image, _recipeImageUploadPath);
+                var imageId = await SaveImage(image, _recipeImageUploadPath);
 
-                var oldImageId = recipe.ThumbnailImageUrl;
-                recipe.ThumbnailImageUrl = imageUrl;
+                var oldImageId = recipe.ImageId;
+                recipe.ImageId = imageId;
 
                 await _recipeRepository.Edit(recipe);
 
@@ -52,9 +52,9 @@
             }
         }
 
-        public FileStream GetRecipeImage(string imageUrl)
+        public FileStream GetRecipeImage(string imageId)
         {
-            var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageUrl + _savedImageExtansion;
+            var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
 
             if (!File.Exists(imagePath)) throw new FileNotFoundException("Image not found.");
 
@@ -64,7 +64,7 @@
         private async Task<string> SaveImage(IFormFile image, string imageUploadPath)
         {
             var imageId = $"{Guid.NewGuid()}";
-            var path = Path.Combine(_env.ContentRootPath, imageUploadPath, imageId + _savedImageExtansion);
+            var path = Path.Combine(_env.ContentRootPath, imageUploadPath, imageId + _savedImageExtension);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -76,7 +76,7 @@
 
         private void DeleteImage(string imageId, string imageUploadPath)
         {
-            var filePath = Path.Combine(_env.ContentRootPath, imageUploadPath, imageId + _savedImageExtansion);
+            var filePath = Path.Combine(_env.ContentRootPath, imageUploadPath, imageId + _savedImageExtension);
 
             if (File.Exists(filePath))
             {
