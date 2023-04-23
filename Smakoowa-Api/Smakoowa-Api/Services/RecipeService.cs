@@ -1,8 +1,4 @@
-﻿using Azure.Core;
-using Smakoowa_Api.Models.DatabaseModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RecipeService : IRecipeService
     {
@@ -49,7 +45,7 @@ namespace Smakoowa_Api.Services
             var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
             try
-            { 
+            {
                 var createdRecipe = await _recipeRepository.Create(recipe);
                 return ServiceResponse.Success("Recipe created.");
             }
@@ -58,9 +54,6 @@ namespace Smakoowa_Api.Services
                 return _helperService.HandleException(ex, "Something went wrong while creating a recipe.");
             }
         }
-
-        
-
 
         public async Task<ServiceResponse> Delete(int recipeId)
         {
@@ -83,7 +76,7 @@ namespace Smakoowa_Api.Services
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
-            if (recipe.CreatorId != _apiUserService.GetCurrentUserId()) 
+            if (recipe.CreatorId != _apiUserService.GetCurrentUserId())
                 return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
 
             var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
