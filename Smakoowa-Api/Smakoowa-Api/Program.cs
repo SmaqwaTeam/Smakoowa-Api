@@ -114,6 +114,7 @@ builder.Services.AddScoped(typeof(IRequestCountMapperService), typeof(RequestCou
 builder.Services.AddScoped(typeof(IRequestCountRepository), typeof(RequestCountRepository));
 
 builder.Services.AddScoped(typeof(IImageService), typeof(ImageService));
+builder.Services.AddScoped(typeof(IImageValidatorService), typeof(ImageValidatorService));
 
 builder.Services.AddHostedService<QueuedHostedService>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>

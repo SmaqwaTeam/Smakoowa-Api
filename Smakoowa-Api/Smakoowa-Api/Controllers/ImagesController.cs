@@ -23,7 +23,7 @@ namespace Smakoowa_Api.Controllers
         [HttpGet("GetImage/{imageUrl}")]
         public IActionResult GetImage(string imageUrl)
         {
-            var imageFileStream = _imageService.GetImage(imageUrl);
+            var imageFileStream = _imageService.GetRecipeImage(imageUrl);
             return File(imageFileStream, "image/jpeg");
         }
     }
