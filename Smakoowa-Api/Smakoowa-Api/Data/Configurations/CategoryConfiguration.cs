@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.Configurations
 {
-    public class CategoryConfiguration
+    public static class CategoryConfiguration
     {
         public static void ConfigureCategories(ModelBuilder modelBuilder)
         {

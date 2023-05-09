@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.Configurations
 {
-    public class RequestCountConfiguration
+    public static class RequestCountConfiguration
     {
         public static void ConfigureRequestCount(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.DatabaseSeeds
 {
-    public class CategorySeed
+    public static class CategorySeed
     {
         public static void SeedCategories(ModelBuilder modelBuilder)
         {

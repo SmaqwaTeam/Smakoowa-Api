@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.DatabaseSeeds
 {
-    public class TagSeed
+    public static class TagSeed
     {
         public static void SeedTags(ModelBuilder modelBuilder)
         {
