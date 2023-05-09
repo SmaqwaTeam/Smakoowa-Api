@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Smakoowa_Api.Middlewares;
@@ -146,7 +147,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("corspolicy",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "https://localhost:5173") //enter your url here
+            policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "https://smakoowa-web-app.vercel.app")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -181,6 +182,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
+
+app.UseStaticFiles();
 
 app.UseMiddleware<ServiceResponseMiddleware>();
 app.UseMiddleware<RequestCountMiddleware>();

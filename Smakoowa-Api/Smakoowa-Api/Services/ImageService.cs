@@ -54,7 +54,8 @@
 
         public FileStream GetRecipeImage(string imageId)
         {
-            var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
+            //var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
+            var imagePath = Path.Combine(_env.ContentRootPath, _recipeImageUploadPath, imageId + _savedImageExtension);
 
             if (!File.Exists(imagePath)) throw new FileNotFoundException("Image not found.");
 
