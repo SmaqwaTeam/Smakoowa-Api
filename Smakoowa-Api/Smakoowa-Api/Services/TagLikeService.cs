@@ -2,10 +2,10 @@
 {
     public class TagLikeService : LikeService, ITagLikeService
     {
-        private readonly IBaseRepository<TagLike> _tagLikeRepository;
+        private readonly ITagLikeRepository _tagLikeRepository;
 
         public TagLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, ILikeValidatorService likeValidatorService,
-            IBaseRepository<TagLike> tagLikeRepository, IApiUserService apiUserService)
+            ITagLikeRepository tagLikeRepository, IApiUserService apiUserService)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _tagLikeRepository = tagLikeRepository;

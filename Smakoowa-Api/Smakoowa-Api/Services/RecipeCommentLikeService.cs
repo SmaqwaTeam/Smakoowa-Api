@@ -2,10 +2,10 @@
 {
     public class RecipeCommentLikeService : LikeService, IRecipeCommentLikeService
     {
-        private readonly IBaseRepository<RecipeCommentLike> _recipeCommentLikeRepository;
+        private readonly IRecipeCommentLikeRepository _recipeCommentLikeRepository;
 
         public RecipeCommentLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, IBaseRepository<RecipeCommentLike> recipeCommentLikeRepository)
+            ILikeValidatorService likeValidatorService, IRecipeCommentLikeRepository recipeCommentLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _recipeCommentLikeRepository = recipeCommentLikeRepository;

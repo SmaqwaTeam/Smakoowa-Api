@@ -7,11 +7,11 @@
         private readonly ICommentValidatorService _recipeCommentValidatorService;
         private readonly ICommentReplyRepository _commentReplyRepository;
         private readonly IHelperService<CommentService> _helperService;
-        private readonly IBaseRepository<Comment> _commentRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly IApiUserService _apiUserService;
 
         public CommentService(ICommentValidatorService recipeCommentValidatorService, ICommentMapperService recipeCommentMapperService,
-            IRecipeCommentRepository recipeCommentRepository, IHelperService<CommentService> helperService, IBaseRepository<Comment> commentRepository,
+            IRecipeCommentRepository recipeCommentRepository, IHelperService<CommentService> helperService, ICommentRepository commentRepository,
             ICommentReplyRepository commentReplyRepository, IApiUserService apiUserService)
         {
             _recipeCommentValidatorService = recipeCommentValidatorService;

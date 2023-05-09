@@ -63,7 +63,6 @@ builder.Services.AddDbContext<BackgroundDataContext>(options => options.UseSqlSe
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddLogging();
 
-builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
 
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
@@ -95,8 +94,6 @@ builder.Services.AddScoped(typeof(ICommentMapperService), typeof(CommentMapperSe
 builder.Services.AddScoped(typeof(ICommentService), typeof(CommentService));
 
 builder.Services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyRepository));
-builder.Services.AddScoped(typeof(IBaseRepository<CommentReply>), typeof(BaseRepository<CommentReply>));
-builder.Services.AddScoped(typeof(IBaseRepository<RecipeComment>), typeof(BaseRepository<RecipeComment>));
 
 builder.Services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
 builder.Services.AddScoped(typeof(IRecipeLikeService), typeof(RecipeLikeService));
@@ -118,6 +115,13 @@ builder.Services.AddScoped(typeof(IRequestCountRepository), typeof(RequestCountR
 builder.Services.AddScoped(typeof(IImageService), typeof(ImageService));
 builder.Services.AddScoped(typeof(IImageValidatorService), typeof(ImageValidatorService));
 
+builder.Services.AddScoped(typeof(IRecipeCommentLikeRepository), typeof(RecipeCommentLikeRepository));
+builder.Services.AddScoped(typeof(ICommentReplyLikeRepository), typeof(CommentReplyLikeRepository));
+builder.Services.AddScoped(typeof(IRecipeLikeRepository), typeof(RecipeLikeRepository));
+builder.Services.AddScoped(typeof(ITagLikeRepository), typeof(TagLikeRepository));
+
+builder.Services.AddScoped(typeof(ICommentRepository), typeof(CommentRepository));
+
 builder.Services.AddTransient(typeof(IJsonKeyValueGetter), typeof(JsonKeyValueGetter));
 
 builder.Services.AddHostedService<QueuedHostedService>();
@@ -125,7 +129,7 @@ builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 {
     if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
     {
-        queueCapacity = 100;
+        queueCapacity = 1000;
     }
 
     return new DefaultBackgroundTaskQueue(queueCapacity);

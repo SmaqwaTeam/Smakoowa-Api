@@ -3,19 +3,19 @@
     public class LikeValidatorService : ILikeValidatorService
     {
         private readonly IRecipeRepository _recipeRepository;
-        private readonly IBaseRepository<RecipeLike> _recipeLikeRepository;
+        private readonly IRecipeLikeRepository _recipeLikeRepository;
         private readonly IRecipeCommentRepository _recipeCommentRepository;
-        private readonly IBaseRepository<RecipeCommentLike> _recipeCommentLikeRepository;
+        private readonly IRecipeCommentLikeRepository _recipeCommentLikeRepository;
         private readonly ICommentReplyRepository _commentReplyRepository;
-        private readonly IBaseRepository<CommentReplyLike> _commentReplyLikeRepository;
+        private readonly ICommentReplyLikeRepository _commentReplyLikeRepository;
         private readonly ITagRepository _tagRepository;
-        private readonly IBaseRepository<TagLike> _tagLikeRepository;
+        private readonly ITagLikeRepository _tagLikeRepository;
         private readonly IApiUserService _apiUserService;
 
-        public LikeValidatorService(IRecipeRepository recipeRepository, IBaseRepository<RecipeLike> recipeLikeRepository,
-            IRecipeCommentRepository recipeCommentRepository, IBaseRepository<RecipeCommentLike> recipeCommentLikeRepository,
-            ICommentReplyRepository commentReplyRepository, IBaseRepository<CommentReplyLike> commentReplyLikeRepository, 
-            IApiUserService apiUserService, ITagRepository tagRepository, IBaseRepository<TagLike> tagLikeRepository)
+        public LikeValidatorService(IRecipeRepository recipeRepository, IRecipeLikeRepository recipeLikeRepository,
+            IRecipeCommentRepository recipeCommentRepository, IRecipeCommentLikeRepository recipeCommentLikeRepository,
+            ICommentReplyRepository commentReplyRepository, ICommentReplyLikeRepository commentReplyLikeRepository, 
+            IApiUserService apiUserService, ITagRepository tagRepository, ITagLikeRepository tagLikeRepository)
         {
             _recipeRepository = recipeRepository;
             _recipeLikeRepository = recipeLikeRepository;

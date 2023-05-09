@@ -2,10 +2,10 @@
 {
     public class CommentReplyLikeService : LikeService, ICommentReplyLikeService
     {
-        private readonly IBaseRepository<CommentReplyLike> _commentReplyLikeRepository;
+        private readonly ICommentReplyLikeRepository _commentReplyLikeRepository;
 
         public CommentReplyLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, IBaseRepository<CommentReplyLike> commentReplyLikeRepository)
+            ILikeValidatorService likeValidatorService, ICommentReplyLikeRepository commentReplyLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _commentReplyLikeRepository = commentReplyLikeRepository;

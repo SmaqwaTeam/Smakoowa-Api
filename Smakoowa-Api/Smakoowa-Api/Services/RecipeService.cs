@@ -130,7 +130,7 @@
             }
             catch (Exception ex)
             {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the recipe." + ex.Message);
+                return _helperService.HandleException(ex, "Something went wrong while accessing the recipe.");
             }
         }
 
