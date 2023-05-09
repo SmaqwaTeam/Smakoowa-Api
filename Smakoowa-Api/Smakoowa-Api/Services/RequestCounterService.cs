@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Statistics;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class RequestCounterService : IRequestCounterService
     {

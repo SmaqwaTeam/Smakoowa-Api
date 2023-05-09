@@ -78,6 +78,7 @@
             try
             {
                 var tags = await _tagRepository.FindAll();
+
                 var getTagsResponseDto = new List<TagResponseDto>();
                 foreach (Tag tag in tags) getTagsResponseDto.Add(_tagMapperService.MapGetTagResponseDto(tag));
                 return ServiceResponse<List<TagResponseDto>>.Success(getTagsResponseDto, "Tags retrieved.");

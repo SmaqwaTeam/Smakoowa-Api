@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Models.DatabaseModels.Statistics;
-
-namespace Smakoowa_Api.Data.Configurations
+﻿namespace Smakoowa_Api.Data.Configurations
 {
     public class RequestCountConfiguration
     {

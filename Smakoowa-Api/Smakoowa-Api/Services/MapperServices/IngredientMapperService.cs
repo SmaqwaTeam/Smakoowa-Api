@@ -11,7 +11,7 @@
         public List<Ingredient> MapCreateIngredientRequestDtos(List<IngredientRequestDto> ingredientRequestDtos, int recipeId)
         {
             List<Ingredient> mappedIngredients = new();
-            foreach(var ingredient in ingredientRequestDtos) mappedIngredients.Add(_mapper.Map<Ingredient>(ingredient));
+            foreach (var ingredient in ingredientRequestDtos) mappedIngredients.Add(_mapper.Map<Ingredient>(ingredient));
             foreach (Ingredient ingredient in mappedIngredients) ingredient.RecipeId = recipeId;
             return mappedIngredients;
         }

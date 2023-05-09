@@ -25,11 +25,11 @@
 
         public async Task<ServiceResponse> AddRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
         {
-            var recipeCommentValidationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
+            var recipeCommentValidationResult = await _recipeCommentValidatorService.
+                ValidateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
             if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
 
             var mappedRecipeComment = _recipeCommentMapperService.MapCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
-
             return await AddComment(mappedRecipeComment);
         }
 
@@ -39,7 +39,6 @@
             if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
 
             var mappedCommentReply = _recipeCommentMapperService.MapCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
-
             return await AddComment(mappedCommentReply);
         }
 
@@ -64,8 +63,10 @@
             if (!IsCreatorOfComment(editedRecipeComment))
                 return ServiceResponse.Error($"User is not creator of comment reply with id {recipeCommentId}.");
 
-            var recipeCommentValidationResult = await _recipeCommentValidatorService.ValidateRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment.RecipeId);
+            var recipeCommentValidationResult = await _recipeCommentValidatorService
+                .ValidateRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment.RecipeId);
             if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
+
             return await EditComment(recipeCommentRequestDto, editedRecipeComment);
         }
 
@@ -77,8 +78,10 @@
             if (!IsCreatorOfComment(editedCommentReply))
                 return ServiceResponse.Error($"User is not creator of comment reply with id {commentReplyId}.");
 
-            var commentReplyValidationResult = await _recipeCommentValidatorService.ValidateCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply.RepliedCommentId);
+            var commentReplyValidationResult = await _recipeCommentValidatorService
+                .ValidateCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply.RepliedCommentId);
             if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
+
             return await EditComment(commentReplyRequestDto, editedCommentReply);
         }
 

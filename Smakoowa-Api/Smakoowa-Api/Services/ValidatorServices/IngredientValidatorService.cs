@@ -1,10 +1,8 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services.ValidatorServices
+﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
     public class IngredientValidatorService : BaseValidatorService, IIngredientValidatorService
     {
-        public IngredientValidatorService(IConfiguration configuration): base(configuration, "Validation:Ingredient")
+        public IngredientValidatorService(IConfiguration configuration) : base(configuration, "Validation:Ingredient")
         {
         }
 

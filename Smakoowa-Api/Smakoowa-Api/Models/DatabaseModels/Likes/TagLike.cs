@@ -3,6 +3,6 @@
     public class TagLike : Like
     {
         public int TagId { get; set; }
-        public Tag LikedTag { get; set; }
+        public virtual Tag LikedTag { get; set; }
     }
 }

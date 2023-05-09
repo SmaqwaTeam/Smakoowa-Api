@@ -30,7 +30,8 @@
             }
 
             if (recipeRequestDto.TagIds is not null
-                && (await _tagRepository.FindByConditions(t => recipeRequestDto.TagIds.Contains(t.Id))).Count() != recipeRequestDto.TagIds.Count())
+                && (await _tagRepository.FindByConditions(
+                    t => recipeRequestDto.TagIds.Contains(t.Id))).Count() != recipeRequestDto.TagIds.Count())
             {
                 return ServiceResponse.Error("One or more of the specified tag ids are invalid.");
             }

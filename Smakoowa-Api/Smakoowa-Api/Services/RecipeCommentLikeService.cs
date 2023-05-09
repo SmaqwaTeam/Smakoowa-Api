@@ -22,8 +22,11 @@
 
         public async Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId)
         {
-            var likeToRemove = await _recipeCommentLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedRecipeComment.Id == recipeCommentId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            var likeToRemove = await _recipeCommentLikeRepository.FindByConditionsFirstOrDefault(
+                c => c.LikedRecipeComment.Id == recipeCommentId
+                && c.CreatorId == _apiUserService.GetCurrentUserId());
             if (likeToRemove == null) return ServiceResponse.Error($"Like of recipe comment with id: {recipeCommentId} not found.");
+
             return await RemoveLike(likeToRemove);
         }
     }

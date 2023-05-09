@@ -7,7 +7,8 @@
         private readonly int MaxCommentContentLength;
         private readonly int MinCommentContentLength;
 
-        public CommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository, IRecipeCommentRepository recipeCommentRepository)
+        public CommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository,
+            IRecipeCommentRepository recipeCommentRepository)
         {
             MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MaxCommentContentLength").Value);
             MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MinCommentContentLength").Value);

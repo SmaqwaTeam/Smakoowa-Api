@@ -27,8 +27,11 @@
 
         public async Task<ServiceResponse> RemoveTagLike(int tagId)
         {
-            var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedTag.Id == tagId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(
+                c => c.LikedTag.Id == tagId
+                && c.CreatorId == _apiUserService.GetCurrentUserId());
             if (likeToRemove == null) return ServiceResponse.Error($"Like of tag with id: {tagId} not found.");
+
             return await RemoveLike(likeToRemove);
         }
     }

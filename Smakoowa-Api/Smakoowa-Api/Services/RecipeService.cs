@@ -13,9 +13,11 @@
         private readonly IApiUserService _apiUserService;
         private readonly IApiUserRepository _apiUserRepository;
 
-        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService, IRecipeValidatorService recipeValidatorService,
-            IHelperService<RecipeService> helperService, IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
-            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService, IApiUserService apiUserService, IApiUserRepository apiUserRepository)
+        public RecipeService(IRecipeRepository recipeRepository, IRecipeMapperService recipeMapperService,
+            IRecipeValidatorService recipeValidatorService, IHelperService<RecipeService> helperService,
+            IIngredientValidatorService ingredientValidatorService, IIngredientMapperService ingredientMapperService,
+            IInstructionValidatorService instructionValidatorService, IInstructionMapperService instructionMapperService,
+            IApiUserService apiUserService, IApiUserRepository apiUserRepository)
         {
             _recipeRepository = recipeRepository;
             _recipeMapperService = recipeMapperService;
@@ -110,6 +112,7 @@
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+
                 var getDetailedRecipeResponseDto = await _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
                 return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
             }
@@ -125,6 +128,7 @@
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
                 if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+
                 var getRecipeResponseDto = await _recipeMapperService.MapGetRecipeResponseDto(recipe);
                 return ServiceResponse<RecipeResponseDto>.Success(getRecipeResponseDto, "Recipe retrieved.");
             }

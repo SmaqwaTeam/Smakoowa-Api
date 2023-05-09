@@ -5,15 +5,11 @@
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ILogger<QueuedHostedService> _logger;
 
-        public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger) => (_taskQueue, _logger) = (taskQueue, logger);
+        public QueuedHostedService(IBackgroundTaskQueue taskQueue,
+            ILogger<QueuedHostedService> logger) => (_taskQueue, _logger) = (taskQueue, logger);
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
-                $"{nameof(QueuedHostedService)} is running.{Environment.NewLine}" +
-                $"{Environment.NewLine}Tap W to add a work item to the " +
-                $"background queue.{Environment.NewLine}");
-
             return ProcessTaskQueueAsync(stoppingToken);
         }
 

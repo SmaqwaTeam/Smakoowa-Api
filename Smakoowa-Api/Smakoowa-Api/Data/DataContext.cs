@@ -1,6 +1,5 @@
 ﻿using Smakoowa_Api.Data.Configurations;
 using Smakoowa_Api.Data.DatabaseSeeds;
-using Smakoowa_Api.Models.DatabaseModels.Statistics;
 
 namespace Smakoowa_Api.Data
 {
