@@ -30,5 +30,10 @@
 
             return await RemoveLike(likeToRemove);
         }
+
+        public async Task<int> GetCommentReplyLikeCount(int commentReplyId)
+        {
+            return (await _commentReplyLikeRepository.FindByConditions(crl => crl.CommentReplyId == commentReplyId)).Count();
+        }
     }
 }

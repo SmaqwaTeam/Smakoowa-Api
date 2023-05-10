@@ -3,7 +3,7 @@
     public interface ITagMapperService
     {
         public Tag MapCreateTagRequestDto(TagRequestDto tagRequestDto);
-        public TagResponseDto MapGetTagResponseDto(Tag category);
+        public Task<TagResponseDto> MapGetTagResponseDto(Tag category);
         public Tag MapEditTagRequestDto(TagRequestDto tagRequestDto, Tag editedTag);
     }
 }

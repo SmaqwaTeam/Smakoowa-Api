@@ -29,5 +29,10 @@
 
             return await RemoveLike(likeToRemove);
         }
+
+        public async Task<int> GetRecipeCommentLikeCount(int recipeCommentId)
+        {
+            return (await _recipeCommentLikeRepository.FindByConditions(rcl => rcl.RecipeCommentId == recipeCommentId)).Count();
+        }
     }
 }

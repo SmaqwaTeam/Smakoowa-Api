@@ -34,5 +34,10 @@
 
             return await RemoveLike(likeToRemove);
         }
+
+        public async Task<int> GetTagLikeCount(int tagId)
+        {
+            return (await _tagLikeRepository.FindByConditions(rl => rl.TagId == tagId)).Count();
+        }
     }
 }
