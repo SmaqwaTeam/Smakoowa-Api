@@ -14,11 +14,6 @@ namespace Smakoowa_Api.Services
 
         public int GetCurrentUserId()
         {
-            if (System.Diagnostics.Process.GetCurrentProcess().ProcessName.StartsWith("testhost"))
-            {
-                return 1;
-            }
-
             var authHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             var token = authHeader.Substring("Bearer ".Length);
 
