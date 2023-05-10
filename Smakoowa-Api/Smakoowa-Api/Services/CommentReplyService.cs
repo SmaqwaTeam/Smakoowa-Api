@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Models.DatabaseModels.Comments;
+
+namespace Smakoowa_Api.Services
 {
     public class CommentReplyService : CommentService, ICommentReplyService
     {
@@ -8,8 +10,8 @@
 
         public CommentReplyService(IHelperService<CommentService> helperService, ICommentRepository commentRepository,
             ICommentReplyRepository commentReplyRepository, ICommentReplyMapperService commentReplyMapperService,
-            ICommentReplyValidatorService commentReplyValidatorService)
-            : base(helperService, commentRepository)
+            ICommentReplyValidatorService commentReplyValidatorService, IApiUserService apiUserService)
+            : base(helperService, commentRepository, apiUserService)
         {
             _commentReplyRepository = commentReplyRepository;
             _commentReplyMapperService = commentReplyMapperService;
@@ -47,6 +49,9 @@
         {
             var commentReplyToDelete = await _commentReplyRepository.FindByConditionsFirstOrDefault(c => c.Id == commentReplyId);
             if (commentReplyToDelete == null) return ServiceResponse.Error($"Comment reply with id: {commentReplyId} not found.");
+
+            if (commentReplyToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.UserIsAdmin())
+                return ServiceResponse.Error($"User isn't the owner of comment with id: {commentReplyId}.");
 
             try
             {

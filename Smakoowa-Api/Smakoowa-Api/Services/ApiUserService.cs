@@ -14,14 +14,28 @@ namespace Smakoowa_Api.Services
 
         public int GetCurrentUserId()
         {
+            IEnumerable<Claim> claims = GetClaims();
+            var userIdClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            return int.Parse(userIdClaim.Value);
+        }
+
+        public bool UserIsAdmin()
+        {
+            IEnumerable<Claim> claims = GetClaims();
+            var userRoles = claims.Where(c => c.Type == ClaimTypes.Role);
+
+            return userRoles.Any(r => r.Value == "Admin");
+        }
+
+        private IEnumerable<Claim> GetClaims()
+        {
             var authHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             var token = authHeader.Substring("Bearer ".Length);
 
             var handler = new JwtSecurityTokenHandler();
             var claims = handler.ReadJwtToken(token).Claims;
-            var userIdClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            return int.Parse(userIdClaim.Value);
+            return claims;
         }
     }
 }
