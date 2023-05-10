@@ -5,11 +5,13 @@
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        private readonly ICommentService _recipeCommentService;
+        private readonly IRecipeCommentService _recipeCommentService;
+        private readonly ICommentReplyService _commentReplyService;
 
-        public CommentsController(ICommentService recipeCommentService)
+        public CommentsController(IRecipeCommentService recipeCommentService, ICommentReplyService commentReplyService)
         {
             _recipeCommentService = recipeCommentService;
+            _commentReplyService = commentReplyService;
         }
 
         [HttpPost("AddRecipeComment/{recipeId}")]
@@ -21,7 +23,7 @@
         [HttpPost("AddCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> AddCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _recipeCommentService.AddCommentReply(commentReplyRequestDto, commentReplyId);
+            return await _commentReplyService.AddCommentReply(commentReplyRequestDto, commentReplyId);
         }
 
         [HttpPut("EditRecipeComment/{recipeCommentId}")]
@@ -33,7 +35,7 @@
         [HttpPut("EditCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> EditCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _recipeCommentService.EditCommentReply(commentReplyRequestDto, commentReplyId);
+            return await _commentReplyService.EditCommentReply(commentReplyRequestDto, commentReplyId);
         }
 
         [HttpDelete("DeleteRecipeComment/{recipeCommentId}")]
@@ -45,7 +47,7 @@
         [HttpDelete("DeleteCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> DeleteCommentReply(int commentReplyId)
         {
-            return await _recipeCommentService.DeleteCommentReply(commentReplyId);
+            return await _commentReplyService.DeleteCommentReply(commentReplyId);
         }
     }
 }

@@ -1,42 +1,19 @@
 ﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
-    public class CommentValidatorService : ICommentValidatorService
+    public abstract class CommentValidatorService
     {
-        private readonly IRecipeRepository _recipeRepository;
-        private readonly IRecipeCommentRepository _recipeCommentRepository;
         private readonly int MaxCommentContentLength;
         private readonly int MinCommentContentLength;
+        private readonly IApiUserService _apiUserService;
 
-        public CommentValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository,
-            IRecipeCommentRepository recipeCommentRepository)
+        public CommentValidatorService(IConfiguration configuration, string commentType, IApiUserService apiUserService)
         {
-            MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MaxCommentContentLength").Value);
-            MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:Comment:MinCommentContentLength").Value);
-            _recipeRepository = recipeRepository;
-            _recipeCommentRepository = recipeCommentRepository;
+            MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MaxCommentContentLength").Value);
+            MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MinCommentContentLength").Value);
+            _apiUserService = apiUserService;
         }
 
-        public async Task<ServiceResponse> ValidateRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
-        {
-            if (!await _recipeRepository.CheckIfExists(r => r.Id == recipeId))
-            {
-                return ServiceResponse.Error($"A recipe with id: {recipeId} does not exist.");
-            }
-
-            return ValidateCommentContent(recipeCommentRequestDto);
-        }
-
-        public async Task<ServiceResponse> ValidateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId)
-        {
-            if (!await _recipeCommentRepository.CheckIfExists(c => c.Id == commentId))
-            {
-                return ServiceResponse.Error($"A comment with id: {commentId} does not exist.");
-            }
-
-            return ValidateCommentContent(commentReplyRequestDto);
-        }
-
-        private ServiceResponse ValidateCommentContent(CommentRequestDto commentRequestDto)
+        protected ServiceResponse ValidateCommentContent(CommentRequestDto commentRequestDto)
         {
             if (commentRequestDto.Content.Length < MinCommentContentLength)
             {
@@ -49,6 +26,11 @@
             }
 
             return ServiceResponse.Success();
+        }
+
+        protected bool IsCreatorOfComment(Comment comment)
+        {
+            return comment.CreatorId == _apiUserService.GetCurrentUserId();
         }
     }
 }
