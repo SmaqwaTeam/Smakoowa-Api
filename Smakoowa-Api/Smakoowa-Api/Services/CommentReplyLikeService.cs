@@ -25,6 +25,7 @@
             var likeToRemove = await _commentReplyLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedCommentReply.Id == commentReplyId
                 && c.CreatorId == _apiUserService.GetCurrentUserId());
+
             if (likeToRemove == null) return ServiceResponse.Error($"Like of comment reply with id: {commentReplyId} not found.");
 
             return await RemoveLike(likeToRemove);

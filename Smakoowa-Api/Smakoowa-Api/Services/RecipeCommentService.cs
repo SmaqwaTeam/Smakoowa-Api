@@ -21,7 +21,7 @@
             var recipeCommentValidationResult = await _recipeCommentValidatorService.
                 ValidateCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
 
-            if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
+            if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 
             var mappedRecipeComment = _recipeCommentMapperService.MapCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
             return await AddComment(mappedRecipeComment);
@@ -35,7 +35,7 @@
             var recipeCommentValidationResult = await _recipeCommentValidatorService
                 .ValidateEditRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
 
-            if (!recipeCommentValidationResult.SuccessStatus) return ServiceResponse.Error(recipeCommentValidationResult.Message);
+            if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 
             var mappedRecipeComment = _recipeCommentMapperService.MapEditRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
 

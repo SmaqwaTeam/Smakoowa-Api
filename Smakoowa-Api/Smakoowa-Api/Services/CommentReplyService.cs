@@ -21,7 +21,7 @@
             var commentReplyValidationResult = await _commentReplyValidatorService
                 .ValidateCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
 
-            if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
+            if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 
             var mappedCommentReply = _commentReplyMapperService.MapCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
 
@@ -36,7 +36,7 @@
             var commentReplyValidationResult = await _commentReplyValidatorService
                 .ValidateEditCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply);
 
-            if (!commentReplyValidationResult.SuccessStatus) return ServiceResponse.Error(commentReplyValidationResult.Message);
+            if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 
             var mappedCommentReply = _commentReplyMapperService.MapEditCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply);
 

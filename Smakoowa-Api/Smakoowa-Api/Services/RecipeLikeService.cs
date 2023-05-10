@@ -30,6 +30,7 @@
             var likeToRemove = await _recipeLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedRecipe.Id == recipeId
                 && c.CreatorId == _apiUserService.GetCurrentUserId());
+
             if (likeToRemove == null) return ServiceResponse.Error($"Like of recipe with id: {recipeId} not found.");
 
             return await RemoveLike(likeToRemove);

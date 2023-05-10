@@ -21,7 +21,7 @@
         public async Task<ServiceResponse> Create(TagRequestDto tagRequestDto)
         {
             var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            if (!validationResult.SuccessStatus) return validationResult;
 
             var tag = _tagMapperService.MapCreateTagRequestDto(tagRequestDto);
 
@@ -58,7 +58,7 @@
             if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
 
             var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            if (!validationResult.SuccessStatus) return validationResult;
 
             var updatedTag = _tagMapperService.MapEditTagRequestDto(tagRequestDto, tag);
 

@@ -19,7 +19,7 @@
         public async Task<ServiceResponse> Create(CategoryRequestDto categoryRequestDto)
         {
             var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            if (!validationResult.SuccessStatus) return validationResult;
 
             var category = _categoryMapperService.MapCreateCategoryRequestDto(categoryRequestDto);
 
@@ -56,7 +56,7 @@
             if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
 
             var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
-            if (!validationResult.SuccessStatus) return ServiceResponse.Error(validationResult.Message);
+            if (!validationResult.SuccessStatus) return validationResult;
 
             var updatedCategory = _categoryMapperService.MapEditCategoryRequestDto(categoryRequestDto, category);
 

@@ -24,7 +24,7 @@
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
         {
             var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
-            if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
+            if (!recipeValidationResult.SuccessStatus) return recipeValidationResult;
 
             var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
