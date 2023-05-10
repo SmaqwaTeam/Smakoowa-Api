@@ -2,17 +2,21 @@
 {
     public class RecipeValidatorService : BaseValidatorService, IRecipeValidatorService
     {
-        private readonly IRecipeRepository _recipeRepository;
         private readonly ITagRepository _tagRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IIngredientValidatorService _ingredientValidatorService;
+        private readonly IInstructionValidatorService _instructionValidatorService;
         private readonly int MaxDescriptionLength;
-        public RecipeValidatorService(IConfiguration configuration, IRecipeRepository recipeRepository, ITagRepository tagRepository,
-            ICategoryRepository categoryRepository) : base(configuration, "Validation:Recipe")
+
+        public RecipeValidatorService(IConfiguration configuration, ITagRepository tagRepository, ICategoryRepository categoryRepository, 
+            IIngredientValidatorService ingredientValidatorService, IInstructionValidatorService instructionValidatorService) 
+            : base(configuration, "Validation:Recipe")
         {
-            _recipeRepository = recipeRepository;
             _tagRepository = tagRepository;
             _categoryRepository = categoryRepository;
             MaxDescriptionLength = int.Parse(configuration.GetSection("Validation:Recipe:MaxDescriptionLength").Value);
+            _ingredientValidatorService = ingredientValidatorService;
+            _instructionValidatorService = instructionValidatorService;
         }
 
         public async Task<ServiceResponse> ValidateRecipeRequestDto(RecipeRequestDto recipeRequestDto)
@@ -60,6 +64,12 @@
             {
                 return ServiceResponse.Error("A recipe must have at least one instruction.");
             }
+
+            var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
+            if (!ingredientValidationResult.SuccessStatus) return ServiceResponse.Error(ingredientValidationResult.Message);
+
+            var instructionValidationResult = await _instructionValidatorService.ValidateInstructionRequestDtos(recipeRequestDto.Instructions);
+            if (!instructionValidationResult.SuccessStatus) return ServiceResponse.Error(instructionValidationResult.Message);
 
             return ServiceResponse.Success();
         }

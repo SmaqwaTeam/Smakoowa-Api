@@ -6,14 +6,19 @@
         private readonly ITagRepository _tagRepository;
         private readonly IControllerStatisticsService _controllerStatisticsService;
         private readonly IRecipeLikeService _recipeLikeService;
+        private readonly IIngredientMapperService _ingredientMapperService;
+        private readonly IInstructionMapperService _instructionMapperService;
 
         public RecipeMapperService(IMapper mapper, ITagRepository tagRepository, IControllerStatisticsService controllerStatisticsService,
-            IRecipeLikeService recipeLikeService)
+            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService,
+            IInstructionMapperService instructionMapperService)
         {
             _mapper = mapper;
             _tagRepository = tagRepository;
             _controllerStatisticsService = controllerStatisticsService;
             _recipeLikeService = recipeLikeService;
+            _ingredientMapperService = ingredientMapperService;
+            _instructionMapperService = instructionMapperService;
         }
 
         public async Task<Recipe> MapCreateRecipeRequestDto(RecipeRequestDto createRecipeRequestDto)
@@ -41,6 +46,12 @@
                 editedRecipe.Tags = tags.ToList();
             }
             else editedRecipe.Tags = null;
+
+            var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
+            var mappedInstructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id);
+
+            editedRecipe.Ingredients = mappedIngredients;
+            editedRecipe.Instructions = mappedInstructions;
 
             return editedRecipe;
         }
