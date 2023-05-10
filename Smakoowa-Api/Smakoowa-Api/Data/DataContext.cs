@@ -59,14 +59,12 @@ namespace Smakoowa_Api.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            var currentUserId = _apiUserService.GetCurrentUserId();
-
             foreach (EntityEntry<Creatable> entry in ChangeTracker.Entries<Creatable>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatorId = currentUserId;
+                        entry.Entity.CreatorId = _apiUserService.GetCurrentUserId();
                         entry.Entity.CreatedAt = DateTime.UtcNow;
                         break;
                 }
@@ -77,7 +75,7 @@ namespace Smakoowa_Api.Data
                 switch (entry.State)
                 {
                     case EntityState.Modified:
-                        entry.Entity.UpdaterId = currentUserId;
+                        entry.Entity.UpdaterId = _apiUserService.GetCurrentUserId();
                         entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                 }

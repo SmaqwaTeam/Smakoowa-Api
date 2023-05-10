@@ -9,7 +9,9 @@
             modelBuilder.Entity<Recipe>()
                 .HasOne(r => r.Category)
                 .WithMany(c => c.Recipes)
-                .HasForeignKey(c => c.CategoryId);
+                .HasForeignKey(c => c.CategoryId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Recipe>()
                 .HasMany(r => r.Instructions)
