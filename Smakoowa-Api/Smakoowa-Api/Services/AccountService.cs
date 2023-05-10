@@ -64,6 +64,8 @@ namespace Smakoowa_Api.Services
                 User = _mapper.Map<ApiUserResponseDto>(user)
             };
 
+            loginResponse.User.UserRoles = userRoles.Select(ur => ur.Value).ToList();
+
             return ServiceResponse<LoginResponse>.Success(loginResponse, "Login successful.");
         }
 
