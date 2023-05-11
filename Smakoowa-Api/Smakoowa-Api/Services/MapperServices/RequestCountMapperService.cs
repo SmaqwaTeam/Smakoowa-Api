@@ -6,16 +6,18 @@
         {
             var controllerNames = requestCounts.Select(r => r.ControllerName).Distinct().ToList();
             List<ControllerStatisticsResponseDto> controllerStatisticsResponseDtos = new();
-            foreach (string controllerName in controllerNames) controllerStatisticsResponseDtos.Add(new ControllerStatisticsResponseDto { ControllerName = controllerName });
+            foreach (string controllerName in controllerNames) 
+                controllerStatisticsResponseDtos.Add(new ControllerStatisticsResponseDto { ControllerName = controllerName });
 
-            foreach(RequestCount requestCount in requestCounts)
+            foreach (RequestCount requestCount in requestCounts)
             {
                 controllerStatisticsResponseDtos.FirstOrDefault(c => c.ControllerName == requestCount.ControllerName)
                     .ActionStatistics.Add
-                    (new ActionStatisticsResponseDto { 
+                    (new ActionStatisticsResponseDto
+                    {
                         ActionName = requestCount.ActionName,
                         Parameters = requestCount.RemainingPath,
-                        RequestCount = requestCount.Count 
+                        RequestCount = requestCount.Count
                     });
             }
 

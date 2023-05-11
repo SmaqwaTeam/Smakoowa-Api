@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace Smakoowa_Api.Attributes
@@ -59,15 +58,6 @@ namespace Smakoowa_Api.Attributes
                     if (!hasRole)
                     {
                         throw new SecurityTokenValidationException("Unauthorized.");
-                    }
-
-                    var handler = new JwtSecurityTokenHandler();
-                    var claims = handler.ReadJwtToken(token).Claims;
-
-                    var userIdClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-                    if (userIdClaim != null)
-                    {
-                        Program.configuration["CurrentUserId"] = userIdClaim.Value;
                     }
                 }
             }

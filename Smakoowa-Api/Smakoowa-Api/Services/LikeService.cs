@@ -1,9 +1,9 @@
 ﻿namespace Smakoowa_Api.Services
 {
-    public class LikeService
+    public abstract class LikeService
     {
-        private readonly IHelperService<LikeService> _helperService;
-        private readonly ILikeRepository _likeRepository;
+        protected readonly IHelperService<LikeService> _helperService;
+        protected readonly ILikeRepository _likeRepository;
         protected readonly IApiUserService _apiUserService;
         protected readonly ILikeValidatorService _likeValidatorService;
 
@@ -16,7 +16,7 @@
             _likeValidatorService = likeValidatorService;
         }
 
-        public async Task<ServiceResponse> AddLike(Like like)
+        protected async Task<ServiceResponse> AddLike(Like like)
         {
             try
             {
@@ -29,7 +29,7 @@
             }
         }
 
-        public async Task<ServiceResponse> RemoveLike(Like likeToRemove)
+        protected async Task<ServiceResponse> RemoveLike(Like likeToRemove)
         {
             try
             {

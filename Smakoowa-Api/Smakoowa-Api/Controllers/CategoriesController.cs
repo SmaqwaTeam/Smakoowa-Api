@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Attributes;
-
-namespace Smakoowa_Api.Controllers
+﻿namespace Smakoowa_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

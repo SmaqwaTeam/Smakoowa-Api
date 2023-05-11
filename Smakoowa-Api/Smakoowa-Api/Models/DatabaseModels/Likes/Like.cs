@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Smakoowa_Api.Models.DatabaseModels.Likes
+﻿namespace Smakoowa_Api.Models.DatabaseModels.Likes
 {
     public class Like : Creatable, ILike
     {

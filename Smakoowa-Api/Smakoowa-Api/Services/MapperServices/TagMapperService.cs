@@ -1,14 +1,14 @@
-﻿using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Services.MapperServices
+﻿namespace Smakoowa_Api.Services.MapperServices
 {
     public class TagMapperService : ITagMapperService
     {
         private readonly IMapper _mapper;
+        private readonly ITagLikeService _tagLikeService;
 
-        public TagMapperService(IMapper mapper)
+        public TagMapperService(IMapper mapper, ITagLikeService tagLikeService)
         {
             _mapper = mapper;
+            _tagLikeService = tagLikeService;
         }
 
         public Tag MapCreateTagRequestDto(TagRequestDto createTagRequestDto)
@@ -16,9 +16,11 @@ namespace Smakoowa_Api.Services.MapperServices
             return _mapper.Map<Tag>(createTagRequestDto);
         }
 
-        public TagResponseDto MapGetTagResponseDto(Tag category)
+        public async Task<TagResponseDto> MapGetTagResponseDto(Tag tag)
         {
-            return _mapper.Map<TagResponseDto>(category);
+            var mappedTag = _mapper.Map<TagResponseDto>(tag);
+            mappedTag.LikeCount = await _tagLikeService.GetTagLikeCount(tag.Id);
+            return mappedTag;
         }
 
         public Tag MapEditTagRequestDto(TagRequestDto editTagRequestDto, Tag editedTag)

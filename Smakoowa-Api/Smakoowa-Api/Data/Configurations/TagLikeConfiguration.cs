@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.Configurations
 {
-    public class TagLikeConfiguration
+    public static class TagLikeConfiguration
     {
         public static void ConfigureRecipeLike(ModelBuilder modelBuilder)
         {

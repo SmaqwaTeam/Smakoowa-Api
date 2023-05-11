@@ -3,7 +3,7 @@
     public enum TagType
     {
         Diet,
-        Cuisine, 
+        Cuisine,
         Occasion
     }
 }

@@ -13,12 +13,12 @@
 
         public ServiceResponse ValidateImage(IFormFile image)
         {
-            if(image.Length > maxImageSizeBytes)
+            if (image.Length > maxImageSizeBytes)
             {
-                return ServiceResponse.Error($"Image is too large, max size is {(double)maxImageSizeBytes/1000000} MB.");
+                return ServiceResponse.Error($"Image is too large, max size is {(double)maxImageSizeBytes / 1000000} MB.");
             }
 
-            if (image.ContentType.StartsWith("image/") 
+            if (image.ContentType.StartsWith("image/")
                 && !allowedImageExtensions.Any(a => image.ContentType.Substring("image/".Length).Contains(a)))
             {
                 return ServiceResponse.Error($"Incorrect image type, allowed types: {String.Join(", ", allowedImageExtensions)}");

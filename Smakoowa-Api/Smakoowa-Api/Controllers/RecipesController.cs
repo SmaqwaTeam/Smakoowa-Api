@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Attributes;
-
-namespace Smakoowa_Api.Controllers
+﻿namespace Smakoowa_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,7 +13,7 @@ namespace Smakoowa_Api.Controllers
 
         [JwtAuthorize("User", "Admin")]
         [HttpPost("Create")]
-        public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
+        public async Task<ServiceResponse> Create([FromBody] RecipeRequestDto recipeRequestDto)
         {
             return await _recipeService.Create(recipeRequestDto);
         }

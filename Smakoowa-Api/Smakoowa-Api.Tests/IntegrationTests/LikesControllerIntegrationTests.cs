@@ -17,72 +17,157 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task TestAddLikes()
+        public async Task TestAddRecipeLike()
+        {
+            // Arrange
+            var testRecipe = await AddRecipeToDatabase();
+
+            string addRecipeLikeUrl = $"/api/Likes/AddRecipeLike/{testRecipe.Id}";
+
+            // Act
+            var addRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addRecipeLikeUrl, testRecipe.Id));
+
+            // Assert
+            AssertResponseSuccess(addRecipeLikeResponseContent);
+            Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipe.Id));
+        }
+
+        [Fact]
+        public async Task TestAddRecipeCommentLike()
+        {
+            // Arrange
+            var testRecipe = await AddRecipeToDatabase();
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestAddLikes");
+
+            string addRecipeCommentLikeUrl = $"/api/Likes/AddRecipeCommentLike/{testRecipeComment.Id}";
+
+            // Act
+            var addRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addRecipeCommentLikeUrl, testRecipeComment.Id));
+
+            // Assert
+            AssertResponseSuccess(addRecipeCommentLikeResponseContent);
+            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipeComment.Id));
+        }
+
+        [Fact]
+        public async Task TestAddCommentReplyLike()
         {
             // Arrange
             var testRecipe = await AddRecipeToDatabase();
             var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestAddLikes");
             var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestAddLikes");
 
-            string addRecipeLikeUrl = $"/api/Likes/AddRecipeLike/{testRecipe.Id}";
-            string addRecipeCommentLikeUrl = $"/api/Likes/AddRecipeCommentLike/{testRecipeComment.Id}";
             string addCommentReplyLikeUrl = $"/api/Likes/AddCommentReplyLike/{testCommentReply.Id}";
 
             // Act
-            var addRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>
-                (await _HttpClient.PostAsJsonAsync(addRecipeLikeUrl, testRecipe.Id));
-
-            var addRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>
-                (await _HttpClient.PostAsJsonAsync(addRecipeCommentLikeUrl, testRecipeComment.Id));
-
             var addCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>
                 (await _HttpClient.PostAsJsonAsync(addCommentReplyLikeUrl, testCommentReply.Id));
 
             // Assert
-            AssertResponseSuccess(addRecipeLikeResponseContent);
-            Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipe.Id));
-
-            AssertResponseSuccess(addRecipeCommentLikeResponseContent);
-            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count > 0 && c.Id == testRecipeComment.Id));
-
             AssertResponseSuccess(addCommentReplyLikeResponseContent);
             Assert.True(await _context.CommentReplies.AnyAsync(c => c.Likes.Count > 0 && c.Id == testCommentReply.Id));
         }
 
         [Fact]
-        public async Task TestDeleteLikes()
+        public async Task TestAddTagLike()
         {
-            var testRecipe = await AddRecipeToDatabase();
-            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteLikes");
-            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestDeleteLikes");
+            // Arrange
+            var testTag = (Tag)await AddToDatabase(new Tag { Name = "TestLikedTag", TagType = TagType.Diet });
 
-            var recipeLike = await AddToDatabase(new RecipeLike { RecipeId = testRecipe.Id, LikeableType = LikeableType.Recipe });
-            var recipeCommentLike = await AddToDatabase(new RecipeCommentLike { RecipeCommentId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
-            var commentReplyLike = await AddToDatabase(new CommentReplyLike { CommentReplyId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
+            string addTagLikeUrl = $"/api/Likes/AddTagLike/{testTag.Id}";
+
+            // Act
+            var addTagLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.PostAsJsonAsync(addTagLikeUrl, testTag.Id));
+
+            // Assert
+            AssertResponseSuccess(addTagLikeResponseContent);
+            Assert.True(await _context.Tags.AnyAsync(c => c.Likes.Count > 0 && c.Id == testTag.Id));
+        }
+
+
+        [Fact]
+        public async Task TestDeleteRecipeLike()
+        {
+            // Arrange
+            var testRecipe = await AddRecipeToDatabase();
+
+            var recipeLike = await AddToDatabase(new RecipeLike
+            { RecipeId = testRecipe.Id, LikeableType = LikeableType.Recipe });
 
             string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{testRecipe.Id}";
-            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{testRecipeComment.Id}";
-            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
 
             // Act
             var removeRecipeLikeResponseContent = await DeserializeResponse<ServiceResponse>
                 (await _HttpClient.DeleteAsync(removeRecipeLikeUrl));
 
+            // Assert
+            AssertResponseSuccess(removeRecipeLikeResponseContent);
+            Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipe.Id));
+        }
+
+        [Fact]
+        public async Task TestDeleteRecipeCommentLike()
+        {
+            // Arrange
+            var testRecipe = await AddRecipeToDatabase();
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteLikes");
+
+            var recipeCommentLike = await AddToDatabase(new RecipeCommentLike
+            { RecipeCommentId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
+
+            string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{testRecipeComment.Id}";
+
+            // Act
             var removeRecipeCommentLikeResponseContent = await DeserializeResponse<ServiceResponse>
                 (await _HttpClient.DeleteAsync(removeRecipeCommentLikeUrl));
 
+            // Assert
+            AssertResponseSuccess(removeRecipeCommentLikeResponseContent);
+            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipeComment.Id));
+        }
+
+        [Fact]
+        public async Task TestDeleteCommentReplyLike()
+        {
+            // Arrange
+            var testRecipe = await AddRecipeToDatabase();
+            var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteLikes");
+            var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestDeleteLikes");
+
+            var commentReplyLike = await AddToDatabase(new CommentReplyLike
+            { CommentReplyId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
+
+            string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
+
+            // Act
             var removeCommentReplyLikeResponseContent = await DeserializeResponse<ServiceResponse>
                 (await _HttpClient.DeleteAsync(removeCommentReplyLikeUrl));
 
             // Assert
-            AssertResponseSuccess(removeRecipeLikeResponseContent);
-            Assert.True(await _context.Recipes.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipe.Id));
-
-            AssertResponseSuccess(removeRecipeCommentLikeResponseContent);
-            Assert.True(await _context.RecipeComments.AnyAsync(c => c.Likes.Count == 0 && c.Id == testRecipeComment.Id));
-
             AssertResponseSuccess(removeCommentReplyLikeResponseContent);
             Assert.True(await _context.CommentReplies.AnyAsync(c => c.Likes.Count == 0 && c.Id == testCommentReply.Id));
+        }
+
+        [Fact]
+        public async Task TestDeleteTagLike()
+        {
+            // Arrange
+            var testTag = (Tag)await AddToDatabase(new Tag { Name = "TestDeleteLikedTag", TagType = TagType.Diet });
+
+            var tagLike = await AddToDatabase(new TagLike { TagId = testTag.Id, LikeableType = LikeableType.Tag });
+
+            string removeTagLikeUrl = $"/api/Likes/RemoveTagLike/{testTag.Id}";
+
+            // Act
+            var removeTagLikeResponseContent = await DeserializeResponse<ServiceResponse>
+                (await _HttpClient.DeleteAsync(removeTagLikeUrl));
+
+            // Assert
+            AssertResponseSuccess(removeTagLikeResponseContent);
+            Assert.True(await _context.Tags.AnyAsync(c => c.Likes.Count == 0 && c.Id == testTag.Id));
         }
 
         private async Task<Recipe> AddRecipeToDatabase()

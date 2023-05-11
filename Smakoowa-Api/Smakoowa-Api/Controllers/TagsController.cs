@@ -1,12 +1,9 @@
-﻿using Smakoowa_Api.Attributes;
-using Smakoowa_Api.Models.RequestDtos;
-
-namespace Smakoowa_Api.Controllers
+﻿namespace Smakoowa_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class TagsController : ControllerBase
-    { 
+    {
         private readonly ITagService _tagService;
 
         public TagsController(ITagService tagService)

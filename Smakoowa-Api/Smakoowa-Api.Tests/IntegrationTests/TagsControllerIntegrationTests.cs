@@ -36,7 +36,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllTag1") 
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllTag1")
                 && responseContent.Content.Exists(c => c.Name == "TestGetAllTag2"));
         }
 

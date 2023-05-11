@@ -2,10 +2,10 @@
 {
     public class RecipeLikeService : LikeService, IRecipeLikeService
     {
-        private readonly IBaseRepository<RecipeLike> _recipeLikeRepository;
+        private readonly IRecipeLikeRepository _recipeLikeRepository;
 
         public RecipeLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, IBaseRepository<RecipeLike> recipeLikeRepository)
+            ILikeValidatorService likeValidatorService, IRecipeLikeRepository recipeLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _recipeLikeRepository = recipeLikeRepository;
@@ -27,8 +27,12 @@
 
         public async Task<ServiceResponse> RemoveRecipeLike(int recipeId)
         {
-            var likeToRemove = await _recipeLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedRecipe.Id == recipeId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            var likeToRemove = await _recipeLikeRepository.FindByConditionsFirstOrDefault(
+                c => c.LikedRecipe.Id == recipeId
+                && c.CreatorId == _apiUserService.GetCurrentUserId());
+
             if (likeToRemove == null) return ServiceResponse.Error($"Like of recipe with id: {recipeId} not found.");
+
             return await RemoveLike(likeToRemove);
         }
     }

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smakoowa_Api.Data;
+using Smakoowa_Api.Services.Interfaces;
+using Smakoowa_Api.Services.Tests;
 
 namespace Smakoowa_Api.Tests
 {
@@ -25,16 +27,16 @@ namespace Smakoowa_Api.Tests
                             typeof(DbContextOptions<DataContext>));
 
                         services.Remove(descriptor);
+                        services.Remove(services.SingleOrDefault(
+                            d => d.ServiceType ==
+                            typeof(IApiUserService)));
+
+                        services.AddScoped(typeof(IApiUserService), typeof(TestApiUserService));
 
                         services.AddDbContext<DataContext>(options =>
                         {
                             options.UseInMemoryDatabase("InMemoryDB");
                         });
-
-                        //services.AddDbContext<BackgroundDataContext>(options =>
-                        //{
-                        //    options.UseInMemoryDatabase("InMemoryDBBackground");
-                        //});
                     });
                 });
             var configuration = appFactory.Services.GetService<IConfiguration>();
