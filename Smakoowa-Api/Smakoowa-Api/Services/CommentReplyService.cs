@@ -50,7 +50,7 @@ namespace Smakoowa_Api.Services
             var commentReplyToDelete = await _commentReplyRepository.FindByConditionsFirstOrDefault(c => c.Id == commentReplyId);
             if (commentReplyToDelete == null) return ServiceResponse.Error($"Comment reply with id: {commentReplyId} not found.");
 
-            if (commentReplyToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.UserIsAdmin())
+            if (commentReplyToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
                 return ServiceResponse.Error($"User isn't the owner of comment with id: {commentReplyId}.");
 
             try

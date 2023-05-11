@@ -83,6 +83,8 @@
                 }
             }
 
+            mappedRecipe.CreatorUsername = recipe.Creator?.UserName;
+
             return mappedRecipe;
         }
 

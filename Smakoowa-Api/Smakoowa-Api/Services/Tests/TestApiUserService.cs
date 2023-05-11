@@ -7,7 +7,7 @@
             return 1;
         }
 
-        public bool UserIsAdmin()
+        public bool CurrentUserIsAdmin()
         {
             return false;
         }

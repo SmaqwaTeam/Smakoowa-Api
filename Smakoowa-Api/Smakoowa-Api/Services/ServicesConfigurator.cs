@@ -134,6 +134,8 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
 
             services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
+            services.AddScoped(typeof(IApiUserMapperService), typeof(ApiUserMapperService));
+            services.AddScoped(typeof(IApiUserGetterService), typeof(ApiUserGetterService));
             services.AddScoped(typeof(IAccountService), typeof(AccountService));
             services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository));
             services.AddScoped<RoleManager<ApiRole>>();

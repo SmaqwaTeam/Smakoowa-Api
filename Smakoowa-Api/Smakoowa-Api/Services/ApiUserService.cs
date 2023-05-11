@@ -14,21 +14,21 @@ namespace Smakoowa_Api.Services
 
         public int GetCurrentUserId()
         {
-            IEnumerable<Claim> claims = GetClaims();
+            IEnumerable<Claim> claims = GetUserClaims();
             var userIdClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
             return int.Parse(userIdClaim.Value);
         }
 
-        public bool UserIsAdmin()
+        public bool CurrentUserIsAdmin()
         {
-            IEnumerable<Claim> claims = GetClaims();
+            IEnumerable<Claim> claims = GetUserClaims();
             var userRoles = claims.Where(c => c.Type == ClaimTypes.Role);
 
             return userRoles.Any(r => r.Value == "Admin");
         }
 
-        private IEnumerable<Claim> GetClaims()
+        private IEnumerable<Claim> GetUserClaims()
         {
             var authHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             var token = authHeader.Substring("Bearer ".Length);

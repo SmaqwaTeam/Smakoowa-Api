@@ -44,7 +44,7 @@
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
-            if (recipe.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.UserIsAdmin())
+            if (recipe.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
                 return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
 
             try

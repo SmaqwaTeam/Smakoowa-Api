@@ -47,7 +47,7 @@
             var recipeCommentToDelete = await _recipeCommentRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeCommentId);
             if (recipeCommentToDelete == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
 
-            if (recipeCommentToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.UserIsAdmin())
+            if (recipeCommentToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
                 return ServiceResponse.Error($"User isn't the owner of comment with id: {recipeCommentId}.");
 
             try
