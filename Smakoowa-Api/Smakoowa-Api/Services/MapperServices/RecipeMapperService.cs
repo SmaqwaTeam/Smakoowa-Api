@@ -6,14 +6,24 @@
         private readonly ITagRepository _tagRepository;
         private readonly IControllerStatisticsService _controllerStatisticsService;
         private readonly IRecipeLikeService _recipeLikeService;
+        private readonly IIngredientMapperService _ingredientMapperService;
+        private readonly IInstructionMapperService _instructionMapperService;
+        private readonly IRecipeCommentLikeService _recipeCommentLikeService;
+        private readonly ICommentReplyLikeService _commentReplyLikeService;
 
         public RecipeMapperService(IMapper mapper, ITagRepository tagRepository, IControllerStatisticsService controllerStatisticsService,
-            IRecipeLikeService recipeLikeService)
+            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService, 
+            IInstructionMapperService instructionMapperService, IRecipeCommentLikeService recipeCommentLikeService, 
+            ICommentReplyLikeService commentReplyLikeService)
         {
             _mapper = mapper;
             _tagRepository = tagRepository;
             _controllerStatisticsService = controllerStatisticsService;
             _recipeLikeService = recipeLikeService;
+            _ingredientMapperService = ingredientMapperService;
+            _instructionMapperService = instructionMapperService;
+            _recipeCommentLikeService = recipeCommentLikeService;
+            _commentReplyLikeService = commentReplyLikeService;
         }
 
         public async Task<Recipe> MapCreateRecipeRequestDto(RecipeRequestDto createRecipeRequestDto)
@@ -42,6 +52,12 @@
             }
             else editedRecipe.Tags = null;
 
+            var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
+            var mappedInstructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id);
+
+            editedRecipe.Ingredients = mappedIngredients;
+            editedRecipe.Instructions = mappedInstructions;
+
             return editedRecipe;
         }
 
@@ -57,6 +73,17 @@
         {
             var mappedRecipe = _mapper.Map<DetailedRecipeResponseDto>(recipe);
             mappedRecipe = (DetailedRecipeResponseDto)await CompleteRecipeData(mappedRecipe);
+
+            foreach(var recipeComment in mappedRecipe.RecipeComments)
+            {
+                recipeComment.LikeCount = await _recipeCommentLikeService.GetRecipeCommentLikeCount(recipeComment.Id);
+                foreach(var commentReply in recipeComment.CommentReplies)
+                {
+                    commentReply.LikeCount = await _commentReplyLikeService.GetCommentReplyLikeCount(commentReply.Id);
+                }
+            }
+
+            mappedRecipe.CreatorUsername = recipe.Creator?.UserName;
 
             return mappedRecipe;
         }

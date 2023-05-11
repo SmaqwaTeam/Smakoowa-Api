@@ -3,5 +3,6 @@
     public interface IApiUserService
     {
         public int GetCurrentUserId();
+        public bool CurrentUserIsAdmin();
     }
 }

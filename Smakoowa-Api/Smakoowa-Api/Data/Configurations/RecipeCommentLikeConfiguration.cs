@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.Configurations
 {
-    public class RecipeCommentLikeConfiguration
+    public static class RecipeCommentLikeConfiguration
     {
         public static void ConfigureRecipeCommentLike(ModelBuilder modelBuilder)
         {

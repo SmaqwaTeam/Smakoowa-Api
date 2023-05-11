@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Smakoowa_Api.Models.DatabaseModels;
-using Smakoowa_Api.Models.Enums;
 using Smakoowa_Api.Models.RequestDtos;
 using Smakoowa_Api.Models.ResponseDtos;
 using Smakoowa_Api.Models.Services;
@@ -36,7 +35,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
             // Assert
             AssertResponseSuccess(responseContent);
-            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe1") 
+            Assert.True(responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe1")
                 && responseContent.Content.Exists(c => c.Name == "TestGetAllRecipe2"));
         }
 

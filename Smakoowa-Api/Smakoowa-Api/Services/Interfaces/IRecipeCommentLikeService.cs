@@ -4,5 +4,6 @@
     {
         public Task<ServiceResponse> AddRecipeCommentLike(int recipeCommentId);
         public Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId);
+        public Task<int> GetRecipeCommentLikeCount(int recipeCommentId);
     }
 }

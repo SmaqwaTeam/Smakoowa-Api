@@ -27,7 +27,7 @@
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
             if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
 
-            if(recipe.CreatorId != _apiUserService.GetCurrentUserId()) 
+            if (recipe.CreatorId != _apiUserService.GetCurrentUserId())
                 return ServiceResponse.Error($"Recipe with id: {recipeId} doesn't belong to user.");
 
             var imageValidationResult = _imageValidatorService.ValidateImage(image);

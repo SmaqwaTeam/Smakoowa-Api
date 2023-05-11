@@ -6,6 +6,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using ModernPantryBackend.Interfaces;
 global using ModernPantryBackend.Repositories;
+global using Smakoowa_Api.Attributes;
 global using Smakoowa_Api.Data;
 global using Smakoowa_Api.Models.Auditables;
 global using Smakoowa_Api.Models.DatabaseModels;

@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Repositories.Interfaces
 {
-    public interface IApiUserRepository : IBaseRepository<ApiUser>, IRepository
+    public interface IApiUserRepository : IBaseRepository<ApiUser>
     {
     }
 }

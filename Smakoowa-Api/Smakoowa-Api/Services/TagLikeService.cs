@@ -2,10 +2,10 @@
 {
     public class TagLikeService : LikeService, ITagLikeService
     {
-        private readonly IBaseRepository<TagLike> _tagLikeRepository;
+        private readonly ITagLikeRepository _tagLikeRepository;
 
         public TagLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, ILikeValidatorService likeValidatorService,
-            IBaseRepository<TagLike> tagLikeRepository, IApiUserService apiUserService)
+            ITagLikeRepository tagLikeRepository, IApiUserService apiUserService)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _tagLikeRepository = tagLikeRepository;
@@ -27,9 +27,17 @@
 
         public async Task<ServiceResponse> RemoveTagLike(int tagId)
         {
-            var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(c => c.LikedTag.Id == tagId && c.CreatorId == _apiUserService.GetCurrentUserId());
+            var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(
+                c => c.LikedTag.Id == tagId
+                && c.CreatorId == _apiUserService.GetCurrentUserId());
             if (likeToRemove == null) return ServiceResponse.Error($"Like of tag with id: {tagId} not found.");
+
             return await RemoveLike(likeToRemove);
+        }
+
+        public async Task<int> GetTagLikeCount(int tagId)
+        {
+            return (await _tagLikeRepository.FindByConditions(rl => rl.TagId == tagId)).Count();
         }
     }
 }

@@ -4,10 +4,7 @@
     {
         public LikeMapperProfile()
         {
-            CreateMap<RecipeLike, LikeResponseDto>();
-            CreateMap<RecipeCommentLike, LikeResponseDto>();
-            CreateMap<CommentReplyLike, LikeResponseDto>();
+            CreateMap<Like, LikeResponseDto>();
         }
     }
 }
-

@@ -482,7 +482,7 @@ namespace Smakoowa_Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -777,14 +777,14 @@ namespace Smakoowa_Api.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "83af2e39-42dd-4547-83ed-e9c372753231",
+                            ConcurrencyStamp = "02aa8a8a-a429-40b8-9dc3-5dafe54cc0de",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7aa311c7-cd46-480e-938f-fd9ae31f1030",
+                            ConcurrencyStamp = "93ff19c2-e402-4962-ae64-75a946e90d46",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -862,7 +862,7 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9036aae5-a88a-4c4a-96e8-354a2f80b993",
+                            ConcurrencyStamp = "f70f2508-8410-4f2d-a42d-0ebbde9c68cc",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
@@ -873,7 +873,7 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6960847b-5255-4bf1-8be5-e52b614bdb97",
+                            ConcurrencyStamp = "01cfc594-5dda-4ba2-81e4-ab8a4f21491f",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
@@ -1089,8 +1089,7 @@ namespace Smakoowa_Api.Migrations
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.Category", "Category")
                         .WithMany("Recipes")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")
                         .WithMany("Recipes")

@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Data.Configurations
 {
-    public class TagConfiguration
+    public static class TagConfiguration
     {
         public static void ConfigureTag(ModelBuilder modelBuilder)
         {
