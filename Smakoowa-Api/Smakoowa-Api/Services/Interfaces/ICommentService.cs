@@ -2,11 +2,8 @@
 {
     public interface ICommentService
     {
-        public Task<ServiceResponse> AddRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId);
-        public Task<ServiceResponse> AddCommentReply(CommentReplyRequestDto commentReplyRequestDto, int recipeCommentId);
-        public Task<ServiceResponse> EditRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeCommentId);
-        public Task<ServiceResponse> EditCommentReply(CommentReplyRequestDto commentReplyRequestDto, int commentReplyId);
-        public Task<ServiceResponse> DeleteRecipeComment(int recipeCommentId);
-        public Task<ServiceResponse> DeleteCommentReply(int commentReplyId);
+        public Task<ServiceResponse> AddComment(CommentRequestDto commentRequestDto, int commentedId);
+        public Task<ServiceResponse> EditComment(CommentRequestDto commentRequestDto, int commentedId);
+        public Task<ServiceResponse> DeleteComment(int recipeCommentId);
     }
 }

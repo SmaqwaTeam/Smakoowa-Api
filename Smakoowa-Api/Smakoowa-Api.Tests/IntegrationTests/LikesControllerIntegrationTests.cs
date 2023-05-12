@@ -188,12 +188,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
         private async Task<RecipeComment> AddRecipeCommentToDatabase(int recipeId, string content)
         {
-            return (RecipeComment)await AddToDatabase(new RecipeComment { Content = content, RecipeId = recipeId });
+            return (RecipeComment)await AddToDatabase(new RecipeComment { Content = content, CommentedId = recipeId });
         }
 
         private async Task<CommentReply> AddCommentReplyToDatabase(int recipeCommentId, string content)
         {
-            return (CommentReply)await AddToDatabase(new CommentReply { Content = content, RepliedCommentId = recipeCommentId });
+            return (CommentReply)await AddToDatabase(new CommentReply { Content = content, CommentedId = recipeCommentId });
         }
     }
 }

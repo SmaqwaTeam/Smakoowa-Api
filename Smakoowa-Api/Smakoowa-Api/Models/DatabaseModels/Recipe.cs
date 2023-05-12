@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Models.DatabaseModels
 {
-    public class Recipe : Updatable, IDbModel, ILikeable, INameable
+    public class Recipe : Updatable, IDbModel, ILikeable, INameable, ICommentable
     {
         public int Id { get; set; }
         public string Name { get; set; }

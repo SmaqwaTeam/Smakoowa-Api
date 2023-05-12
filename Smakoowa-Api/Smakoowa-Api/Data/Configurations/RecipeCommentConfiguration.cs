@@ -9,7 +9,7 @@
             modelBuilder.Entity<RecipeComment>()
                 .HasMany(r => r.CommentReplies)
                 .WithOne(c => c.RepliedComment)
-                .HasForeignKey(c => c.RepliedCommentId)
+                .HasForeignKey(c => c.CommentedId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<RecipeComment>()

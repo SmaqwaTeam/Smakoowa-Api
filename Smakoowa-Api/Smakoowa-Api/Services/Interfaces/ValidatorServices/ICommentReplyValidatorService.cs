@@ -1,8 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.Interfaces.ValidatorServices
 {
-    public interface ICommentReplyValidatorService
+    public interface ICommentReplyValidatorService : ICommentValidatorService
     {
-        public Task<ServiceResponse> ValidateEditCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, CommentReply editedCommentReply);
-        public Task<ServiceResponse> ValidateCreateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId);
     }
 }
