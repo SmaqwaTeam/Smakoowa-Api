@@ -1,7 +1,4 @@
-﻿using ModernPantryBackend.Interfaces;
-using ModernPantryBackend.Repositories;
-
-namespace Smakoowa_Api.Services.ValidatorServices
+﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
     public abstract class LikeValidatorService<T, C> where C : IDbModel where T : ILike
     {
