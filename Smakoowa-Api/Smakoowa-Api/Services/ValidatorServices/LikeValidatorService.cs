@@ -15,8 +15,6 @@
 
         public async Task<ServiceResponse> ValidateAddLike(int likedId)
         {
-            bool a = await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId);
-
             if (!await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId))
             {
                 return ServiceResponse.Error($"Item with id: {likedId} does not exist.");
