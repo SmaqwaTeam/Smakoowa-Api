@@ -100,14 +100,14 @@ namespace Smakoowa_Api.Tests.IntegrationTests
 
         private async Task<RecipeComment> AddRecipeCommentToDatabase(int recipeId, string content)
         {
-            await AddToDatabase(new RecipeComment { Content = content, RecipeId = recipeId });
-            return await FindInDatabaseByConditionsFirstOrDefault<RecipeComment>(c => c.Content == content && c.RecipeId == recipeId);
+            await AddToDatabase(new RecipeComment { Content = content, CommentedId = recipeId });
+            return await FindInDatabaseByConditionsFirstOrDefault<RecipeComment>(c => c.Content == content && c.CommentedId == recipeId);
         }
 
         private async Task<CommentReply> AddCommentReplyToDatabase(int recipeCommentId, string content)
         {
-            await AddToDatabase(new CommentReply { Content = content, RepliedCommentId = recipeCommentId });
-            return await FindInDatabaseByConditionsFirstOrDefault<CommentReply>(c => c.Content == content && c.RepliedCommentId == recipeCommentId);
+            await AddToDatabase(new CommentReply { Content = content, CommentedId = recipeCommentId });
+            return await FindInDatabaseByConditionsFirstOrDefault<CommentReply>(c => c.Content == content && c.CommentedId == recipeCommentId);
         }
     }
 }

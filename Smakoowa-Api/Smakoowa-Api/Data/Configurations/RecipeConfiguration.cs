@@ -26,7 +26,7 @@
             modelBuilder.Entity<Recipe>()
                 .HasMany(r => r.RecipeComments)
                 .WithOne(c => c.Recipe)
-                .HasForeignKey(c => c.RecipeId)
+                .HasForeignKey(c => c.CommentedId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Recipe>()
