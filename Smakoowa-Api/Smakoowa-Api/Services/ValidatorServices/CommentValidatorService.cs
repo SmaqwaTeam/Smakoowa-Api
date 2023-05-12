@@ -2,16 +2,16 @@
 {
     public abstract class CommentValidatorService<T> where T : ICommentable
     {
-        private readonly int MaxCommentContentLength;
-        private readonly int MinCommentContentLength;
+        private readonly int _maxCommentContentLength;
+        private readonly int _minCommentContentLength;
         private readonly IApiUserService _apiUserService;
         private readonly IBaseRepository<T> _commentedRepository;
 
         public CommentValidatorService(IConfiguration configuration, string commentType, IApiUserService apiUserService, 
             IBaseRepository<T> commentedRepository)
         {
-            MaxCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MaxCommentContentLength").Value);
-            MinCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MinCommentContentLength").Value);
+            _maxCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MaxCommentContentLength").Value);
+            _minCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MinCommentContentLength").Value);
             _apiUserService = apiUserService;
             _commentedRepository = commentedRepository;
         }
@@ -19,7 +19,7 @@
         public async Task<ServiceResponse> ValidateCreateCommentRequestDto(CommentRequestDto commentRequestDto, int commentedId)
         {
             if (!await CheckIfCommentedExists(commentedId))
-                return ServiceResponse.Error($"A recipe with id: {commentedId} does not exist.");
+                return ServiceResponse.Error($"A Item with id: {commentedId} does not exist.");
 
             return ValidateCommentContent(commentRequestDto);
         }
@@ -42,14 +42,14 @@
 
         protected ServiceResponse ValidateCommentContent(CommentRequestDto commentRequestDto)
         {
-            if (commentRequestDto.Content.Length < MinCommentContentLength)
+            if (commentRequestDto.Content.Length < _minCommentContentLength)
             {
-                return ServiceResponse.Error($"Comment content must be min {MinCommentContentLength} characters.");
+                return ServiceResponse.Error($"Comment content must be min {_minCommentContentLength} characters.");
             }
 
-            if (commentRequestDto.Content.Length > MaxCommentContentLength)
+            if (commentRequestDto.Content.Length > _maxCommentContentLength)
             {
-                return ServiceResponse.Error($"Comment content must be max {MaxCommentContentLength} characters.");
+                return ServiceResponse.Error($"Comment content must be max {_maxCommentContentLength} characters.");
             }
 
             return ServiceResponse.Success();

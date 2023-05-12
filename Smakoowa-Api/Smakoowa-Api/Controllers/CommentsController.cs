@@ -17,37 +17,37 @@
         [HttpPost("AddRecipeComment/{recipeId}")]
         public async Task<ServiceResponse> AddRecipeComment([FromBody] RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
         {
-            return await _recipeCommentService.AddRecipeComment(recipeCommentRequestDto, recipeId);
+            return await _recipeCommentService.AddComment(recipeCommentRequestDto, recipeId);
         }
 
         [HttpPost("AddCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> AddCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _commentReplyService.AddCommentReply(commentReplyRequestDto, commentReplyId);
+            return await _commentReplyService.AddComment(commentReplyRequestDto, commentReplyId);
         }
 
         [HttpPut("EditRecipeComment/{recipeCommentId}")]
         public async Task<ServiceResponse> EditRecipeComment([FromBody] RecipeCommentRequestDto recipeCommentRequestDto, int recipeCommentId)
         {
-            return await _recipeCommentService.EditRecipeComment(recipeCommentRequestDto, recipeCommentId);
+            return await _recipeCommentService.EditComment(recipeCommentRequestDto, recipeCommentId);
         }
 
         [HttpPut("EditCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> EditCommentReply([FromBody] CommentReplyRequestDto commentReplyRequestDto, int commentReplyId)
         {
-            return await _commentReplyService.EditCommentReply(commentReplyRequestDto, commentReplyId);
+            return await _commentReplyService.EditComment(commentReplyRequestDto, commentReplyId);
         }
 
         [HttpDelete("DeleteRecipeComment/{recipeCommentId}")]
         public async Task<ServiceResponse> DeleteRecipeComment(int recipeCommentId)
         {
-            return await _recipeCommentService.DeleteRecipeComment(recipeCommentId);
+            return await _recipeCommentService.DeleteComment(recipeCommentId);
         }
 
         [HttpDelete("DeleteCommentReply/{commentReplyId}")]
         public async Task<ServiceResponse> DeleteCommentReply(int commentReplyId)
         {
-            return await _commentReplyService.DeleteCommentReply(commentReplyId);
+            return await _commentReplyService.DeleteComment(commentReplyId);
         }
     }
 }

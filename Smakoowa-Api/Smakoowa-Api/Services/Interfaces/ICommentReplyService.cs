@@ -1,9 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.Interfaces
 {
-    public interface ICommentReplyService
+    public interface ICommentReplyService : ICommentService
     {
-        public Task<ServiceResponse> AddCommentReply(CommentReplyRequestDto commentReplyRequestDto, int commentId);
-        public Task<ServiceResponse> EditCommentReply(CommentReplyRequestDto commentReplyRequestDto, int commentReplyId);
-        public Task<ServiceResponse> DeleteCommentReply(int commentReplyId);
     }
 }
