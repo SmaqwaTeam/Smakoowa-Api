@@ -17,7 +17,7 @@
                 .Include(r => r.Creator)
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
-                .Include(r => r.Ingredients)  
+                .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                 .Include(r => r.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
@@ -57,11 +57,29 @@
                 .Include(r => r.Creator)
                 .Include(r => r.Updater)
                 .Include(r => r.Tags)
-                .Include(r => r.Ingredients) 
+                .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                 .Include(r => r.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
                 .Include(r => r.RecipeComments).ThenInclude(b => b.CommentReplies).ThenInclude(e => e.Likes)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Recipe>> FindByConditions(Expression<Func<Recipe, bool>> expresion, int? count = null)
+        {
+            return await _context.Set<Recipe>()
+                .Where(expresion)
+                .Include(r => r.Category)
+                .Include(r => r.Creator)
+                .Include(r => r.Updater)
+                .Include(r => r.Tags)
+                .Include(r => r.Ingredients)
+                .Include(r => r.Instructions)
+                .Include(r => r.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(d => d.Likes)
+                .Include(r => r.RecipeComments).ThenInclude(b => b.CommentReplies).ThenInclude(e => e.Likes)
+                .OrderByDescending(r => r.CreatedAt)
+                .Take(count ?? int.MaxValue)
                 .ToListAsync();
         }
     }
