@@ -1,46 +1,38 @@
 ﻿using ModernPantryBackend.Interfaces;
+using ModernPantryBackend.Repositories;
 
 namespace Smakoowa_Api.Services.ValidatorServices
 {
-    public abstract class LikeValidatorService
+    public abstract class LikeValidatorService<T, C> where C : IDbModel where T : ILike
     {
-        //private readonly IApiUserService _apiUserService;
-        //private readonly ILikeRepository<Like> _likeRepository;
-        //private readonly IBaseRepository<ILikeable> _likedItemRepository;
+        private readonly IApiUserService _apiUserService;
+        private readonly IBaseRepository<T> _likeRepository;
+        private readonly IBaseRepository<C> _likedItemRepository;
 
-        //protected LikeValidatorService(IRepository likeRepository, IApiUserService apiUserService,
-        //    IRepository likedItemRepository)
-        //{
-        //    _likeRepository = (ILikeRepository<Like>)likeRepository;
-        //    _apiUserService = apiUserService;
-        //    _likedItemRepository = (IBaseRepository<ILikeable>)likedItemRepository;
-        //}
+        protected LikeValidatorService(IBaseRepository<C> likedItemRepository, IBaseRepository<T> likeRepository, IApiUserService apiUserService)
+        {
+            _likedItemRepository = likedItemRepository;
+            _likeRepository = likeRepository;
+            _apiUserService = apiUserService;
+        }
 
-        //public async Task<ServiceResponse> ValidateLike(int likedId)
-        //{
-        //    if (await CheckIfLikedItemExists(likedId))
-        //    {
-        //        return ServiceResponse.Error($"Item with id: {likedId} does not exist.");
-        //    }
+        public async Task<ServiceResponse> ValidateAddLike(int likedId)
+        {
+            bool a = await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId);
 
-        //    if (await CheckIfLikeExists(likedId))
-        //    {
-        //        return ServiceResponse.Error($"Item with id: {likedId} is already liked by current user.");
-        //    }
+            if (!await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId))
+            {
+                return ServiceResponse.Error($"Item with id: {likedId} does not exist.");
+            }
 
-        //    return ServiceResponse.Success();
-        //}
+            if (await _likeRepository.CheckIfExists(
+                l => ((T)l).LikedId == likedId
+                && ((T)l).CreatorId == _apiUserService.GetCurrentUserId()))
+            {
+                return ServiceResponse.Error($"Item with id: {likedId} is already liked by current user.");
+            }
 
-        //private async Task<bool> CheckIfLikedItemExists(int likedId)
-        //{
-        //    return !await _likedItemRepository.CheckIfExists(r => r.Id == likedId);
-        //}
-
-        //private async Task<bool> CheckIfLikeExists(int likedId)
-        //{
-        //    return await _likeRepository.CheckIfExists(
-        //        l => l.LikedId == likedId
-        //        && l.CreatorId == _apiUserService.GetCurrentUserId());
-        //}
+            return ServiceResponse.Success();
+        }
     }
 }

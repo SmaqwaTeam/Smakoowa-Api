@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
-    public class RecipeCommentLikeValidatorService : LikeValidatorService, IRecipeCommentLikeValidatorService
+    public class RecipeCommentLikeValidatorService : IRecipeCommentLikeValidatorService
     {
         private readonly IApiUserService _apiUserService;
         private readonly IRecipeCommentLikeRepository _likeRepository;

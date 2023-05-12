@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Services.ValidatorServices
 {
-    public class TagLikeValidatorService : LikeValidatorService, ITagLikeValidatorService
+    public class TagLikeValidatorService : ITagLikeValidatorService
     {
         private readonly IApiUserService _apiUserService;
         private readonly ITagLikeRepository _likeRepository;

@@ -140,6 +140,8 @@ namespace Smakoowa_Api.Services
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(ILikeRepository<>), typeof(LikeRepository<>));
+            //services.AddScoped(typeof(ILikeRepository<Like>), typeof(LikeRepository<Like>));
+            //services.AddScoped(typeof(ILikeRepository<RecipeLike>), typeof(LikeRepository<RecipeLike>));
 
 
             //services.AddScoped(typeof(IBaseRepository<ILike>), typeof(BaseRepository<Like>));
