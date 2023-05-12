@@ -2,9 +2,6 @@
 {
     public interface ILikeValidatorService
     {
-        public Task<ServiceResponse> ValidateRecipeLike(int recipeId);
-        public Task<ServiceResponse> ValidateRecipeCommentLike(int recipeCommentId);
-        public Task<ServiceResponse> ValidateCommentReplyLike(int commentReplyId);
-        public Task<ServiceResponse> ValidateTagLike(int tagId);
+        public Task<ServiceResponse> ValidateAddLike(int likedId);
     }
 }

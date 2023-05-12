@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Repositories.Interfaces
 {
-    public interface IRecipeLikeRepository : IBaseRepository<RecipeLike>
+    public interface IRecipeLikeRepository : ILikeRepository<RecipeLike>
     {
     }
 }

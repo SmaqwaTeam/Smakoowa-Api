@@ -3,11 +3,11 @@
     public abstract class LikeService
     {
         protected readonly IHelperService<LikeService> _helperService;
-        protected readonly ILikeRepository _likeRepository;
+        protected readonly ILikeRepository<Like> _likeRepository;
         protected readonly IApiUserService _apiUserService;
         protected readonly ILikeValidatorService _likeValidatorService;
 
-        public LikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
+        public LikeService(ILikeRepository<Like> likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
             ILikeValidatorService likeValidatorService)
         {
             _likeRepository = likeRepository;

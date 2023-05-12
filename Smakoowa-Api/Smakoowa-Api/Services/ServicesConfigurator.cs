@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ModernPantryBackend.Interfaces;
 using Smakoowa_Api.Services.BackgroundTaskQueue;
 using Smakoowa_Api.Services.Helper;
 using Smakoowa_Api.Services.Interfaces.Helper;
@@ -120,7 +121,7 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyRepository));
             services.AddScoped(typeof(ICommentReplyService), typeof(CommentReplyService));
 
-            services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
+            //services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
             services.AddScoped(typeof(IRecipeLikeService), typeof(RecipeLikeService));
             services.AddScoped(typeof(IRecipeCommentLikeService), typeof(RecipeCommentLikeService));
             services.AddScoped(typeof(ICommentReplyLikeService), typeof(CommentReplyLikeService));
@@ -131,7 +132,20 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(IRecipeLikeRepository), typeof(RecipeLikeRepository));
             services.AddScoped(typeof(ITagLikeRepository), typeof(TagLikeRepository));
 
-            services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
+            //services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
+            services.AddScoped(typeof(IRecipeLikeValidatorService), typeof(RecipeLikeValidatorService));
+            services.AddScoped(typeof(IRecipeCommentLikeValidatorService), typeof(RecipeCommentLikeValidatorService));
+            services.AddScoped(typeof(ICommentReplyLikeValidatorService), typeof(CommentReplyLikeValidatorService));
+            services.AddScoped(typeof(ITagLikeValidatorService), typeof(TagLikeValidatorService));
+
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(ILikeRepository<>), typeof(LikeRepository<>));
+
+
+            //services.AddScoped(typeof(IBaseRepository<ILike>), typeof(BaseRepository<Like>));
+
+            //    private readonly ILikeRepository<ILike> _likeRepository;
+            //private readonly IBaseRepository<ILikeable> _likedItemRepository;
 
             services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
             services.AddScoped(typeof(IApiUserMapperService), typeof(ApiUserMapperService));

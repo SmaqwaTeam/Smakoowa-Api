@@ -143,7 +143,7 @@
         {
             var userLikedTagIds = (await _apiUserRepository
                 .FindByConditionsFirstOrDefault(u => u.Id == _apiUserService.GetCurrentUserId()))
-                .TagLikes.Select(t => t.TagId);
+                .TagLikes.Select(t => t.LikedId);
 
             return await GetRecipesByConditions(c => c.Tags.Select(t => t.Id).Any(s => userLikedTagIds.Contains(s)));
         }
@@ -152,7 +152,7 @@
         {
             var userLikedRecipeIds = (await _apiUserRepository
                 .FindByConditionsFirstOrDefault(u => u.Id == _apiUserService.GetCurrentUserId()))
-                .RecipeLikes.Select(t => t.RecipeId);
+                .RecipeLikes.Select(t => t.LikedId);
 
             return await GetRecipesByConditions(c => userLikedRecipeIds.Contains(c.Id));
         }

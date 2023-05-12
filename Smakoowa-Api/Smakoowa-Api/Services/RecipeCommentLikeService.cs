@@ -4,23 +4,23 @@
     {
         private readonly IRecipeCommentLikeRepository _recipeCommentLikeRepository;
 
-        public RecipeCommentLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, IRecipeCommentLikeRepository recipeCommentLikeRepository)
+        public RecipeCommentLikeService(ILikeRepository<Like> likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
+            IRecipeCommentLikeValidatorService likeValidatorService, IRecipeCommentLikeRepository recipeCommentLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _recipeCommentLikeRepository = recipeCommentLikeRepository;
         }
 
-        public async Task<ServiceResponse> AddRecipeCommentLike(int recipeCommentId)
+        public async Task<ServiceResponse> AddLike(int recipeCommentId)
         {
-            var recipeCommentLikeValidationResult = await _likeValidatorService.ValidateRecipeCommentLike(recipeCommentId);
+            var recipeCommentLikeValidationResult = await _likeValidatorService.ValidateAddLike(recipeCommentId);
             if (!recipeCommentLikeValidationResult.SuccessStatus) return recipeCommentLikeValidationResult;
 
-            var recipeCommentLike = new RecipeCommentLike { RecipeCommentId = recipeCommentId, LikeableType = LikeableType.RecipeComment };
+            var recipeCommentLike = new RecipeCommentLike { LikedId = recipeCommentId, LikeableType = LikeableType.RecipeComment };
             return await AddLike(recipeCommentLike);
         }
 
-        public async Task<ServiceResponse> RemoveRecipeCommentLike(int recipeCommentId)
+        public async Task<ServiceResponse> RemoveLike(int recipeCommentId)
         {
             var likeToRemove = await _recipeCommentLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedRecipeComment.Id == recipeCommentId
@@ -30,9 +30,9 @@
             return await RemoveLike(likeToRemove);
         }
 
-        public async Task<int> GetRecipeCommentLikeCount(int recipeCommentId)
+        public async Task<int> GetLikeCount(int recipeCommentId)
         {
-            return (await _recipeCommentLikeRepository.FindByConditions(rcl => rcl.RecipeCommentId == recipeCommentId)).Count();
+            return (await _recipeCommentLikeRepository.FindByConditions(rcl => rcl.LikedId == recipeCommentId)).Count();
         }
     }
 }

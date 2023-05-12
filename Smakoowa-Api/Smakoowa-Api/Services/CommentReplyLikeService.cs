@@ -4,23 +4,23 @@
     {
         private readonly ICommentReplyLikeRepository _commentReplyLikeRepository;
 
-        public CommentReplyLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, ICommentReplyLikeRepository commentReplyLikeRepository)
+        public CommentReplyLikeService(ILikeRepository<Like> likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
+            ICommentReplyLikeValidatorService likeValidatorService, ICommentReplyLikeRepository commentReplyLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _commentReplyLikeRepository = commentReplyLikeRepository;
         }
 
-        public async Task<ServiceResponse> AddCommentReplyLike(int commentReplyId)
+        public async Task<ServiceResponse> AddLike(int commentReplyId)
         {
-            var commentReplyLikeValidationResult = await _likeValidatorService.ValidateCommentReplyLike(commentReplyId);
+            var commentReplyLikeValidationResult = await _likeValidatorService.ValidateAddLike(commentReplyId);
             if (!commentReplyLikeValidationResult.SuccessStatus) return commentReplyLikeValidationResult;
 
-            var commentReplyLike = new CommentReplyLike { CommentReplyId = commentReplyId, LikeableType = LikeableType.CommentReply };
+            var commentReplyLike = new CommentReplyLike { LikedId = commentReplyId, LikeableType = LikeableType.CommentReply };
             return await AddLike(commentReplyLike);
         }
 
-        public async Task<ServiceResponse> RemoveCommentReplyLike(int commentReplyId)
+        public async Task<ServiceResponse> RemoveLike(int commentReplyId)
         {
             var likeToRemove = await _commentReplyLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedCommentReply.Id == commentReplyId
@@ -31,9 +31,9 @@
             return await RemoveLike(likeToRemove);
         }
 
-        public async Task<int> GetCommentReplyLikeCount(int commentReplyId)
+        public async Task<int> GetLikeCount(int commentReplyId)
         {
-            return (await _commentReplyLikeRepository.FindByConditions(crl => crl.CommentReplyId == commentReplyId)).Count();
+            return (await _commentReplyLikeRepository.FindByConditions(crl => crl.LikedId == commentReplyId)).Count();
         }
     }
 }

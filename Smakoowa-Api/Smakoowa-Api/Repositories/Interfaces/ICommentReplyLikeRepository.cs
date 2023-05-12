@@ -1,6 +1,6 @@
 ﻿namespace Smakoowa_Api.Repositories.Interfaces
 {
-    public interface ICommentReplyLikeRepository : IBaseRepository<CommentReplyLike>
+    public interface ICommentReplyLikeRepository : ILikeRepository<CommentReplyLike>
     {
     }
 }

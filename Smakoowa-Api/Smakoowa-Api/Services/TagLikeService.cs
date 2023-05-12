@@ -4,19 +4,19 @@
     {
         private readonly ITagLikeRepository _tagLikeRepository;
 
-        public TagLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, ILikeValidatorService likeValidatorService,
+        public TagLikeService(ILikeRepository<Like> likeRepository, IHelperService<LikeService> helperService, ITagLikeValidatorService likeValidatorService,
             ITagLikeRepository tagLikeRepository, IApiUserService apiUserService)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _tagLikeRepository = tagLikeRepository;
         }
 
-        public async Task<ServiceResponse> AddTagLike(int tagId)
+        public async Task<ServiceResponse> AddLike(int tagId)
         {
-            var tagLikeValidationResult = await _likeValidatorService.ValidateTagLike(tagId);
+            var tagLikeValidationResult = await _likeValidatorService.ValidateAddLike(tagId);
             if (!tagLikeValidationResult.SuccessStatus) return tagLikeValidationResult;
 
-            var tagLike = new TagLike { TagId = tagId, LikeableType = LikeableType.Tag };
+            var tagLike = new TagLike { LikedId = tagId, LikeableType = LikeableType.Tag };
             return await AddLike(tagLike);
         }
 
@@ -25,7 +25,7 @@
             return await _tagLikeRepository.FindByConditions(tl => tl.CreatorId == _apiUserService.GetCurrentUserId());
         }
 
-        public async Task<ServiceResponse> RemoveTagLike(int tagId)
+        public async Task<ServiceResponse> RemoveLike(int tagId)
         {
             var likeToRemove = await _tagLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedTag.Id == tagId
@@ -35,9 +35,9 @@
             return await RemoveLike(likeToRemove);
         }
 
-        public async Task<int> GetTagLikeCount(int tagId)
+        public async Task<int> GetLikeCount(int tagId)
         {
-            return (await _tagLikeRepository.FindByConditions(rl => rl.TagId == tagId)).Count();
+            return (await _tagLikeRepository.FindByConditions(rl => rl.LikedId == tagId)).Count();
         }
     }
 }

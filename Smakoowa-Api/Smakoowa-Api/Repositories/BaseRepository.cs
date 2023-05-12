@@ -1,6 +1,6 @@
 ﻿namespace ModernPantryBackend.Repositories
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IDbModel
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IDbModel
     {
         protected readonly DataContext _context;
 

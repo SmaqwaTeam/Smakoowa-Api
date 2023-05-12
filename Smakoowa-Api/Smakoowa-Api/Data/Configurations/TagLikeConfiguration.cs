@@ -14,7 +14,7 @@
             modelBuilder.Entity<TagLike>()
                 .HasOne(l => l.LikedTag)
                 .WithMany(r => r.Likes)
-                .HasForeignKey(l => l.TagId)
+                .HasForeignKey(l => l.LikedId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

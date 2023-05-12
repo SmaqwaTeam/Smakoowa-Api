@@ -4,28 +4,28 @@
     {
         private readonly IRecipeLikeRepository _recipeLikeRepository;
 
-        public RecipeLikeService(ILikeRepository likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
-            ILikeValidatorService likeValidatorService, IRecipeLikeRepository recipeLikeRepository)
+        public RecipeLikeService(ILikeRepository<Like> likeRepository, IHelperService<LikeService> helperService, IApiUserService apiUserService,
+            IRecipeLikeValidatorService likeValidatorService, IRecipeLikeRepository recipeLikeRepository)
             : base(likeRepository, helperService, apiUserService, likeValidatorService)
         {
             _recipeLikeRepository = recipeLikeRepository;
         }
 
-        public async Task<ServiceResponse> AddRecipeLike(int recipeId)
+        public async Task<ServiceResponse> AddLike(int recipeId)
         {
-            var recipeLikeValidationResult = await _likeValidatorService.ValidateRecipeLike(recipeId);
+            var recipeLikeValidationResult = await _likeValidatorService.ValidateAddLike(recipeId);
             if (!recipeLikeValidationResult.SuccessStatus) return recipeLikeValidationResult;
 
-            var recipeLike = new RecipeLike { RecipeId = recipeId, LikeableType = LikeableType.Recipe };
+            var recipeLike = new RecipeLike { LikedId = recipeId, LikeableType = LikeableType.Recipe };
             return await AddLike(recipeLike);
         }
 
-        public async Task<int> GetRecipeLikeCount(int recipeId)
+        public async Task<int> GetLikeCount(int recipeId)
         {
-            return (await _recipeLikeRepository.FindByConditions(rl => rl.RecipeId == recipeId)).Count();
+            return (await _recipeLikeRepository.FindByConditions(rl => rl.LikedId == recipeId)).Count();
         }
 
-        public async Task<ServiceResponse> RemoveRecipeLike(int recipeId)
+        public async Task<ServiceResponse> RemoveLike(int recipeId)
         {
             var likeToRemove = await _recipeLikeRepository.FindByConditionsFirstOrDefault(
                 c => c.LikedRecipe.Id == recipeId

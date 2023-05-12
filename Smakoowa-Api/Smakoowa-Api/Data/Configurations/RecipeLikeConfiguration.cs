@@ -14,7 +14,7 @@
             modelBuilder.Entity<RecipeLike>()
                 .HasOne(l => l.LikedRecipe)
                 .WithMany(r => r.Likes)
-                .HasForeignKey(l => l.RecipeId)
+                .HasForeignKey(l => l.LikedId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }
