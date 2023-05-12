@@ -19,7 +19,7 @@
         public async Task<TagResponseDto> MapGetTagResponseDto(Tag tag)
         {
             var mappedTag = _mapper.Map<TagResponseDto>(tag);
-            mappedTag.LikeCount = await _tagLikeService.GetTagLikeCount(tag.Id);
+            mappedTag.LikeCount = await _tagLikeService.GetLikeCount(tag.Id);
             return mappedTag;
         }
 

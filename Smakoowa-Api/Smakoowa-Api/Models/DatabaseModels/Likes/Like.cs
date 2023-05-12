@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public LikeableType LikeableType { get; set; }
+        public int LikedId { get; set; }
     }
 }

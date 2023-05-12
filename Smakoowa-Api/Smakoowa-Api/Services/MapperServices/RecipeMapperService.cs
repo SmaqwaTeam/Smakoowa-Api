@@ -76,10 +76,10 @@
 
             foreach(var recipeComment in mappedRecipe.RecipeComments)
             {
-                recipeComment.LikeCount = await _recipeCommentLikeService.GetRecipeCommentLikeCount(recipeComment.Id);
+                recipeComment.LikeCount = await _recipeCommentLikeService.GetLikeCount(recipeComment.Id);
                 foreach(var commentReply in recipeComment.CommentReplies)
                 {
-                    commentReply.LikeCount = await _commentReplyLikeService.GetCommentReplyLikeCount(commentReply.Id);
+                    commentReply.LikeCount = await _commentReplyLikeService.GetLikeCount(commentReply.Id);
                 }
             }
 
@@ -91,7 +91,7 @@
         private async Task<RecipeResponseDto> CompleteRecipeData(RecipeResponseDto mappedRecipe)
         {
             mappedRecipe.ViewCount = await _controllerStatisticsService.GetRecipeViewCount(mappedRecipe.Id);
-            mappedRecipe.LikeCount = await _recipeLikeService.GetRecipeLikeCount(mappedRecipe.Id);
+            mappedRecipe.LikeCount = await _recipeLikeService.GetLikeCount(mappedRecipe.Id);
 
             return mappedRecipe;
         }
