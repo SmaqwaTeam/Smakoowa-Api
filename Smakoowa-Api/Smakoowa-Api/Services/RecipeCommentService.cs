@@ -23,7 +23,7 @@
 
             if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 
-            var mappedRecipeComment = _recipeCommentMapperService.MapCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
+            var mappedRecipeComment = _recipeCommentMapperService.MapCreateCommentRequestDto(recipeCommentRequestDto, recipeId);
             return await AddComment(mappedRecipeComment);
         }
 
@@ -37,7 +37,7 @@
 
             if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 
-            var mappedRecipeComment = _recipeCommentMapperService.MapEditRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
+            var mappedRecipeComment = _recipeCommentMapperService.MapEditCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
 
             return await EditComment(mappedRecipeComment);
         }

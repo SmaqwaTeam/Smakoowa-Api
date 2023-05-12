@@ -25,7 +25,7 @@ namespace Smakoowa_Api.Services
 
             if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 
-            var mappedCommentReply = _commentReplyMapperService.MapCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
+            var mappedCommentReply = _commentReplyMapperService.MapCreateCommentRequestDto(commentReplyRequestDto, commentId);
 
             return await AddComment(mappedCommentReply);
         }
@@ -40,7 +40,7 @@ namespace Smakoowa_Api.Services
 
             if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 
-            var mappedCommentReply = _commentReplyMapperService.MapEditCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply);
+            var mappedCommentReply = _commentReplyMapperService.MapEditCommentRequestDto(commentReplyRequestDto, editedCommentReply);
 
             return await EditComment(mappedCommentReply);
         }
