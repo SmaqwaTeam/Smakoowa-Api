@@ -95,7 +95,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             var testRecipe = await AddRecipeToDatabase();
 
             var recipeLike = await AddToDatabase(new RecipeLike
-            { RecipeId = testRecipe.Id, LikeableType = LikeableType.Recipe });
+            { LikedId = testRecipe.Id, LikeableType = LikeableType.Recipe });
 
             string removeRecipeLikeUrl = $"/api/Likes/RemoveRecipeLike/{testRecipe.Id}";
 
@@ -116,7 +116,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             var testRecipeComment = await AddRecipeCommentToDatabase(testRecipe.Id, "TestDeleteLikes");
 
             var recipeCommentLike = await AddToDatabase(new RecipeCommentLike
-            { RecipeCommentId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
+            { LikedId = testRecipeComment.Id, LikeableType = LikeableType.RecipeComment });
 
             string removeRecipeCommentLikeUrl = $"/api/Likes/RemoveRecipeCommentLike/{testRecipeComment.Id}";
 
@@ -138,7 +138,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             var testCommentReply = await AddCommentReplyToDatabase(testRecipeComment.Id, "TestDeleteLikes");
 
             var commentReplyLike = await AddToDatabase(new CommentReplyLike
-            { CommentReplyId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
+            { LikedId = testCommentReply.Id, LikeableType = LikeableType.CommentReply });
 
             string removeCommentReplyLikeUrl = $"/api/Likes/RemoveCommentReplyLike/{testCommentReply.Id}";
 
@@ -157,7 +157,7 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             // Arrange
             var testTag = (Tag)await AddToDatabase(new Tag { Name = "TestDeleteLikedTag", TagType = TagType.Diet });
 
-            var tagLike = await AddToDatabase(new TagLike { TagId = testTag.Id, LikeableType = LikeableType.Tag });
+            var tagLike = await AddToDatabase(new TagLike { LikedId = testTag.Id, LikeableType = LikeableType.Tag });
 
             string removeTagLikeUrl = $"/api/Likes/RemoveTagLike/{testTag.Id}";
 

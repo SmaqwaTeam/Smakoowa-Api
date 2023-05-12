@@ -24,20 +24,27 @@ namespace Smakoowa_Api.Middlewares
 
         private async ValueTask BuildWorkItemAsync(CancellationToken token)
         {
-            var endpoint = _context.GetEndpoint();
-            if (endpoint == null) return;
+            try
+            {
+                var endpoint = _context.GetEndpoint();
+                if (endpoint == null) return;
 
-            var controllerName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
-            if (controllerName == "Statistics") return;
+                var controllerName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
+                if (controllerName == "Statistics") return;
 
-            var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
+                var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
 
-            var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;
-            var requestPath = _context.Request.Path.ToString();
+                var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;
+                var requestPath = _context.Request.Path.ToString();
 
-            var remainingPath = uriLength >= requestPath.Length ? null : requestPath.Substring(uriLength).TrimStart('/');
+                var remainingPath = uriLength >= requestPath.Length ? null : requestPath.Substring(uriLength).TrimStart('/');
 
-            await _requestCounterService.LogRequestCount(controllerName, actionName, remainingPath);
+                await _requestCounterService.LogRequestCount(controllerName, actionName, remainingPath);
+            }
+            catch
+            {
+
+            }
         }
     }
 }

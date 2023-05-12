@@ -117,7 +117,7 @@
 
         public async Task<ServiceResponse> GetUserLikedTags()
         {
-            var likedTagIds = (await _tagLikeService.GetUserTagLikes()).Select(tl => tl.TagId);
+            var likedTagIds = (await _tagLikeService.GetUserTagLikes()).Select(tl => tl.LikedId);
             return await GetByConditions(t => likedTagIds.Any(tl => tl == t.Id));
         }
 

@@ -2,7 +2,6 @@
 {
     public class TagLike : Like
     {
-        public int TagId { get; set; }
         public virtual Tag LikedTag { get; set; }
     }
 }

@@ -120,18 +120,17 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyRepository));
             services.AddScoped(typeof(ICommentReplyService), typeof(CommentReplyService));
 
-            services.AddScoped(typeof(ILikeRepository), typeof(LikeRepository));
             services.AddScoped(typeof(IRecipeLikeService), typeof(RecipeLikeService));
             services.AddScoped(typeof(IRecipeCommentLikeService), typeof(RecipeCommentLikeService));
             services.AddScoped(typeof(ICommentReplyLikeService), typeof(CommentReplyLikeService));
             services.AddScoped(typeof(ITagLikeService), typeof(TagLikeService));
 
-            services.AddScoped(typeof(IRecipeCommentLikeRepository), typeof(RecipeCommentLikeRepository));
-            services.AddScoped(typeof(ICommentReplyLikeRepository), typeof(CommentReplyLikeRepository));
-            services.AddScoped(typeof(IRecipeLikeRepository), typeof(RecipeLikeRepository));
-            services.AddScoped(typeof(ITagLikeRepository), typeof(TagLikeRepository));
+            services.AddScoped(typeof(IRecipeLikeValidatorService), typeof(RecipeLikeValidatorService));
+            services.AddScoped(typeof(IRecipeCommentLikeValidatorService), typeof(RecipeCommentLikeValidatorService));
+            services.AddScoped(typeof(ICommentReplyLikeValidatorService), typeof(CommentReplyLikeValidatorService));
+            services.AddScoped(typeof(ITagLikeValidatorService), typeof(TagLikeValidatorService));
 
-            services.AddScoped(typeof(ILikeValidatorService), typeof(LikeValidatorService));
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
             services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
             services.AddScoped(typeof(IApiUserMapperService), typeof(ApiUserMapperService));
