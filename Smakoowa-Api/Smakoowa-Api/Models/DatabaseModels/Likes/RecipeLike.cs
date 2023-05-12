@@ -2,7 +2,6 @@
 {
     public class RecipeLike : Like
     {
-        //public int LikedId { get; set; }
         public virtual Recipe LikedRecipe { get; set; }
     }
 }
