@@ -21,7 +21,7 @@ namespace Smakoowa_Api.Services
         public async Task<ServiceResponse> AddCommentReply(CommentReplyRequestDto commentReplyRequestDto, int commentId)
         {
             var commentReplyValidationResult = await _commentReplyValidatorService
-                .ValidateCreateCommentReplyRequestDto(commentReplyRequestDto, commentId);
+                .ValidateCreateCommentRequestDto(commentReplyRequestDto, commentId);
 
             if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 
@@ -36,7 +36,7 @@ namespace Smakoowa_Api.Services
             if (editedCommentReply == null) return ServiceResponse.Error($"Comment reply with id: {commentReplyId} not found.");
 
             var commentReplyValidationResult = await _commentReplyValidatorService
-                .ValidateEditCommentReplyRequestDto(commentReplyRequestDto, editedCommentReply);
+                .ValidateEditCommentRequestDto(commentReplyRequestDto, editedCommentReply);
 
             if (!commentReplyValidationResult.SuccessStatus) return commentReplyValidationResult;
 

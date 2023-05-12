@@ -9,7 +9,7 @@
         public CommentReply MapCreateCommentReplyRequestDto(CommentReplyRequestDto commentReplyRequestDto, int commentId)
         {
             var mappedCommentReply = _mapper.Map<CommentReply>(commentReplyRequestDto);
-            mappedCommentReply.RepliedCommentId = commentId;
+            mappedCommentReply.CommentedId = commentId;
             return mappedCommentReply;
         }
 

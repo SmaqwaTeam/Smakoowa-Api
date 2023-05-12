@@ -19,7 +19,7 @@
         public async Task<ServiceResponse> AddRecipeComment(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
         {
             var recipeCommentValidationResult = await _recipeCommentValidatorService.
-                ValidateCreateRecipeCommentRequestDto(recipeCommentRequestDto, recipeId);
+                ValidateCreateCommentRequestDto(recipeCommentRequestDto, recipeId);
 
             if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 
@@ -33,7 +33,7 @@
             if (editedRecipeComment == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
 
             var recipeCommentValidationResult = await _recipeCommentValidatorService
-                .ValidateEditRecipeCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
+                .ValidateEditCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
 
             if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
 

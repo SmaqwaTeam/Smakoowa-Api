@@ -9,7 +9,7 @@
         public RecipeComment MapCreateRecipeCommentRequestDto(RecipeCommentRequestDto recipeCommentRequestDto, int recipeId)
         {
             var mappedRecipeComment = _mapper.Map<RecipeComment>(recipeCommentRequestDto);
-            mappedRecipeComment.RecipeId = recipeId;
+            mappedRecipeComment.CommentedId = recipeId;
             return mappedRecipeComment;
         }
 
