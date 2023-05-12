@@ -108,16 +108,12 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(IInstructionValidatorService), typeof(InstructionValidatorService));
             services.AddScoped(typeof(IInstructionMapperService), typeof(InstructionMapperService));
 
-            services.AddScoped(typeof(ICommentRepository), typeof(CommentRepository));
-
-            services.AddScoped(typeof(IRecipeCommentRepository), typeof(RecipeCommentRepository));
             services.AddScoped(typeof(IRecipeCommentService), typeof(RecipeCommentService));
             services.AddScoped(typeof(IRecipeCommentValidatorService), typeof(RecipeCommentValidatorService));
             services.AddScoped(typeof(IRecipeCommentMapperService), typeof(RecipeCommentMapperService));
 
             services.AddScoped(typeof(ICommentReplyValidatorService), typeof(CommentReplyValidatorService));
             services.AddScoped(typeof(ICommentReplyMapperService), typeof(CommentReplyMapperService));
-            services.AddScoped(typeof(ICommentReplyRepository), typeof(CommentReplyRepository));
             services.AddScoped(typeof(ICommentReplyService), typeof(CommentReplyService));
 
             services.AddScoped(typeof(IRecipeLikeService), typeof(RecipeLikeService));

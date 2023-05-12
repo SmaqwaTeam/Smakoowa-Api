@@ -7,7 +7,7 @@
         private readonly IApiUserService _apiUserService;
         private readonly IBaseRepository<T> _commentedRepository;
 
-        public CommentValidatorService(IConfiguration configuration, string commentType, IApiUserService apiUserService, 
+        public CommentValidatorService(IConfiguration configuration, string commentType, IApiUserService apiUserService,
             IBaseRepository<T> commentedRepository)
         {
             _maxCommentContentLength = int.Parse(configuration.GetSection($"Validation:{commentType}:MaxCommentContentLength").Value);

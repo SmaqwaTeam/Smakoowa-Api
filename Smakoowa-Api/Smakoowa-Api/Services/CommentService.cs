@@ -8,7 +8,7 @@
         protected readonly ICommentValidatorService _commentValidatorService;
         protected readonly ICommentMapperService _commentMapperService;
 
-        protected CommentService(ICommentMapperService commentMapperService, ICommentValidatorService commentValidatorService, 
+        protected CommentService(ICommentMapperService commentMapperService, ICommentValidatorService commentValidatorService,
             IBaseRepository<T> commentRepository, IApiUserService apiUserService, IHelperService<CommentService<T>> helperService)
         {
             _commentMapperService = commentMapperService;
