@@ -33,9 +33,9 @@
         }
 
         [HttpGet("GetAll")]
-        public async Task<ServiceResponse> GetAll()
+        public async Task<ServiceResponse> GetAll([FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetAll();
+            return await _recipeService.GetAll(getRecipeParameters);
         }
 
         [HttpGet("GetById/{recipeId}")]
@@ -52,45 +52,47 @@
 
         [JwtAuthorize("User", "Admin")]
         [HttpGet("GetCurrentUsersRecipes")]
-        public async Task<ServiceResponse> GetCurrentUsersRecipes()
+        public async Task<ServiceResponse> GetCurrentUsersRecipes([FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetCurrentUsersRecipes();
+            return await _recipeService.GetCurrentUsersRecipes(getRecipeParameters);
         }
 
         [HttpGet("GetRecipesByTagIds")]
-        public async Task<ServiceResponse> GetRecipesByTagIds([FromQuery] int[] tagIds)
+        public async Task<ServiceResponse> GetRecipesByTagIds([FromQuery] int[] tagIds, [FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetRecipesByTagIds(tagIds.ToList());
+            return await _recipeService.GetRecipesByTagIds(tagIds.ToList(), getRecipeParameters);
         }
 
         [HttpGet("GetRecipesByCategoryId")]
-        public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId)
+        public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId, [FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetRecipesByCategoryId(categoryId);
+            return await _recipeService.GetRecipesByCategoryId(categoryId, getRecipeParameters);
         }
 
         [HttpGet("SearchRecipesByName")]
-        public async Task<ServiceResponse> SearchRecipesByName(string querry)
+        public async Task<ServiceResponse> SearchRecipesByName(string querry, [FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.SearchRecipesByName(querry);
+            return await _recipeService.SearchRecipesByName(querry, getRecipeParameters);
         }
 
+        [JwtAuthorize("User", "Admin")]
         [HttpGet("GetRecipiesByLikedTags")]
-        public async Task<ServiceResponse> GetRecipiesByLikedTags()
+        public async Task<ServiceResponse> GetRecipiesByLikedTags([FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetRecipiesByLikedTags();
+            return await _recipeService.GetRecipiesByLikedTags(getRecipeParameters);
         }
 
+        [JwtAuthorize("User", "Admin")]
         [HttpGet("GetLikedRecipies")]
-        public async Task<ServiceResponse> GetLikedRecipies()
+        public async Task<ServiceResponse> GetLikedRecipies([FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetLikedRecipies();
+            return await _recipeService.GetLikedRecipies(getRecipeParameters);
         }
 
         [HttpGet("GetUserRecipies/{userId}")]
-        public async Task<ServiceResponse> GetUserRecipies(int userId)
+        public async Task<ServiceResponse> GetUserRecipies(int userId, [FromQuery] GetRecipeParameters? getRecipeParameters)
         {
-            return await _recipeService.GetUserRecipies(userId);
+            return await _recipeService.GetUserRecipies(userId, getRecipeParameters);
         }
     }
 }
