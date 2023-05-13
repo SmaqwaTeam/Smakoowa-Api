@@ -11,12 +11,12 @@ namespace Smakoowa_Api.Tests.IntegrationTests
     [Trait("Category", "Integration")]
     public class CategoriesControllerIntegrationTests : ControllerIntegrationTests
     {
-        private readonly int MaxCategoryNameLength;
-        private readonly int MinCategoryNameLength;
+        private readonly int _maxCategoryNameLength;
+        private readonly int _minCategoryNameLength;
         public CategoriesControllerIntegrationTests(CustomWebApplicationFactory<Program> fixture) : base(fixture)
         {
-            MaxCategoryNameLength = int.Parse(_configuration.GetSection($"Validation:Category:MaxNameLength").Value);
-            MinCategoryNameLength = int.Parse(_configuration.GetSection($"Validation:Category:MinNameLength").Value);
+            _maxCategoryNameLength = int.Parse(_configuration.GetSection($"Validation:Category:MaxNameLength").Value);
+            _minCategoryNameLength = int.Parse(_configuration.GetSection($"Validation:Category:MinNameLength").Value);
         }
 
         [Fact]
@@ -113,8 +113,8 @@ namespace Smakoowa_Api.Tests.IntegrationTests
             // Arrange
             string minName = "", maxName = "";
 
-            while (minName.Length < MinCategoryNameLength - 1) minName += "a";
-            while (maxName.Length <= MaxCategoryNameLength + 1) maxName += "a";
+            while (minName.Length < _minCategoryNameLength - 1) minName += "a";
+            while (maxName.Length <= _maxCategoryNameLength + 1) maxName += "a";
 
             Category categoryMinName = new Category { Name = minName };
             Category categoryMaxName = new Category { Name = maxName };

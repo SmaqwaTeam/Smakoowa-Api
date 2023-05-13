@@ -2,9 +2,9 @@
 {
     public abstract class LikeValidatorService<T, C> where C : IDbModel where T : ILike
     {
-        private readonly IApiUserService _apiUserService;
-        private readonly IBaseRepository<T> _likeRepository;
-        private readonly IBaseRepository<C> _likedItemRepository;
+        protected readonly IApiUserService _apiUserService;
+        protected readonly IBaseRepository<T> _likeRepository;
+        protected readonly IBaseRepository<C> _likedItemRepository;
 
         protected LikeValidatorService(IBaseRepository<C> likedItemRepository, IBaseRepository<T> likeRepository, IApiUserService apiUserService)
         {

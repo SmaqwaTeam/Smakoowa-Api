@@ -11,13 +11,13 @@ namespace Smakoowa_Api.Tests.IntegrationTests
     [Trait("Category", "Integration")]
     public class TagsControllerIntegrationTests : ControllerIntegrationTests
     {
-        private readonly int MaxTagNameLength;
-        private readonly int MinTagNameLength;
+        private readonly int _maxTagNameLength;
+        private readonly int _minTagNameLength;
 
         public TagsControllerIntegrationTests(CustomWebApplicationFactory<Program> fixture) : base(fixture)
         {
-            MaxTagNameLength = int.Parse(_configuration.GetSection($"Validation:Tag:MaxNameLength").Value);
-            MinTagNameLength = int.Parse(_configuration.GetSection($"Validation:Tag:MinNameLength").Value);
+            _maxTagNameLength = int.Parse(_configuration.GetSection($"Validation:Tag:MaxNameLength").Value);
+            _minTagNameLength = int.Parse(_configuration.GetSection($"Validation:Tag:MinNameLength").Value);
         }
 
         [Fact]
@@ -111,8 +111,8 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         {
             // Arrange
             string minName = "", maxName = "";
-            while (minName.Length < MinTagNameLength - 1) minName += "a";
-            while (maxName.Length <= MaxTagNameLength + 1) maxName += "a";
+            while (minName.Length < _minTagNameLength - 1) minName += "a";
+            while (maxName.Length <= _maxTagNameLength + 1) maxName += "a";
 
             Tag tagMinName = new Tag { Name = minName };
             Tag tagMaxName = new Tag { Name = maxName };

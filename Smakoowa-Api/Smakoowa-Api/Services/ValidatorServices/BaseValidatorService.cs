@@ -3,26 +3,26 @@
     public abstract class BaseValidatorService
     {
         protected readonly IConfiguration _configuration;
-        protected readonly int MaxNameLength;
-        protected readonly int MinNameLength;
+        protected readonly int _maxNameLength;
+        protected readonly int _minNameLength;
 
         protected BaseValidatorService(IConfiguration configuration, string configSectionName)
         {
             _configuration = configuration;
-            MaxNameLength = int.Parse(_configuration.GetSection($"{configSectionName}:MaxNameLength").Value);
-            MinNameLength = int.Parse(_configuration.GetSection($"{configSectionName}:MinNameLength").Value);
+            _maxNameLength = int.Parse(_configuration.GetSection($"{configSectionName}:MaxNameLength").Value);
+            _minNameLength = int.Parse(_configuration.GetSection($"{configSectionName}:MinNameLength").Value);
         }
 
         protected ServiceResponse ValidateNameLength(string name, string entityName)
         {
-            if (name.Length < MinNameLength)
+            if (name.Length < _minNameLength)
             {
-                return ServiceResponse.Error($"{entityName} name must have a minimum of {MinNameLength} characters.");
+                return ServiceResponse.Error($"{entityName} name must have a minimum of {_minNameLength} characters.");
             }
 
-            if (name.Length > MaxNameLength)
+            if (name.Length > _maxNameLength)
             {
-                return ServiceResponse.Error($"{entityName} name must have a maximum of {MaxNameLength} characters.");
+                return ServiceResponse.Error($"{entityName} name must have a maximum of {_maxNameLength} characters.");
             }
 
             return ServiceResponse.Success();

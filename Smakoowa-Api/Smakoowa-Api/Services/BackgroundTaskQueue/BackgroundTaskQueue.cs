@@ -2,11 +2,11 @@
 
 namespace Smakoowa_Api.Services.BackgroundTaskQueue
 {
-    public sealed class DefaultBackgroundTaskQueue : IBackgroundTaskQueue
+    public sealed class BackgroundTaskQueue : IBackgroundTaskQueue
     {
         private readonly Channel<Func<CancellationToken, ValueTask>> _queue;
 
-        public DefaultBackgroundTaskQueue(int capacity)
+        public BackgroundTaskQueue(int capacity)
         {
             BoundedChannelOptions options = new(capacity)
             {
@@ -15,8 +15,7 @@ namespace Smakoowa_Api.Services.BackgroundTaskQueue
             _queue = Channel.CreateBounded<Func<CancellationToken, ValueTask>>(options);
         }
 
-        public async ValueTask QueueBackgroundWorkItemAsync(
-            Func<CancellationToken, ValueTask> workItem)
+        public async ValueTask QueueBackgroundWorkItemAsync(Func<CancellationToken, ValueTask> workItem)
         {
             if (workItem is null)
             {
@@ -26,11 +25,9 @@ namespace Smakoowa_Api.Services.BackgroundTaskQueue
             await _queue.Writer.WriteAsync(workItem);
         }
 
-        public async ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(
-            CancellationToken cancellationToken)
+        public async ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(CancellationToken cancellationToken)
         {
-            Func<CancellationToken, ValueTask>? workItem =
-                await _queue.Reader.ReadAsync(cancellationToken);
+            Func<CancellationToken, ValueTask>? workItem = await _queue.Reader.ReadAsync(cancellationToken);
 
             return workItem;
         }

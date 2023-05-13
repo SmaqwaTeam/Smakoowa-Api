@@ -2,10 +2,10 @@
 {
     public abstract class CommentValidatorService<T> where T : ICommentable
     {
-        private readonly int _maxCommentContentLength;
-        private readonly int _minCommentContentLength;
-        private readonly IApiUserService _apiUserService;
-        private readonly IBaseRepository<T> _commentedRepository;
+        protected readonly int _maxCommentContentLength;
+        protected readonly int _minCommentContentLength;
+        protected readonly IApiUserService _apiUserService;
+        protected readonly IBaseRepository<T> _commentedRepository;
 
         public CommentValidatorService(IConfiguration configuration, string commentType, IApiUserService apiUserService,
             IBaseRepository<T> commentedRepository)

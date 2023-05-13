@@ -27,7 +27,7 @@
 
             try
             {
-                var createdRecipe = await _recipeRepository.Create(recipe);
+                await _recipeRepository.Create(recipe);
                 return ServiceResponse.Success("Recipe created.");
             }
             catch (Exception ex)

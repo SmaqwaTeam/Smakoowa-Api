@@ -12,13 +12,13 @@ namespace Smakoowa_Api.Tests.IntegrationTests
     [Trait("Category", "Integration")]
     public class RecipesControllerIntegrationTests : ControllerIntegrationTests
     {
-        private readonly int MaxRecipeNameLength;
-        private readonly int MinRecipeNameLength;
+        private readonly int _maxRecipeNameLength;
+        private readonly int _minRecipeNameLength;
 
         public RecipesControllerIntegrationTests(CustomWebApplicationFactory<Program> fixture) : base(fixture)
         {
-            MaxRecipeNameLength = int.Parse(_configuration.GetSection($"Validation:Recipe:MaxNameLength").Value);
-            MinRecipeNameLength = int.Parse(_configuration.GetSection($"Validation:Recipe:MinNameLength").Value);
+            _maxRecipeNameLength = int.Parse(_configuration.GetSection($"Validation:Recipe:MaxNameLength").Value);
+            _minRecipeNameLength = int.Parse(_configuration.GetSection($"Validation:Recipe:MinNameLength").Value);
         }
 
         [Fact]
@@ -111,8 +111,8 @@ namespace Smakoowa_Api.Tests.IntegrationTests
         {
             // Arrange
             string minName = "", maxName = "";
-            while (minName.Length < MinRecipeNameLength - 1) minName += "a";
-            while (maxName.Length <= MaxRecipeNameLength + 1) maxName += "a";
+            while (minName.Length < _minRecipeNameLength - 1) minName += "a";
+            while (maxName.Length <= _maxRecipeNameLength + 1) maxName += "a";
             Recipe recipeMinName = new Recipe { Name = minName };
             Recipe recipeMaxName = new Recipe { Name = maxName };
             RecipeRequestDto RecipeRequestMinName = new RecipeRequestDto { Name = minName };

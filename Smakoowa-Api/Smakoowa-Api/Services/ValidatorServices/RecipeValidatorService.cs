@@ -6,7 +6,7 @@
         private readonly ICategoryRepository _categoryRepository;
         private readonly IIngredientValidatorService _ingredientValidatorService;
         private readonly IInstructionValidatorService _instructionValidatorService;
-        private readonly int MaxDescriptionLength;
+        private readonly int _maxDescriptionLength;
 
         public RecipeValidatorService(IConfiguration configuration, ITagRepository tagRepository, ICategoryRepository categoryRepository, 
             IIngredientValidatorService ingredientValidatorService, IInstructionValidatorService instructionValidatorService) 
@@ -14,7 +14,7 @@
         {
             _tagRepository = tagRepository;
             _categoryRepository = categoryRepository;
-            MaxDescriptionLength = int.Parse(configuration.GetSection("Validation:Recipe:MaxDescriptionLength").Value);
+            _maxDescriptionLength = int.Parse(configuration.GetSection("Validation:Recipe:MaxDescriptionLength").Value);
             _ingredientValidatorService = ingredientValidatorService;
             _instructionValidatorService = instructionValidatorService;
         }
@@ -28,9 +28,9 @@
                 return validationResponse;
             }
 
-            if (recipeRequestDto.Description?.Length > MaxDescriptionLength)
+            if (recipeRequestDto.Description?.Length > _maxDescriptionLength)
             {
-                return ServiceResponse.Error($"Description must be max {MaxDescriptionLength} characters.");
+                return ServiceResponse.Error($"Description must be max {_maxDescriptionLength} characters.");
             }
 
             if (recipeRequestDto.TagIds is not null

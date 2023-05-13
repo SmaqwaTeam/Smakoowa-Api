@@ -6,7 +6,7 @@ using Smakoowa_Api.Services.Interfaces.Helper;
 using Smakoowa_Api.Services.MapperServices;
 using System.Text;
 
-namespace Smakoowa_Api.Services
+namespace Smakoowa_Api
 {
     public static class ServicesConfigurator
     {
@@ -27,8 +27,8 @@ namespace Smakoowa_Api.Services
                         Id = "Bearer"
                     }
                 };
-                c.AddSecurityDefinition("Bearer", securitySchema);
 
+                c.AddSecurityDefinition("Bearer", securitySchema);
                 var securityRequirement = new OpenApiSecurityRequirement();
                 securityRequirement.Add(securitySchema, new[] { "Bearer" });
                 c.AddSecurityRequirement(securityRequirement);
@@ -78,8 +78,37 @@ namespace Smakoowa_Api.Services
             options.UseSqlServer(builder.Configuration.GetConnectionString("SmakoowaApiDBConnectionBackground")), contextLifetime: ServiceLifetime.Singleton);
         }
 
+        public static void ConfigureBackgroundQueue(WebApplicationBuilder builder)
+        {
+            builder.Services.AddHostedService<QueuedHostedService>();
+            builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
+            {
+                if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
+                {
+                    queueCapacity = 1000;
+                }
+                return new BackgroundTaskQueue(queueCapacity);
+            });
+        }
+
+        public static void ConfigureCors(WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("corspolicy",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+            });
+        }
+
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IHelperService<>), typeof(HelperService<>));
             services.AddTransient(typeof(IJsonKeyValueGetter), typeof(JsonKeyValueGetter));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -127,8 +156,6 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(ICommentReplyLikeValidatorService), typeof(CommentReplyLikeValidatorService));
             services.AddScoped(typeof(ITagLikeValidatorService), typeof(TagLikeValidatorService));
 
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
             services.AddScoped(typeof(IApiUserService), typeof(ApiUserService));
             services.AddScoped(typeof(IApiUserMapperService), typeof(ApiUserMapperService));
             services.AddScoped(typeof(IApiUserGetterService), typeof(ApiUserGetterService));
@@ -136,7 +163,6 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository));
             services.AddScoped<RoleManager<ApiRole>>();
 
-            services.AddHostedService<QueuedHostedService>();
             services.AddSingleton(typeof(IRequestCounterService), typeof(RequestCounterService));
             services.AddScoped(typeof(IControllerStatisticsService), typeof(ControllerStatisticsService));
             services.AddScoped(typeof(IRequestCountMapperService), typeof(RequestCountMapperService));

@@ -2,26 +2,26 @@
 {
     public class ImageValidatorService : IImageValidatorService
     {
-        private readonly List<string> allowedImageExtensions;
-        private readonly int maxImageSizeBytes;
+        private readonly List<string> _allowedImageExtensions;
+        private readonly int _maxImageSizeBytes;
 
         public ImageValidatorService(IConfiguration configuration)
         {
-            maxImageSizeBytes = int.Parse(configuration.GetSection($"Validation:Image:MaxImageSizeBytes").Value);
-            allowedImageExtensions = configuration.GetSection($"Validation:Image:AllowedImageExtensions").Value.Split(", ").ToList();
+            _maxImageSizeBytes = int.Parse(configuration.GetSection($"Validation:Image:MaxImageSizeBytes").Value);
+            _allowedImageExtensions = configuration.GetSection($"Validation:Image:AllowedImageExtensions").Value.Split(", ").ToList();
         }
 
         public ServiceResponse ValidateImage(IFormFile image)
         {
-            if (image.Length > maxImageSizeBytes)
+            if (image.Length > _maxImageSizeBytes)
             {
-                return ServiceResponse.Error($"Image is too large, max size is {(double)maxImageSizeBytes / 1000000} MB.");
+                return ServiceResponse.Error($"Image is too large, max size is {(double)_maxImageSizeBytes / 1000000} MB.");
             }
 
             if (image.ContentType.StartsWith("image/")
-                && !allowedImageExtensions.Any(a => image.ContentType.Substring("image/".Length).Contains(a)))
+                && !_allowedImageExtensions.Any(a => image.ContentType.Substring("image/".Length).Contains(a)))
             {
-                return ServiceResponse.Error($"Incorrect image type, allowed types: {String.Join(", ", allowedImageExtensions)}");
+                return ServiceResponse.Error($"Incorrect image type, allowed types: {String.Join(", ", _allowedImageExtensions)}");
             }
 
             return ServiceResponse.Success();

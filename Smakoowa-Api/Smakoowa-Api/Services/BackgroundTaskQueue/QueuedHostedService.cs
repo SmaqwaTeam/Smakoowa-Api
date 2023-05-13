@@ -5,8 +5,8 @@
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ILogger<QueuedHostedService> _logger;
 
-        public QueuedHostedService(IBackgroundTaskQueue taskQueue,
-            ILogger<QueuedHostedService> logger) => (_taskQueue, _logger) = (taskQueue, logger);
+        public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger) 
+            => (_taskQueue, _logger) = (taskQueue, logger);
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -19,8 +19,7 @@
             {
                 try
                 {
-                    Func<CancellationToken, ValueTask>? workItem =
-                        await _taskQueue.DequeueAsync(stoppingToken);
+                    Func<CancellationToken, ValueTask>? workItem = await _taskQueue.DequeueAsync(stoppingToken);
 
                     await workItem(stoppingToken);
                 }
@@ -33,8 +32,7 @@
 
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
-                $"{nameof(QueuedHostedService)} is stopping.");
+            _logger.LogInformation($"{nameof(QueuedHostedService)} is stopping.");
 
             await base.StopAsync(stoppingToken);
         }
