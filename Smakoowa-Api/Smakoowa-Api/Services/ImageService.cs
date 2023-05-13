@@ -22,18 +22,6 @@
             _savedImageExtension = configuration.GetSection($"FileUpload:Images:SavedImageExtension").Value;
         }
 
-        public FileStream GetRecipeImage(string imageId)
-        {
-            var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
-
-            if (!File.Exists(imagePath))
-            {
-                throw new FileNotFoundException("Image not found.");
-            }
-
-            return System.IO.File.OpenRead(imagePath);
-        }
-
         public async Task<ServiceResponse> AddImageToRecipe(IFormFile image, int recipeId)
         {
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
@@ -77,10 +65,12 @@
 
         public FileStream GetRecipeImage(string imageId)
         {
-            //var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
             var imagePath = Path.Combine(_env.ContentRootPath, _recipeImageUploadPath, imageId + _savedImageExtension);
 
-            if (!File.Exists(imagePath)) throw new FileNotFoundException("Image not found.");
+            if (!File.Exists(imagePath))
+            {
+                throw new FileNotFoundException("Image not found.");
+            }
 
             return System.IO.File.OpenRead(imagePath);
         }
