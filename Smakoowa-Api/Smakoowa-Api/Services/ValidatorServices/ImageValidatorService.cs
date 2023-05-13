@@ -15,13 +15,15 @@
         {
             if (image.Length > _maxImageSizeBytes)
             {
-                return ServiceResponse.Error($"Image is too large, max size is {(double)_maxImageSizeBytes / 1000000} MB.");
+                return ServiceResponse.Error($"Image is too large, max size is {(double)_maxImageSizeBytes / 1000000} MB.",
+                    HttpStatusCode.RequestEntityTooLarge);
             }
 
             if (image.ContentType.StartsWith("image/")
                 && !_allowedImageExtensions.Any(a => image.ContentType.Substring("image/".Length).Contains(a)))
             {
-                return ServiceResponse.Error($"Incorrect image type, allowed types: {String.Join(", ", _allowedImageExtensions)}");
+                return ServiceResponse.Error($"Incorrect image type, allowed types: {String.Join(", ", _allowedImageExtensions)}",
+                    HttpStatusCode.UnsupportedMediaType);
             }
 
             return ServiceResponse.Success();

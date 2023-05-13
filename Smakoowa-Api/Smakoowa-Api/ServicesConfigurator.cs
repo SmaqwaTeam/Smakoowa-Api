@@ -123,6 +123,7 @@ namespace Smakoowa_Api
             services.AddScoped(typeof(ITagValidatorService), typeof(TagValidatorService));
             services.AddScoped(typeof(ITagMapperService), typeof(TagMapperService));
             services.AddScoped(typeof(ITagService), typeof(TagService));
+            services.AddScoped(typeof(ITagGetterService), typeof(TagGetterService));
 
             services.AddScoped(typeof(IRecipeRepository), typeof(RecipeRepository));
             services.AddScoped(typeof(IRecipeValidatorService), typeof(RecipeValidatorService));

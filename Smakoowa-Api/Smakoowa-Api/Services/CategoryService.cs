@@ -26,7 +26,7 @@
             try
             {
                 await _categoryRepository.Create(category);
-                return ServiceResponse.Success("Category created.");
+                return ServiceResponse.Success("Category created.", HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@
         public async Task<ServiceResponse> Delete(int categoryId)
         {
             var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
 
             try
             {
@@ -53,7 +53,7 @@
         public async Task<ServiceResponse> Edit(CategoryRequestDto categoryRequestDto, int categoryId)
         {
             var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
 
             var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
             if (!validationResult.SuccessStatus) return validationResult;
@@ -91,7 +91,7 @@
             try
             {
                 var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-                if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+                if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
 
                 var getCategoryResponseDto = _categoryMapperService.MapGetCategoryResponseDto(category);
                 return ServiceResponse<CategoryResponseDto>.Success(getCategoryResponseDto, "Category retrieved.");

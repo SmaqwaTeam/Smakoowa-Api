@@ -39,10 +39,10 @@
         public async Task<ServiceResponse> Delete(int recipeId)
         {
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
 
             if (recipe.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
-                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
+                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.", HttpStatusCode.Unauthorized);
 
             try
             {
@@ -58,10 +58,10 @@
         public async Task<ServiceResponse> Edit(RecipeRequestDto recipeRequestDto, int recipeId)
         {
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
 
             if (recipe.CreatorId != _apiUserService.GetCurrentUserId())
-                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.");
+                return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.", HttpStatusCode.Unauthorized);
 
             var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
             if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);

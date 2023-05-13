@@ -6,16 +6,14 @@
         private readonly ITagMapperService _tagMapperService;
         private readonly ITagValidatorService _tagValidatorService;
         private readonly IHelperService<TagService> _helperService;
-        private readonly ITagLikeService _tagLikeService;
 
         public TagService(ITagRepository tagRepository, ITagMapperService tagMapperService,
-            ITagValidatorService tagValidatorService, IHelperService<TagService> helperService, ITagLikeService tagLikeService)
+            ITagValidatorService tagValidatorService, IHelperService<TagService> helperService)
         {
             _tagRepository = tagRepository;
             _tagMapperService = tagMapperService;
             _tagValidatorService = tagValidatorService;
             _helperService = helperService;
-            _tagLikeService = tagLikeService;
         }
 
         public async Task<ServiceResponse> Create(TagRequestDto tagRequestDto)
@@ -39,7 +37,7 @@
         public async Task<ServiceResponse> Delete(int tagId)
         {
             var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
+            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
 
             try
             {
@@ -55,7 +53,7 @@
         public async Task<ServiceResponse> Edit(TagRequestDto tagRequestDto, int tagId)
         {
             var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
+            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
 
             var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
             if (!validationResult.SuccessStatus) return validationResult;
@@ -70,70 +68,6 @@
             catch (Exception ex)
             {
                 return _helperService.HandleException(ex, "Something went wrong while editing a tag.");
-            }
-        }
-
-        public async Task<ServiceResponse> GetAll()
-        {
-            try
-            {
-                var tags = await _tagRepository.FindAll();
-
-                var getTagsResponseDto = new List<TagResponseDto>();
-                foreach (Tag tag in tags) getTagsResponseDto.Add(await _tagMapperService.MapGetTagResponseDto(tag));
-                return ServiceResponse<List<TagResponseDto>>.Success(getTagsResponseDto, "Tags retrieved.");
-            }
-            catch (Exception ex)
-            {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the tags.");
-            }
-        }
-
-        public async Task<ServiceResponse> GetById(int tagId)
-        {
-            try
-            {
-                var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-                if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.");
-
-                var getTagResponseDto = await _tagMapperService.MapGetTagResponseDto(tag);
-                return ServiceResponse<TagResponseDto>.Success(getTagResponseDto, "Tag retrieved.");
-            }
-            catch (Exception ex)
-            {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the tag.");
-            }
-        }
-
-        public async Task<ServiceResponse> GetByIds(List<int> tagIds)
-        {
-            return await GetByConditions(t => tagIds.Contains(t.Id));
-        }
-
-        public async Task<ServiceResponse> GetByType(TagType tagType)
-        {
-            return await GetByConditions(t => t.TagType == tagType);
-        }
-
-        public async Task<ServiceResponse> GetUserLikedTags()
-        {
-            var likedTagIds = (await _tagLikeService.GetUserTagLikes()).Select(tl => tl.LikedId);
-            return await GetByConditions(t => likedTagIds.Any(tl => tl == t.Id));
-        }
-
-        private async Task<ServiceResponse> GetByConditions(Expression<Func<Tag, bool>> expresion)
-        {
-            try
-            {
-                var tags = await _tagRepository.FindByConditions(expresion);
-
-                List<TagResponseDto> getTagResponseDtos = new();
-                foreach (var tag in tags) getTagResponseDtos.Add(await _tagMapperService.MapGetTagResponseDto(tag));
-                return ServiceResponse<List<TagResponseDto>>.Success(getTagResponseDtos, "Tags retrieved.");
-            }
-            catch (Exception ex)
-            {
-                return _helperService.HandleException(ex, "Something went wrong while accessing the tags.");
             }
         }
     }

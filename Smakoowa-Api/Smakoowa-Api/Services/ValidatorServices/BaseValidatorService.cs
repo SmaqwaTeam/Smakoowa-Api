@@ -17,12 +17,12 @@
         {
             if (name.Length < _minNameLength)
             {
-                return ServiceResponse.Error($"{entityName} name must have a minimum of {_minNameLength} characters.");
+                return ServiceResponse.Error($"{entityName} name must have a minimum of {_minNameLength} characters.", HttpStatusCode.BadRequest);
             }
 
             if (name.Length > _maxNameLength)
             {
-                return ServiceResponse.Error($"{entityName} name must have a maximum of {_maxNameLength} characters.");
+                return ServiceResponse.Error($"{entityName} name must have a maximum of {_maxNameLength} characters.", HttpStatusCode.BadRequest);
             }
 
             return ServiceResponse.Success();

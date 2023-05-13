@@ -17,14 +17,14 @@
         {
             if (!await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId))
             {
-                return ServiceResponse.Error($"Item with id: {likedId} does not exist.");
+                return ServiceResponse.Error($"Item with id: {likedId} does not exist.", HttpStatusCode.NotFound);
             }
 
             if (await _likeRepository.CheckIfExists(
                 l => ((T)l).LikedId == likedId
                 && ((T)l).CreatorId == _apiUserService.GetCurrentUserId()))
             {
-                return ServiceResponse.Error($"Item with id: {likedId} is already liked by current user.");
+                return ServiceResponse.Error($"Item with id: {likedId} is already liked by current user.", HttpStatusCode.Conflict);
             }
 
             return ServiceResponse.Success();

@@ -19,12 +19,12 @@
 
                 if (ingredientRequestDto.Position < 1)
                 {
-                    return ServiceResponse.Error("Ingredient position needs to be of non-zero value.");
+                    return ServiceResponse.Error("Ingredient position needs to be of non-zero value.", HttpStatusCode.BadRequest);
                 }
 
                 if (ingredientRequestDto.Group < 1)
                 {
-                    return ServiceResponse.Error("Ingredient group needs to be of non-zero value.");
+                    return ServiceResponse.Error("Ingredient group needs to be of non-zero value.", HttpStatusCode.BadRequest);
                 }
             }
 
