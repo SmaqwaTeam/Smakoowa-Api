@@ -99,6 +99,7 @@ namespace Smakoowa_Api.Services
             services.AddScoped(typeof(IRecipeValidatorService), typeof(RecipeValidatorService));
             services.AddScoped(typeof(IRecipeMapperService), typeof(RecipeMapperService));
             services.AddScoped(typeof(IRecipeService), typeof(RecipeService));
+            services.AddScoped(typeof(IRecipeGetterService), typeof(RecipeGetterService));
 
             services.AddScoped(typeof(IIngredientRepository), typeof(IngredientRepository));
             services.AddScoped(typeof(IIngredientValidatorService), typeof(IngredientValidatorService));

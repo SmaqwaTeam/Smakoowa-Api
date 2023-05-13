@@ -22,11 +22,14 @@ namespace Smakoowa_Api.Tests
                 {
                     host.ConfigureServices(services =>
                     {
-                        var descriptor = services.SingleOrDefault(
+                        services.Remove(services.SingleOrDefault(
                             d => d.ServiceType ==
-                            typeof(DbContextOptions<DataContext>));
+                            typeof(DbContextOptions<DataContext>)));
 
-                        services.Remove(descriptor);
+                        services.Remove(services.SingleOrDefault(
+                            d => d.ServiceType ==
+                            typeof(DbContextOptions<BackgroundDataContext>)));
+
                         services.Remove(services.SingleOrDefault(
                             d => d.ServiceType ==
                             typeof(IApiUserService)));
@@ -36,7 +39,12 @@ namespace Smakoowa_Api.Tests
                         services.AddDbContext<DataContext>(options =>
                         {
                             options.UseInMemoryDatabase("InMemoryDB");
-                        });
+                        }, ServiceLifetime.Scoped);
+
+                        services.AddDbContext<BackgroundDataContext>(options =>
+                        {
+                            options.UseInMemoryDatabase("InMemoryBackgroundDB");
+                        }, ServiceLifetime.Singleton);
                     });
                 });
             var configuration = appFactory.Services.GetService<IConfiguration>();
