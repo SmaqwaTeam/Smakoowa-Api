@@ -16,31 +16,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped(sp => new HttpClient());
 builder.Services.AddHttpContextAccessor();
 
-ServicesConfigurator.ConfigureDatabaseConnection(builder);
-
-ServicesConfigurator.ConfigureServices(builder.Services);
-
-builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
-{
-    if (!int.TryParse(builder.Configuration["QueueCapacity"], out var queueCapacity))
-    {
-        queueCapacity = 1000;
-    }
-    return new DefaultBackgroundTaskQueue(queueCapacity);
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("corspolicy",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "https://smakoowa-web-app.vercel.app")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-        });
-});
-
 configuration = builder.Configuration;
 
 var app = builder.Build();

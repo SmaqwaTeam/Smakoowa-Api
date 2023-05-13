@@ -90,7 +90,7 @@
                 options.AddPolicy("corspolicy",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                        policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "https://smakoowa-web-app.vercel.app")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials();
