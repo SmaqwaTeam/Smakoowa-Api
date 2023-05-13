@@ -1,7 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-using Smakoowa_Api.Services.Interfaces.Likes;
-
-namespace Smakoowa_Api.Services.Likes
+﻿namespace Smakoowa_Api.Services.Likes
 {
     public class RecipeCommentLikeService : LikeService<RecipeCommentLike>, IRecipeCommentLikeService
     {

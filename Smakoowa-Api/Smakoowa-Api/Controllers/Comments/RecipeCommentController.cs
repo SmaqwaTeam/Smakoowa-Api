@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Comments;
-
-namespace Smakoowa_Api.Controllers.Comments
+﻿namespace Smakoowa_Api.Controllers.Comments
 {
     [JwtAuthorize("User", "Admin")]
     [Route("api/Comments")]

@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Middlewares
+﻿namespace Smakoowa_Api.Middlewares
 {
     public class ServiceResponseMiddleware
     {

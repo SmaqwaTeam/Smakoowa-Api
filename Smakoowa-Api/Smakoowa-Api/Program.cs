@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.IdentityModel.Tokens;
 using Smakoowa_Api;
 using Smakoowa_Api.Middlewares;
 

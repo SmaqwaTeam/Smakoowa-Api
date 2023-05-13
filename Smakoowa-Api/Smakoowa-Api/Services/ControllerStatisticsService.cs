@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class ControllerStatisticsService : IControllerStatisticsService
     {
@@ -8,7 +6,7 @@ namespace Smakoowa_Api.Services
         private readonly IRequestCountMapperService _requestCountMapperService;
         private readonly IHelperService<ControllerStatisticsService> _helperService;
 
-        public ControllerStatisticsService(IRequestCountRepository requestCountRepository, 
+        public ControllerStatisticsService(IRequestCountRepository requestCountRepository,
             IHelperService<ControllerStatisticsService> helperService, IRequestCountMapperService requestCountMapperService)
         {
             _requestCountRepository = requestCountRepository;

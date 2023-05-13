@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Services.Likes
+﻿namespace Smakoowa_Api.Services.Likes
 {
     public abstract class LikeService<T> where T : Like
     {

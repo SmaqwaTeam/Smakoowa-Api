@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Controllers;
-using Smakoowa_Api.Services.BackgroundTaskQueue;
 
 namespace Smakoowa_Api.Middlewares
 {

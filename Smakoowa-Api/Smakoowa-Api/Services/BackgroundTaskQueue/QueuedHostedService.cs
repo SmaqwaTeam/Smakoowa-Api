@@ -5,7 +5,7 @@
         private readonly IBackgroundTaskQueue _taskQueue;
         private readonly ILogger<QueuedHostedService> _logger;
 
-        public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger) 
+        public QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger)
             => (_taskQueue, _logger) = (taskQueue, logger);
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

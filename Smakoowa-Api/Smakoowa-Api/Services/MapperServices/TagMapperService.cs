@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Likes;
-
-namespace Smakoowa_Api.Services.MapperServices
+﻿namespace Smakoowa_Api.Services.MapperServices
 {
     public class TagMapperService : ITagMapperService
     {

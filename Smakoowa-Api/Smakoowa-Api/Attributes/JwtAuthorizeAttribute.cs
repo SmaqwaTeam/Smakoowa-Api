@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace Smakoowa_Api.Attributes
 {

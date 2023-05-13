@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Services.Helper
+﻿namespace Smakoowa_Api.Services.Helper
 {
     public class HelperService<T> : IHelperService<T> where T : class
     {

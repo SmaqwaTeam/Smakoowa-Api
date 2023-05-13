@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services
 {
     public class ImageService : IImageService
     {

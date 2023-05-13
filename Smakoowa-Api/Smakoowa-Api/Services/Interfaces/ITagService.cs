@@ -2,6 +2,5 @@
 {
     public interface ITagService : ICreatorService<TagRequestDto>, IEditorService<TagRequestDto>, IDeleterService
     {
-
     }
 }

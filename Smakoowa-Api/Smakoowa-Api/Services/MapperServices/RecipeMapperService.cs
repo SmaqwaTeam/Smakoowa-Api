@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Likes;
-
-namespace Smakoowa_Api.Services.MapperServices
+﻿namespace Smakoowa_Api.Services.MapperServices
 {
     public class RecipeMapperService : IRecipeMapperService
     {
@@ -14,8 +12,8 @@ namespace Smakoowa_Api.Services.MapperServices
         private readonly ICommentReplyLikeService _commentReplyLikeService;
 
         public RecipeMapperService(IMapper mapper, ITagRepository tagRepository, IControllerStatisticsService controllerStatisticsService,
-            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService, 
-            IInstructionMapperService instructionMapperService, IRecipeCommentLikeService recipeCommentLikeService, 
+            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService,
+            IInstructionMapperService instructionMapperService, IRecipeCommentLikeService recipeCommentLikeService,
             ICommentReplyLikeService commentReplyLikeService)
         {
             _mapper = mapper;
@@ -76,10 +74,10 @@ namespace Smakoowa_Api.Services.MapperServices
             var mappedRecipe = _mapper.Map<DetailedRecipeResponseDto>(recipe);
             mappedRecipe = (DetailedRecipeResponseDto)await CompleteRecipeData(mappedRecipe);
 
-            foreach(var recipeComment in mappedRecipe.RecipeComments)
+            foreach (var recipeComment in mappedRecipe.RecipeComments)
             {
                 recipeComment.LikeCount = await _recipeCommentLikeService.GetLikeCount(recipeComment.Id);
-                foreach(var commentReply in recipeComment.CommentReplies)
+                foreach (var commentReply in recipeComment.CommentReplies)
                 {
                     commentReply.LikeCount = await _commentReplyLikeService.GetLikeCount(commentReply.Id);
                 }

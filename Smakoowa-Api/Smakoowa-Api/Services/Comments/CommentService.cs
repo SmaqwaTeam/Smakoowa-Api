@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Services.Comments
+﻿namespace Smakoowa_Api.Services.Comments
 {
     public abstract class CommentService<T> where T : Comment
     {

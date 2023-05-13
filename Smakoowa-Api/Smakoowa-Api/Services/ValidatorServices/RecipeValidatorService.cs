@@ -8,8 +8,8 @@
         private readonly IInstructionValidatorService _instructionValidatorService;
         private readonly int _maxDescriptionLength;
 
-        public RecipeValidatorService(IConfiguration configuration, ITagRepository tagRepository, ICategoryRepository categoryRepository, 
-            IIngredientValidatorService ingredientValidatorService, IInstructionValidatorService instructionValidatorService) 
+        public RecipeValidatorService(IConfiguration configuration, ITagRepository tagRepository, ICategoryRepository categoryRepository,
+            IIngredientValidatorService ingredientValidatorService, IInstructionValidatorService instructionValidatorService)
             : base(configuration, "Validation:Recipe")
         {
             _tagRepository = tagRepository;

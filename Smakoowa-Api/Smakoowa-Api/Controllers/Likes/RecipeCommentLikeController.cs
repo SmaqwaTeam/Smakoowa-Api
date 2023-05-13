@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Likes;
-
-namespace Smakoowa_Api.Controllers.Likes
+﻿namespace Smakoowa_Api.Controllers.Likes
 {
     [JwtAuthorize("User", "Admin")]
     [Route("api/Likes")]
