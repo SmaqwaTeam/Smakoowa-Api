@@ -2,7 +2,7 @@
 {
     public class RecipeCommentValidatorService : CommentValidatorService<Recipe>, IRecipeCommentValidatorService
     {
-        public RecipeCommentValidatorService(IConfiguration configuration, IApiUserService apiUserService, 
+        public RecipeCommentValidatorService(IConfiguration configuration, IApiUserService apiUserService,
             IBaseRepository<Recipe> commentedRepository) : base(configuration, "RecipeComment", apiUserService, commentedRepository)
         {
         }

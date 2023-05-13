@@ -1,7 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Smakoowa_Api.Services
 {
@@ -28,7 +26,7 @@ namespace Smakoowa_Api.Services
             var user = await _userManager.FindByNameAsync(loginRequest.UserName);
             if (user == null)
             {
-                return ServiceResponse.Error("User not found.", HttpStatusCode.Unauthorized);
+                return ServiceResponse.Error("User not found.", HttpStatusCode.NotFound);
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, false);
@@ -51,13 +49,20 @@ namespace Smakoowa_Api.Services
                 userRoles.Add(new Claim(ClaimTypes.Role, role));
             }
             claims.AddRange(userRoles);
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
-            var token = new JwtSecurityToken
-                (_authenticationSettings.JwtIssuer, _authenticationSettings.JwtIssuer, claims, expires: expires, signingCredentials: cred);
-            var tokenHandler = new JwtSecurityTokenHandler();
 
+            var token = new JwtSecurityToken(
+                _authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtAudience,
+                claims,
+                expires: DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays),
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(_configuration["JwtKey"])),
+                        SecurityAlgorithms.HmacSha256
+                )
+            );
+
+            var tokenHandler = new JwtSecurityTokenHandler();
             var loginResponse = new LoginResponse
             {
                 Token = tokenHandler.WriteToken(token),
@@ -71,16 +76,15 @@ namespace Smakoowa_Api.Services
 
         public async Task<ServiceResponse> RegisterUser(RegisterRequest registerRequest)
         {
-            var user = _mapper.Map<ApiUser>(registerRequest);
-            var result = await _userManager.CreateAsync(user, registerRequest.Password);
+            var result = await _userManager.CreateAsync
+                (_mapper.Map<ApiUser>(registerRequest), registerRequest.Password);
+
             if (!result.Succeeded)
             {
                 string errorMessage = "";
-                string line = "";
                 foreach (var error in result.Errors)
                 {
-                    line = error.Description + " ";
-                    errorMessage += line;
+                    errorMessage += error.Description + " ";
                 }
                 return ServiceResponse.Error(errorMessage);
             }
@@ -88,7 +92,7 @@ namespace Smakoowa_Api.Services
             var newUser = await _userManager.FindByEmailAsync(registerRequest.Email);
             await _userManager.AddToRoleAsync(newUser, "User");
 
-            return ServiceResponse.Success("Account has been created.");
+            return ServiceResponse.Success("Account has been created.", HttpStatusCode.Created);
         }
     }
 }

@@ -6,7 +6,7 @@
         private readonly IRequestCountMapperService _requestCountMapperService;
         private readonly IHelperService<ControllerStatisticsService> _helperService;
 
-        public ControllerStatisticsService(IRequestCountRepository requestCountRepository, 
+        public ControllerStatisticsService(IRequestCountRepository requestCountRepository,
             IHelperService<ControllerStatisticsService> helperService, IRequestCountMapperService requestCountMapperService)
         {
             _requestCountRepository = requestCountRepository;
@@ -35,8 +35,14 @@
             && rc.ActionName == "GetByIdDetailed"
             && rc.RemainingPath == recipeId.ToString());
 
-            if (recipeViewCount == null) return 0;
-            else return recipeViewCount.Count;
+            if (recipeViewCount == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return recipeViewCount.Count;
+            }
         }
     }
 }

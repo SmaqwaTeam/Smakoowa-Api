@@ -1,4 +1,4 @@
-﻿namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services.Comments
 {
     public class CommentReplyService : CommentService<CommentReply>, ICommentReplyService
     {

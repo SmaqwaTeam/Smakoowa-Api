@@ -19,14 +19,17 @@
         public async Task<ServiceResponse> Create(CategoryRequestDto categoryRequestDto)
         {
             var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            var category = _categoryMapperService.MapCreateCategoryRequestDto(categoryRequestDto);
+            var mappedNewCategory = _categoryMapperService.MapCreateCategoryRequestDto(categoryRequestDto);
 
             try
             {
-                await _categoryRepository.Create(category);
-                return ServiceResponse.Success("Category created.");
+                await _categoryRepository.Create(mappedNewCategory);
+                return ServiceResponse.Success("Category created.", HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -37,7 +40,10 @@
         public async Task<ServiceResponse> Delete(int categoryId)
         {
             var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+            if (category == null)
+            {
+                return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
+            }
 
             try
             {
@@ -53,10 +59,16 @@
         public async Task<ServiceResponse> Edit(CategoryRequestDto categoryRequestDto, int categoryId)
         {
             var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-            if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+            if (category == null)
+            {
+                return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
+            }
 
             var validationResult = await _categoryValidatorService.ValidateCategoryRequestDto(categoryRequestDto);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             var updatedCategory = _categoryMapperService.MapEditCategoryRequestDto(categoryRequestDto, category);
 
@@ -77,7 +89,11 @@
             {
                 var categories = await _categoryRepository.FindAll();
                 var getCategoriesResponseDto = new List<CategoryResponseDto>();
-                foreach (Category category in categories) getCategoriesResponseDto.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
+                foreach (Category category in categories)
+                {
+                    getCategoriesResponseDto.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
+                }
+
                 return ServiceResponse<List<CategoryResponseDto>>.Success(getCategoriesResponseDto, "Categories retrieved.");
             }
             catch (Exception ex)
@@ -91,7 +107,10 @@
             try
             {
                 var category = await _categoryRepository.FindByConditionsFirstOrDefault(c => c.Id == categoryId);
-                if (category == null) return ServiceResponse.Error($"Category with id: {categoryId} not found.");
+                if (category == null)
+                {
+                    return ServiceResponse.Error($"Category with id: {categoryId} not found.", HttpStatusCode.NotFound);
+                }
 
                 var getCategoryResponseDto = _categoryMapperService.MapGetCategoryResponseDto(category);
                 return ServiceResponse<CategoryResponseDto>.Success(getCategoryResponseDto, "Category retrieved.");
@@ -109,7 +128,11 @@
                 var categories = await _categoryRepository.FindByConditions(c => categoryIds.Contains(c.Id));
 
                 List<CategoryResponseDto> getCategoryResponseDtos = new();
-                foreach (var category in categories) getCategoryResponseDtos.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
+                foreach (var category in categories)
+                {
+                    getCategoryResponseDtos.Add(_categoryMapperService.MapGetCategoryResponseDto(category));
+                }
+
                 return ServiceResponse<List<CategoryResponseDto>>.Success(getCategoryResponseDtos, "Categories retrieved.");
             }
             catch (Exception ex)

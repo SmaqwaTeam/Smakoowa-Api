@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Controllers;
-using Smakoowa_Api.Services.BackgroundTaskQueue;
 
 namespace Smakoowa_Api.Middlewares
 {
@@ -8,10 +7,12 @@ namespace Smakoowa_Api.Middlewares
         private readonly RequestDelegate _next;
         private HttpContext _context;
         private IRequestCounterService _requestCounterService;
+        private readonly ILogger<RequestCountMiddleware> _logger;
 
-        public RequestCountMiddleware(RequestDelegate next)
+        public RequestCountMiddleware(RequestDelegate next, ILogger<RequestCountMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context, IBackgroundTaskQueue backgroundTaskQueue, IRequestCounterService requestCounterService)
@@ -27,13 +28,19 @@ namespace Smakoowa_Api.Middlewares
             try
             {
                 var endpoint = _context.GetEndpoint();
-                if (endpoint == null) return;
+                if (endpoint == null)
+                {
+                    return;
+                }
 
-                var controllerName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ControllerName;
-                if (controllerName == "Statistics") return;
+                var controllerActionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
+                var controllerName = controllerActionDescriptor.ControllerName;
+                if (controllerName == "Statistics")
+                {
+                    return;
+                }
 
-                var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
-
+                var actionName = controllerActionDescriptor.ActionName;
                 var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;
                 var requestPath = _context.Request.Path.ToString();
 
@@ -41,9 +48,9 @@ namespace Smakoowa_Api.Middlewares
 
                 await _requestCounterService.LogRequestCount(controllerName, actionName, remainingPath);
             }
-            catch
+            catch (Exception exception)
             {
-
+                _logger.LogError(exception.Message + "\nStack trace: " + exception.StackTrace, exception);
             }
         }
     }

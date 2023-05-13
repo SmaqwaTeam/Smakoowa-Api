@@ -23,10 +23,13 @@
             try
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-                if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+                if (recipe == null)
+                {
+                    return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+                }
 
-                var getDetailedRecipeResponseDto = await _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
-                return ServiceResponse<DetailedRecipeResponseDto>.Success(getDetailedRecipeResponseDto, "Recipe retrieved.");
+                var mappedRecipeResponse = await _recipeMapperService.MapGetDetailedRecipeResponseDto(recipe);
+                return ServiceResponse<DetailedRecipeResponseDto>.Success(mappedRecipeResponse, "Recipe retrieved.");
             }
             catch (Exception ex)
             {
@@ -39,10 +42,13 @@
             try
             {
                 var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-                if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.");
+                if (recipe == null)
+                {
+                    return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+                }
 
-                var getRecipeResponseDto = await _recipeMapperService.MapGetRecipeResponseDto(recipe);
-                return ServiceResponse<RecipeResponseDto>.Success(getRecipeResponseDto, "Recipe retrieved.");
+                var mappedRecipeResponse = await _recipeMapperService.MapGetRecipeResponseDto(recipe);
+                return ServiceResponse<RecipeResponseDto>.Success(mappedRecipeResponse, "Recipe retrieved.");
             }
             catch (Exception ex)
             {
@@ -53,36 +59,36 @@
         public async Task<ServiceResponse> GetAll(GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => true
-                , getRecipeParameters);
+                r => true,
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetCurrentUsersRecipes(GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => r.CreatorId == _apiUserService.GetCurrentUserId()
-                , getRecipeParameters);
+                r => r.CreatorId == _apiUserService.GetCurrentUserId(),
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetRecipesByCategoryId(int categoryId, GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => r.CategoryId == categoryId
-                , getRecipeParameters);
+                r => r.CategoryId == categoryId,
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetRecipesByTagIds(List<int> tagIds, GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => r.Tags.Select(t => t.Id).Any(s => tagIds.Contains(s))
-                , getRecipeParameters);
+                r => r.Tags.Select(t => t.Id).Any(s => tagIds.Contains(s)),
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> SearchRecipesByName(string querry, GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => r.Name.ToLower().Contains(querry.ToLower())
-                , getRecipeParameters);
+                r => r.Name.ToLower().Contains(querry.ToLower()),
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetRecipiesByLikedTags(GetRecipeParameters? getRecipeParameters)
@@ -92,8 +98,8 @@
                 .TagLikes.Select(t => t.LikedId);
 
             return await GetRecipesByConditions(
-                r => r.Tags.Select(t => t.Id).Any(s => userLikedTagIds.Contains(s))
-                , getRecipeParameters);
+                r => r.Tags.Select(t => t.Id).Any(s => userLikedTagIds.Contains(s)),
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetLikedRecipies(GetRecipeParameters? getRecipeParameters)
@@ -103,28 +109,32 @@
                 .RecipeLikes.Select(t => t.LikedId);
 
             return await GetRecipesByConditions(
-                r => userLikedRecipeIds.Contains(r.Id)
-                , getRecipeParameters);
+                r => userLikedRecipeIds.Contains(r.Id),
+                getRecipeParameters);
         }
 
         public async Task<ServiceResponse> GetUserRecipies(int userId, GetRecipeParameters? getRecipeParameters)
         {
             return await GetRecipesByConditions(
-                r => r.CreatorId == userId
-                , getRecipeParameters);
+                r => r.CreatorId == userId,
+                getRecipeParameters);
         }
 
-        private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> condition, GetRecipeParameters? getRecipeParameters)
+        private async Task<ServiceResponse> GetRecipesByConditions(Expression<Func<Recipe, bool>> condition,
+            GetRecipeParameters? getRecipeParameters)
         {
             try
             {
                 var recipes = await _recipeRepository.FindByConditions(
                     MergeConditions(condition, getRecipeParameters), getRecipeParameters.recipeCount);
 
-                List<RecipeResponseDto> recipeResponseDtos = new();
-                foreach (var recipe in recipes) recipeResponseDtos.Add(await _recipeMapperService.MapGetRecipeResponseDto(recipe));
+                List<RecipeResponseDto> mappedRecipesResponse = new();
+                foreach (var recipe in recipes)
+                {
+                    mappedRecipesResponse.Add(await _recipeMapperService.MapGetRecipeResponseDto(recipe));
+                }
 
-                return ServiceResponse<List<RecipeResponseDto>>.Success(recipeResponseDtos, "Recipes retrieved.");
+                return ServiceResponse<List<RecipeResponseDto>>.Success(mappedRecipesResponse, "Recipes retrieved.");
             }
             catch (Exception ex)
             {

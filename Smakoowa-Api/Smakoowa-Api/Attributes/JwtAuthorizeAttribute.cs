@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace Smakoowa_Api.Attributes
 {
@@ -18,13 +16,13 @@ namespace Smakoowa_Api.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var authHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+
             if (authHeader == null || !authHeader.StartsWith("Bearer "))
             {
-                throw new SecurityTokenValidationException("Unauthorized.");
+                throw new SecurityTokenValidationException("Invalid authorization token.");
             }
 
             var token = authHeader.Substring("Bearer ".Length);
-            var tokenHandler = new JwtSecurityTokenHandler();
 
             try
             {
@@ -35,6 +33,8 @@ namespace Smakoowa_Api.Attributes
                     ValidateLifetime = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Program.configuration["JwtKey"])),
                 };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
                 var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
 
                 if (!claimsPrincipal.Identity.IsAuthenticated)
@@ -57,13 +57,13 @@ namespace Smakoowa_Api.Attributes
 
                     if (!hasRole)
                     {
-                        throw new SecurityTokenValidationException("Unauthorized.");
+                        throw new SecurityTokenValidationException("User isn't authorized to access this resource.");
                     }
                 }
             }
             catch (Exception)
             {
-                throw new SecurityTokenValidationException("Unauthorized.");
+                throw new SecurityTokenValidationException("Unauthorized. Invalid token.");
             }
         }
     }

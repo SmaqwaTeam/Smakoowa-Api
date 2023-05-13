@@ -21,7 +21,7 @@
 
             if (await _categoryRepository.CheckIfExists(c => c.Name == categoryRequestDto.Name))
             {
-                return ServiceResponse.Error($"A category with name {categoryRequestDto.Name} already exists.");
+                return ServiceResponse.Error($"A category with name {categoryRequestDto.Name} already exists.", HttpStatusCode.Conflict);
             }
 
             return ServiceResponse.Success();

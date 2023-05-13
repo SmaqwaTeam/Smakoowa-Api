@@ -11,8 +11,14 @@
 
         public virtual async Task<bool> CheckIfExists(Expression<Func<T, bool>> expresion)
         {
-            if (await _context.Set<T>().Where(expresion).AnyAsync()) return true;
-            else return false;
+            if (await _context.Set<T>().Where(expresion).AnyAsync())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public virtual async Task<T> Create(T model)

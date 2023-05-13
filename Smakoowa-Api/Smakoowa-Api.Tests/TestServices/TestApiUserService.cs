@@ -1,4 +1,6 @@
-﻿namespace Smakoowa_Api.Services.Tests
+﻿using Smakoowa_Api.Services.Interfaces;
+
+namespace Smakoowa_Api.Services.Tests
 {
     public class TestApiUserService : IApiUserService
     {

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Smakoowa_Api.Services.Interfaces.Helper;
 
 namespace Smakoowa_Api.Services.Helper
 {
