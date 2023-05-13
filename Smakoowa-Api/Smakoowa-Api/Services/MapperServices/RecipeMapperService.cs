@@ -12,8 +12,8 @@
         private readonly ICommentReplyLikeService _commentReplyLikeService;
 
         public RecipeMapperService(IMapper mapper, ITagRepository tagRepository, IControllerStatisticsService controllerStatisticsService,
-            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService, 
-            IInstructionMapperService instructionMapperService, IRecipeCommentLikeService recipeCommentLikeService, 
+            IRecipeLikeService recipeLikeService, IIngredientMapperService ingredientMapperService,
+            IInstructionMapperService instructionMapperService, IRecipeCommentLikeService recipeCommentLikeService,
             ICommentReplyLikeService commentReplyLikeService)
         {
             _mapper = mapper;
@@ -50,13 +50,13 @@
                 var tags = await _tagRepository.FindByConditions(t => editRecipeRequestDto.TagIds.Contains(t.Id));
                 editedRecipe.Tags = tags.ToList();
             }
-            else editedRecipe.Tags = null;
+            else
+            {
+                editedRecipe.Tags = null;
+            }
 
-            var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
-            var mappedInstructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id);
-
-            editedRecipe.Ingredients = mappedIngredients;
-            editedRecipe.Instructions = mappedInstructions;
+            editedRecipe.Ingredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
+            editedRecipe.Instructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id); ;
 
             return editedRecipe;
         }
@@ -74,10 +74,10 @@
             var mappedRecipe = _mapper.Map<DetailedRecipeResponseDto>(recipe);
             mappedRecipe = (DetailedRecipeResponseDto)await CompleteRecipeData(mappedRecipe);
 
-            foreach(var recipeComment in mappedRecipe.RecipeComments)
+            foreach (var recipeComment in mappedRecipe.RecipeComments)
             {
                 recipeComment.LikeCount = await _recipeCommentLikeService.GetLikeCount(recipeComment.Id);
-                foreach(var commentReply in recipeComment.CommentReplies)
+                foreach (var commentReply in recipeComment.CommentReplies)
                 {
                     commentReply.LikeCount = await _commentReplyLikeService.GetLikeCount(commentReply.Id);
                 }

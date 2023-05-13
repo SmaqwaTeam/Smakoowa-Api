@@ -1,4 +1,4 @@
-﻿namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services.Likes
 {
     public class TagLikeService : LikeService<TagLike>, ITagLikeService
     {

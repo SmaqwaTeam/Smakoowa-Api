@@ -1,6 +1,4 @@
-﻿using Smakoowa_Api.Services.Interfaces.Helper;
-
-namespace Smakoowa_Api.Middlewares
+﻿namespace Smakoowa_Api.Middlewares
 {
     public class ServiceResponseMiddleware
     {
@@ -47,6 +45,7 @@ namespace Smakoowa_Api.Middlewares
         {
             context.Response.Body = workStream;
             await _next(context);
+
             context.Response.Body.Position = 0;
             var responseReader = new StreamReader(context.Response.Body);
 

@@ -6,8 +6,10 @@
         {
             var controllerNames = requestCounts.Select(r => r.ControllerName).Distinct().ToList();
             List<ControllerStatisticsResponseDto> controllerStatisticsResponseDtos = new();
-            foreach (string controllerName in controllerNames) 
+            foreach (string controllerName in controllerNames)
+            {
                 controllerStatisticsResponseDtos.Add(new ControllerStatisticsResponseDto { ControllerName = controllerName });
+            }
 
             foreach (RequestCount requestCount in requestCounts)
             {

@@ -10,15 +10,13 @@ namespace Smakoowa_Api.Tests
 {
     public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
     {
-
         public HttpClient _httpClient;
         public DataContext _context;
         public IConfiguration _configuration;
 
         public CustomWebApplicationFactory()
         {
-            var appFactory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(host =>
+            var appFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(host =>
                 {
                     host.ConfigureServices(services =>
                     {
@@ -47,12 +45,10 @@ namespace Smakoowa_Api.Tests
                         }, ServiceLifetime.Singleton);
                     });
                 });
-            var configuration = appFactory.Services.GetService<IConfiguration>();
-            var context = appFactory.Services.CreateScope().ServiceProvider.GetService<DataContext>();
-            var httpClient = appFactory.CreateClient();
-            _httpClient = httpClient;
-            _context = context;
-            _configuration = configuration;
+
+            _configuration = appFactory.Services.GetService<IConfiguration>();
+            _context = appFactory.Services.CreateScope().ServiceProvider.GetService<DataContext>();
+            _httpClient = appFactory.CreateClient();
         }
     }
 }

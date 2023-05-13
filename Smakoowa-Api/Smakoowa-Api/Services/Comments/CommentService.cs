@@ -1,4 +1,4 @@
-﻿namespace Smakoowa_Api.Services
+﻿namespace Smakoowa_Api.Services.Comments
 {
     public abstract class CommentService<T> where T : Comment
     {
@@ -21,14 +21,17 @@
         public async Task<ServiceResponse> AddComment(CommentRequestDto commentRequestDto, int commentedId)
         {
             var validationResult = await _commentValidatorService.ValidateCreateCommentRequestDto(commentRequestDto, commentedId);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             var mappedComment = _commentMapperService.MapCreateCommentRequestDto(commentRequestDto, commentedId);
 
             try
             {
                 await _commentRepository.Create((T)mappedComment);
-                return ServiceResponse.Success("Comment created.");
+                return ServiceResponse.Success("Comment created.", HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
@@ -36,21 +39,25 @@
             }
         }
 
-        public async Task<ServiceResponse> EditComment(CommentRequestDto recipeCommentRequestDto, int recipeCommentId)
+        public async Task<ServiceResponse> EditComment(CommentRequestDto commentRequestDto, int commentId)
         {
-            var editedRecipeComment = await _commentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == recipeCommentId);
-            if (editedRecipeComment == null) return ServiceResponse.Error($"Comment with id: {recipeCommentId} not found.");
+            var editedComment = await _commentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == commentId);
+            if (editedComment == null)
+            {
+                return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            }
 
-            var recipeCommentValidationResult = await _commentValidatorService
-                .ValidateEditCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
+            var validationResult = await _commentValidatorService.ValidateEditCommentRequestDto(commentRequestDto, editedComment);
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            if (!recipeCommentValidationResult.SuccessStatus) return recipeCommentValidationResult;
-
-            var mappedRecipeComment = _commentMapperService.MapEditCommentRequestDto(recipeCommentRequestDto, editedRecipeComment);
+            var mappedComment = _commentMapperService.MapEditCommentRequestDto(commentRequestDto, editedComment);
 
             try
             {
-                await _commentRepository.Edit((T)mappedRecipeComment);
+                await _commentRepository.Edit((T)mappedComment);
                 return ServiceResponse.Success("Comment edited.");
             }
             catch (Exception ex)
@@ -59,17 +66,22 @@
             }
         }
 
-        public async Task<ServiceResponse> DeleteComment(int recipeCommentId)
+        public async Task<ServiceResponse> DeleteComment(int commentId)
         {
-            var recipeCommentToDelete = await _commentRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeCommentId);
-            if (recipeCommentToDelete == null) return ServiceResponse.Error($"Recipe comment with id: {recipeCommentId} not found.");
+            var commentToDelete = await _commentRepository.FindByConditionsFirstOrDefault(c => c.Id == commentId);
+            if (commentToDelete == null)
+            {
+                return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            }
 
-            if (recipeCommentToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
-                return ServiceResponse.Error($"User isn't the owner of comment with id: {recipeCommentId}.");
+            if (commentToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
+            {
+                return ServiceResponse.Error($"User isn't the owner of comment with id: {commentId}.", HttpStatusCode.Unauthorized);
+            }
 
             try
             {
-                await _commentRepository.Delete(recipeCommentToDelete);
+                await _commentRepository.Delete(commentToDelete);
                 return ServiceResponse.Success("Comment deleted.");
             }
             catch (Exception ex)
