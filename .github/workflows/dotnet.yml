@@ -27,5 +27,6 @@ jobs:
     - name: Run Integration Tests
       env:
         JwtKey: ${{ secrets.JwtKey }}
+        AdminTestToken: ${{ secrets.AdminTestToken }}
       working-directory: ./Smakoowa-Api
       run: dotnet test --filter Category=Integration
