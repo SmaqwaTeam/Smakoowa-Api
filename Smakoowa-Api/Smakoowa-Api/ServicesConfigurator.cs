@@ -1,8 +1,12 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Smakoowa_Api.Services.BackgroundTaskQueue;
+using Smakoowa_Api.Services.Comments;
 using Smakoowa_Api.Services.Helper;
+using Smakoowa_Api.Services.Interfaces.Comments;
 using Smakoowa_Api.Services.Interfaces.Helper;
+using Smakoowa_Api.Services.Interfaces.Likes;
+using Smakoowa_Api.Services.Likes;
 using Smakoowa_Api.Services.MapperServices;
 using System.Text;
 

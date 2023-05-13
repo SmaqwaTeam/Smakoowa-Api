@@ -54,7 +54,7 @@ namespace Smakoowa_Api.Services
 
             var token = new JwtSecurityToken(
                 _authenticationSettings.JwtIssuer,
-                _authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtAudience,
                 claims,
                 expires: DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays),
                 signingCredentials: new SigningCredentials(

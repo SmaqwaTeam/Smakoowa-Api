@@ -1,4 +1,7 @@
-﻿namespace Smakoowa_Api.Services
+﻿using Smakoowa_Api.Services.Interfaces.Helper;
+using Smakoowa_Api.Services.Interfaces.Likes;
+
+namespace Smakoowa_Api.Services
 {
     public class TagGetterService : ITagGetterService
     {
