@@ -20,14 +20,17 @@
 
         public async Task<ServiceResponse> Create(RecipeRequestDto recipeRequestDto)
         {
-            var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
-            if (!recipeValidationResult.SuccessStatus) return recipeValidationResult;
+            var validationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            var recipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
+            var mappedNewRecipe = await _recipeMapperService.MapCreateRecipeRequestDto(recipeRequestDto);
 
             try
             {
-                await _recipeRepository.Create(recipe);
+                await _recipeRepository.Create(mappedNewRecipe);
                 return ServiceResponse.Success("Recipe created.");
             }
             catch (Exception ex)
@@ -38,15 +41,20 @@
 
         public async Task<ServiceResponse> Delete(int recipeId)
         {
-            var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            var recipeToDelete = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
+            if (recipeToDelete == null)
+            {
+                return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            }
 
-            if (recipe.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
+            if (recipeToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
+            {
                 return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.", HttpStatusCode.Unauthorized);
+            }
 
             try
             {
-                await _recipeRepository.Delete(recipe);
+                await _recipeRepository.Delete(recipeToDelete);
                 return ServiceResponse.Success("Recipe deleted.");
             }
             catch (Exception ex)
@@ -57,20 +65,28 @@
 
         public async Task<ServiceResponse> Edit(RecipeRequestDto recipeRequestDto, int recipeId)
         {
-            var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            var recipeToEdit = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
+            if (recipeToEdit == null)
+            {
+                return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            }
 
-            if (recipe.CreatorId != _apiUserService.GetCurrentUserId())
+            if (recipeToEdit.CreatorId != _apiUserService.GetCurrentUserId())
+            {
                 return ServiceResponse.Error($"User isn't the owner of recipe with id: {recipeId}.", HttpStatusCode.Unauthorized);
+            }
 
-            var recipeValidationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
-            if (!recipeValidationResult.SuccessStatus) return ServiceResponse.Error(recipeValidationResult.Message);
+            var validationResult = await _recipeValidatorService.ValidateRecipeRequestDto(recipeRequestDto);
+            if (!validationResult.SuccessStatus)
+            {
+                return ServiceResponse.Error(validationResult.Message);
+            }
 
-            var updatedRecipe = await _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipe);
+            var mappedRecipeToEdit = await _recipeMapperService.MapEditRecipeRequestDto(recipeRequestDto, recipeToEdit);
 
             try
             {
-                await _recipeRepository.Edit(updatedRecipe);
+                await _recipeRepository.Edit(mappedRecipeToEdit);
                 return ServiceResponse.Success("Recipe edited.");
             }
             catch (Exception ex)

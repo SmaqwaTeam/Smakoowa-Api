@@ -21,7 +21,10 @@
         public async Task<ServiceResponse> AddComment(CommentRequestDto commentRequestDto, int commentedId)
         {
             var validationResult = await _commentValidatorService.ValidateCreateCommentRequestDto(commentRequestDto, commentedId);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             var mappedComment = _commentMapperService.MapCreateCommentRequestDto(commentRequestDto, commentedId);
 
@@ -39,10 +42,16 @@
         public async Task<ServiceResponse> EditComment(CommentRequestDto commentRequestDto, int commentId)
         {
             var editedComment = await _commentRepository.FindByConditionsFirstOrDefault(rc => rc.Id == commentId);
-            if (editedComment == null) return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            if (editedComment == null)
+            {
+                return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            }
 
             var validationResult = await _commentValidatorService.ValidateEditCommentRequestDto(commentRequestDto, editedComment);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             var mappedComment = _commentMapperService.MapEditCommentRequestDto(commentRequestDto, editedComment);
 
@@ -60,10 +69,15 @@
         public async Task<ServiceResponse> DeleteComment(int commentId)
         {
             var commentToDelete = await _commentRepository.FindByConditionsFirstOrDefault(c => c.Id == commentId);
-            if (commentToDelete == null) return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            if (commentToDelete == null)
+            {
+                return ServiceResponse.Error($"Comment with id: {commentId} not found.", HttpStatusCode.NotFound);
+            }
 
             if (commentToDelete.CreatorId != _apiUserService.GetCurrentUserId() && !_apiUserService.CurrentUserIsAdmin())
+            {
                 return ServiceResponse.Error($"User isn't the owner of comment with id: {commentId}.", HttpStatusCode.Unauthorized);
+            }
 
             try
             {

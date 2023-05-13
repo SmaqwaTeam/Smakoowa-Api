@@ -19,7 +19,9 @@
         public async Task<ServiceResponse> ValidateCreateCommentRequestDto(CommentRequestDto commentRequestDto, int commentedId)
         {
             if (!await CheckIfCommentedExists(commentedId))
+            {
                 return ServiceResponse.Error($"A Item with id: {commentedId} does not exist.", HttpStatusCode.NotFound);
+            }
 
             return ValidateCommentContent(commentRequestDto);
         }
@@ -27,10 +29,14 @@
         public async Task<ServiceResponse> ValidateEditCommentRequestDto(CommentRequestDto commentRequestDto, Comment editedComment)
         {
             if (!await CheckIfCommentedExists(editedComment.CommentedId))
+            {
                 return ServiceResponse.Error($"An item with id: {editedComment.CommentedId} does not exist.", HttpStatusCode.NotFound);
+            }
 
             if (!IsCreatorOfComment(editedComment))
+            {
                 return ServiceResponse.Error($"User is not creator of comment with id {editedComment.Id}.", HttpStatusCode.Unauthorized);
+            }
 
             return ValidateCommentContent(commentRequestDto);
         }

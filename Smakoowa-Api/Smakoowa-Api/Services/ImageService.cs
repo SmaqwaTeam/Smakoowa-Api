@@ -26,7 +26,10 @@
         {
             var imagePath = Directory.GetCurrentDirectory() + $"\\{_recipeImageUploadPath}\\" + imageId + _savedImageExtension;
 
-            if (!File.Exists(imagePath)) throw new FileNotFoundException("Image not found.");
+            if (!File.Exists(imagePath))
+            {
+                throw new FileNotFoundException("Image not found.");
+            }
 
             return System.IO.File.OpenRead(imagePath);
         }
@@ -34,13 +37,21 @@
         public async Task<ServiceResponse> AddImageToRecipe(IFormFile image, int recipeId)
         {
             var recipe = await _recipeRepository.FindByConditionsFirstOrDefault(c => c.Id == recipeId);
-            if (recipe == null) return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            if (recipe == null)
+            {
+                return ServiceResponse.Error($"Recipe with id: {recipeId} not found.", HttpStatusCode.NotFound);
+            }
 
             if (recipe.CreatorId != _apiUserService.GetCurrentUserId())
+            {
                 return ServiceResponse.Error($"Recipe with id: {recipeId} doesn't belong to user.", HttpStatusCode.Unauthorized);
+            }
 
-            var imageValidationResult = _imageValidatorService.ValidateImage(image);
-            if (!imageValidationResult.SuccessStatus) return imageValidationResult;
+            var validationResult = _imageValidatorService.ValidateImage(image);
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             try
             {
@@ -51,7 +62,10 @@
 
                 await _recipeRepository.Edit(recipe);
 
-                if (oldImageId != null) DeleteImage(oldImageId, _recipeImageUploadPath);
+                if (oldImageId != null)
+                {
+                    DeleteImage(oldImageId, _recipeImageUploadPath);
+                }
 
                 return ServiceResponse.Success("Image uploaded.");
             }
@@ -78,7 +92,10 @@
         {
             var filePath = Path.Combine(_env.ContentRootPath, imageUploadPath, imageId + _savedImageExtension);
 
-            if (File.Exists(filePath)) File.Delete(filePath);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
         }
     }
 }

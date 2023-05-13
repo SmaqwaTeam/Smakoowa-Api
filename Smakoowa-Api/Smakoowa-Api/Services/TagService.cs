@@ -19,13 +19,16 @@
         public async Task<ServiceResponse> Create(TagRequestDto tagRequestDto)
         {
             var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            var tag = _tagMapperService.MapCreateTagRequestDto(tagRequestDto);
+            var mappedNewTag = _tagMapperService.MapCreateTagRequestDto(tagRequestDto);
 
             try
             {
-                await _tagRepository.Create(tag);
+                await _tagRepository.Create(mappedNewTag);
                 return ServiceResponse.Success("Tag created.");
             }
             catch (Exception ex)
@@ -36,12 +39,15 @@
 
         public async Task<ServiceResponse> Delete(int tagId)
         {
-            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+            var tagToDelete = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
+            if (tagToDelete == null)
+            {
+                return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+            }
 
             try
             {
-                await _tagRepository.Delete(tag);
+                await _tagRepository.Delete(tagToDelete);
                 return ServiceResponse.Success("Tag deleted.");
             }
             catch (Exception ex)
@@ -52,17 +58,23 @@
 
         public async Task<ServiceResponse> Edit(TagRequestDto tagRequestDto, int tagId)
         {
-            var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-            if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+            var tagToEdit = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
+            if (tagToEdit == null)
+            {
+                return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+            }
 
             var validationResult = await _tagValidatorService.ValidateTagRequestDto(tagRequestDto);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            var updatedTag = _tagMapperService.MapEditTagRequestDto(tagRequestDto, tag);
+            var mappedTagToEdit = _tagMapperService.MapEditTagRequestDto(tagRequestDto, tagToEdit);
 
             try
             {
-                await _tagRepository.Edit(updatedTag);
+                await _tagRepository.Edit(mappedTagToEdit);
                 return ServiceResponse.Success("Tag edited.");
             }
             catch (Exception ex)

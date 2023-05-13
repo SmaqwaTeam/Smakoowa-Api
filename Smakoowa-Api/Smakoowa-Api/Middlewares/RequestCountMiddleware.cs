@@ -28,13 +28,17 @@ namespace Smakoowa_Api.Middlewares
             try
             {
                 var endpoint = _context.GetEndpoint();
-
-                if (endpoint == null) return;
+                if (endpoint == null)
+                {
+                    return;
+                }
 
                 var controllerActionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
                 var controllerName = controllerActionDescriptor.ControllerName;
-
-                if (controllerName == "Statistics") return;
+                if (controllerName == "Statistics")
+                {
+                    return;
+                }
 
                 var actionName = controllerActionDescriptor.ActionName;
                 var uriLength = ("/api/" + controllerName + "/" + actionName + "/").Length;

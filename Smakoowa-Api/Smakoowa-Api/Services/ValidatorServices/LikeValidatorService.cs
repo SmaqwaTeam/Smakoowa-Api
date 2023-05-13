@@ -15,14 +15,14 @@
 
         public async Task<ServiceResponse> ValidateAddLike(int likedId)
         {
-            if (!await _likedItemRepository.CheckIfExists(r => ((C)r).Id == likedId))
+            if (!await _likedItemRepository.CheckIfExists(r => r.Id == likedId))
             {
                 return ServiceResponse.Error($"Item with id: {likedId} does not exist.", HttpStatusCode.NotFound);
             }
 
             if (await _likeRepository.CheckIfExists(
-                l => ((T)l).LikedId == likedId
-                && ((T)l).CreatorId == _apiUserService.GetCurrentUserId()))
+                l => l.LikedId == likedId
+                && l.CreatorId == _apiUserService.GetCurrentUserId()))
             {
                 return ServiceResponse.Error($"Item with id: {likedId} is already liked by current user.", HttpStatusCode.Conflict);
             }

@@ -22,7 +22,10 @@
         public async Task<ServiceResponse> ValidateRecipeRequestDto(RecipeRequestDto recipeRequestDto)
         {
             var nameValidationResponse = ValidateNameLength(recipeRequestDto.Name, "Recipe");
-            if (!nameValidationResponse.SuccessStatus) return nameValidationResponse;
+            if (!nameValidationResponse.SuccessStatus)
+            {
+                return nameValidationResponse;
+            }
 
             if (recipeRequestDto.Description?.Length > _maxDescriptionLength)
             {
@@ -62,10 +65,16 @@
             }
 
             var ingredientValidationResult = await _ingredientValidatorService.ValidateIngredientRequestDtos(recipeRequestDto.Ingredients);
-            if (!ingredientValidationResult.SuccessStatus) return ingredientValidationResult;
+            if (!ingredientValidationResult.SuccessStatus)
+            {
+                return ingredientValidationResult;
+            }
 
             var instructionValidationResult = await _instructionValidatorService.ValidateInstructionRequestDtos(recipeRequestDto.Instructions);
-            if (!instructionValidationResult.SuccessStatus) return instructionValidationResult;
+            if (!instructionValidationResult.SuccessStatus)
+            {
+                return instructionValidationResult;
+            }
 
             return ServiceResponse.Success();
         }

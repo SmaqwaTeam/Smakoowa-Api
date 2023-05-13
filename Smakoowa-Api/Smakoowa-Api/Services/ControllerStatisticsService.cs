@@ -35,8 +35,14 @@
             && rc.ActionName == "GetByIdDetailed"
             && rc.RemainingPath == recipeId.ToString());
 
-            if (recipeViewCount == null) return 0;
-            else return recipeViewCount.Count;
+            if (recipeViewCount == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return recipeViewCount.Count;
+            }
         }
     }
 }

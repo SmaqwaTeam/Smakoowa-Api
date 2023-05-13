@@ -11,8 +11,16 @@
         public List<Instruction> MapCreateInstructionRequestDtos(List<InstructionRequestDto> instructionRequestDtos, int recipeId)
         {
             List<Instruction> mappedInstructions = new();
-            foreach (var instruction in instructionRequestDtos) mappedInstructions.Add(_mapper.Map<Instruction>(instruction));
-            foreach (Instruction instruction in mappedInstructions) instruction.RecipeId = recipeId;
+            foreach (var instruction in instructionRequestDtos)
+            {
+                mappedInstructions.Add(_mapper.Map<Instruction>(instruction));
+            }
+
+            foreach (Instruction instruction in mappedInstructions)
+            {
+                instruction.RecipeId = recipeId;
+            }
+
             return mappedInstructions;
         }
     }

@@ -50,13 +50,13 @@
                 var tags = await _tagRepository.FindByConditions(t => editRecipeRequestDto.TagIds.Contains(t.Id));
                 editedRecipe.Tags = tags.ToList();
             }
-            else editedRecipe.Tags = null;
+            else
+            {
+                editedRecipe.Tags = null;
+            }
 
-            var mappedIngredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
-            var mappedInstructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id);
-
-            editedRecipe.Ingredients = mappedIngredients;
-            editedRecipe.Instructions = mappedInstructions;
+            editedRecipe.Ingredients = _ingredientMapperService.MapCreateIngredientRequestDtos(editRecipeRequestDto.Ingredients, editedRecipe.Id);
+            editedRecipe.Instructions = _instructionMapperService.MapCreateInstructionRequestDtos(editRecipeRequestDto.Instructions, editedRecipe.Id); ;
 
             return editedRecipe;
         }

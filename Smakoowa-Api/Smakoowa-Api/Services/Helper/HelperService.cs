@@ -14,9 +14,11 @@
             _logger.LogError(exception.Message + "\nStack trace: " + exception.StackTrace, exception);
 
             if (exception.InnerException != null)
+            {
                 _logger.LogError(
                     exception.InnerException.Message
                     + "\nStack trace: " + exception.InnerException.StackTrace, exception.InnerException);
+            }
 
             return ServiceResponse.Error(message, HttpStatusCode.InternalServerError);
         }

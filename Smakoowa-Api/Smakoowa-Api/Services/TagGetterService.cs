@@ -23,7 +23,11 @@
                 var tags = await _tagRepository.FindAll();
 
                 var getTagsResponseDto = new List<TagResponseDto>();
-                foreach (Tag tag in tags) getTagsResponseDto.Add(await _tagMapperService.MapGetTagResponseDto(tag));
+                foreach (Tag tag in tags)
+                {
+                    getTagsResponseDto.Add(await _tagMapperService.MapGetTagResponseDto(tag));
+                }
+
                 return ServiceResponse<List<TagResponseDto>>.Success(getTagsResponseDto, "Tags retrieved.");
             }
             catch (Exception ex)
@@ -37,10 +41,13 @@
             try
             {
                 var tag = await _tagRepository.FindByConditionsFirstOrDefault(t => t.Id == tagId);
-                if (tag == null) return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+                if (tag == null)
+                {
+                    return ServiceResponse.Error($"Tag with id: {tagId} not found.", HttpStatusCode.NotFound);
+                }
 
-                var getTagResponseDto = await _tagMapperService.MapGetTagResponseDto(tag);
-                return ServiceResponse<TagResponseDto>.Success(getTagResponseDto, "Tag retrieved.");
+                var tagResponse = await _tagMapperService.MapGetTagResponseDto(tag);
+                return ServiceResponse<TagResponseDto>.Success(tagResponse, "Tag retrieved.");
             }
             catch (Exception ex)
             {
@@ -70,9 +77,13 @@
             {
                 var tags = await _tagRepository.FindByConditions(expresion);
 
-                List<TagResponseDto> getTagResponseDtos = new();
-                foreach (var tag in tags) getTagResponseDtos.Add(await _tagMapperService.MapGetTagResponseDto(tag));
-                return ServiceResponse<List<TagResponseDto>>.Success(getTagResponseDtos, "Tags retrieved.");
+                List<TagResponseDto> tagsResponse = new();
+                foreach (var tag in tags)
+                {
+                    tagsResponse.Add(await _tagMapperService.MapGetTagResponseDto(tag));
+                }
+
+                return ServiceResponse<List<TagResponseDto>>.Success(tagsResponse, "Tags retrieved.");
             }
             catch (Exception ex)
             {

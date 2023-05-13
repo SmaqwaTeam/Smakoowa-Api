@@ -13,7 +13,10 @@
         public async Task<ServiceResponse> ValidateTagRequestDto(TagRequestDto tagRequestDto)
         {
             var nameValidationResponse = ValidateNameLength(tagRequestDto.Name, "Tag");
-            if (!nameValidationResponse.SuccessStatus) return nameValidationResponse;
+            if (!nameValidationResponse.SuccessStatus)
+            {
+                return nameValidationResponse;
+            }
 
             if (await _tagRepository.CheckIfExists(t => t.Name == tagRequestDto.Name))
             {

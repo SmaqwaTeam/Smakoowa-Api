@@ -18,7 +18,9 @@ namespace Smakoowa_Api.Attributes
             var authHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
 
             if (authHeader == null || !authHeader.StartsWith("Bearer "))
+            {
                 throw new SecurityTokenValidationException("Invalid authorization token.");
+            }
 
             var token = authHeader.Substring("Bearer ".Length);
 
@@ -53,7 +55,10 @@ namespace Smakoowa_Api.Attributes
                         }
                     }
 
-                    if (!hasRole) throw new SecurityTokenValidationException("User isn't authorized to access this resource.");
+                    if (!hasRole)
+                    {
+                        throw new SecurityTokenValidationException("User isn't authorized to access this resource.");
+                    }
                 }
             }
             catch (Exception)

@@ -45,6 +45,7 @@
         {
             context.Response.Body = workStream;
             await _next(context);
+
             context.Response.Body.Position = 0;
             var responseReader = new StreamReader(context.Response.Body);
 

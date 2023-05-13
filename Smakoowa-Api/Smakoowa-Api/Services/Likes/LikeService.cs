@@ -24,7 +24,10 @@
                 c => c.LikedId == likedId
                 && c.CreatorId == _apiUserService.GetCurrentUserId());
 
-            if (likeToRemove == null) return ServiceResponse.Error($"Like of item with id: {likedId} not found.", HttpStatusCode.NotFound);
+            if (likeToRemove == null)
+            {
+                return ServiceResponse.Error($"Like of item with id: {likedId} not found.", HttpStatusCode.NotFound);
+            }
 
             try
             {
@@ -45,7 +48,10 @@
         public async Task<ServiceResponse> AddLike(int likedId)
         {
             var validationResult = await _likeValidatorService.ValidateAddLike(likedId);
-            if (!validationResult.SuccessStatus) return validationResult;
+            if (!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
             try
             {

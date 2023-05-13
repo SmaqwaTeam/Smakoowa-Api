@@ -15,7 +15,10 @@
         {
             var user = await _apiUserRepository.FindByConditionsFirstOrDefault(u => u.Id == userId);
 
-            if (user == null) return ServiceResponse.Error($"User with id:{userId} not found", HttpStatusCode.NotFound);
+            if (user == null)
+            {
+                return ServiceResponse.Error($"User with id:{userId} not found", HttpStatusCode.NotFound);
+            }
 
             return ServiceResponse<ApiUserResponseDto>.Success(await _apiUserMapperService.MapGetApiUserResponseDto(user), "User retrieved.");
         }
