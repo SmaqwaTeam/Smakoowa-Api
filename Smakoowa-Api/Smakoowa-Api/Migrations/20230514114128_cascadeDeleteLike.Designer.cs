@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smakoowa_Api.Data;
 
@@ -11,9 +12,11 @@ using Smakoowa_Api.Data;
 namespace Smakoowa_Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230514114128_cascadeDeleteLike")]
+    partial class cascadeDeleteLike
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -777,14 +780,14 @@ namespace Smakoowa_Api.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "eccdc42f-c508-4447-8083-da2e8d3abfaf",
+                            ConcurrencyStamp = "2fa7bd53-12dc-47d9-ad73-8aac9d35a20f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "447d39d8-3330-44ac-9d8a-475158d9e1ad",
+                            ConcurrencyStamp = "91d88998-0732-4c18-97cc-babe6048d647",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -862,7 +865,7 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c5a5f432-d084-4f26-868a-165796e7269e",
+                            ConcurrencyStamp = "5f290757-cbaa-4713-810c-4197bba08b43",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
@@ -873,7 +876,7 @@ namespace Smakoowa_Api.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a36e47d8-1ae0-4343-8c78-aa5f2cb54026",
+                            ConcurrencyStamp = "15b37ad4-76ce-40eb-a70c-c86a05b2e1f8",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
@@ -953,7 +956,7 @@ namespace Smakoowa_Api.Migrations
                     b.HasOne("Smakoowa_Api.Models.DatabaseModels.Comments.RecipeComment", "RepliedComment")
                         .WithMany("CommentReplies")
                         .HasForeignKey("CommentedId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Smakoowa_Api.Models.Identity.ApiUser", "Creator")

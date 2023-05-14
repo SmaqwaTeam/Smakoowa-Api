@@ -15,7 +15,7 @@
                 .HasOne(l => l.LikedRecipeComment)
                 .WithMany(r => r.Likes)
                 .HasForeignKey(l => l.LikedId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
