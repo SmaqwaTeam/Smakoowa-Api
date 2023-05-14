@@ -5,20 +5,24 @@ namespace Smakoowa_Api.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IMapper _mapper;
+        private readonly IApiUserMapperService _apiUserMapperService;
+        private readonly IApiUserValidatorService _apiUserValidatorService;
         private readonly UserManager<ApiUser> _userManager;
         private readonly SignInManager<ApiUser> _signInManager;
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly IConfiguration _configuration;
 
-        public AccountService(IMapper mapper, UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager,
-            AuthenticationSettings authenticationSettings, IConfiguration configuration)
+        public AccountService(IApiUserMapperService mapper, UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager,
+            AuthenticationSettings authenticationSettings, IConfiguration configuration, IApiUserValidatorService apiUserValidatorService, 
+            IApiUserMapperService apiUserMapperService)
         {
-            _mapper = mapper;
+            _apiUserMapperService = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _authenticationSettings = authenticationSettings;
             _configuration = configuration;
+            _apiUserValidatorService = apiUserValidatorService;
+            _apiUserMapperService = apiUserMapperService;
         }
 
         public async Task<ServiceResponse> LoginUser(LoginRequest loginRequest)
@@ -35,22 +39,23 @@ namespace Smakoowa_Api.Services
                 return ServiceResponse.Error("Ivalid password.", HttpStatusCode.Unauthorized);
             }
 
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("AspNet.Identity.SecurityStamp", user.SecurityStamp),
-            };
-
-            List<Claim> userRoles = new();
-            foreach (string role in await _userManager.GetRolesAsync(user))
-            {
-                userRoles.Add(new Claim(ClaimTypes.Role, role));
-            }
+            List<Claim> claims = GetUserClaims(user);
+            List<Claim> userRoles = await GetUserRoles(user);
             claims.AddRange(userRoles);
 
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = GenerateJwtSecurityToken(claims);
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var loginResponse = _apiUserMapperService.MapUserLoginResponse(user, tokenHandler.WriteToken(token));
+
+            loginResponse.User.UserRoles = userRoles.Select(ur => ur.Value).ToList();
+
+            return ServiceResponse<LoginResponse>.Success(loginResponse, "Login successful.");
+        }
+
+        private JwtSecurityToken GenerateJwtSecurityToken(List<Claim> claims)
+        {
+            return new JwtSecurityToken(
                 _authenticationSettings.JwtIssuer,
                 _authenticationSettings.JwtAudience,
                 claims,
@@ -61,28 +66,45 @@ namespace Smakoowa_Api.Services
                         SecurityAlgorithms.HmacSha256
                 )
             );
+        }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var loginResponse = new LoginResponse
+        private async Task<List<Claim>> GetUserRoles(ApiUser? user)
+        {
+            List<Claim> userRoles = new();
+            foreach (string role in await _userManager.GetRolesAsync(user))
             {
-                Token = tokenHandler.WriteToken(token),
-                User = _mapper.Map<ApiUserResponseDto>(user)
+                userRoles.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            return userRoles;
+        }
+
+        private static List<Claim> GetUserClaims(ApiUser? user)
+        {
+            return new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("AspNet.Identity.SecurityStamp", user.SecurityStamp),
             };
-
-            loginResponse.User.UserRoles = userRoles.Select(ur => ur.Value).ToList();
-
-            return ServiceResponse<LoginResponse>.Success(loginResponse, "Login successful.");
         }
 
         public async Task<ServiceResponse> RegisterUser(RegisterRequest registerRequest)
         {
-            var result = await _userManager.CreateAsync
-                (_mapper.Map<ApiUser>(registerRequest), registerRequest.Password);
+            var validationResult = await _apiUserValidatorService.ValidateRegisterRequest(registerRequest);
+            if(!validationResult.SuccessStatus)
+            {
+                return validationResult;
+            }
 
-            if (!result.Succeeded)
+            var createUserResult = await _userManager.CreateAsync
+                (_apiUserMapperService.MapUserRegisterRequest(registerRequest), registerRequest.Password);
+
+            if (!createUserResult.Succeeded)
             {
                 string errorMessage = "";
-                foreach (var error in result.Errors)
+                foreach (var error in createUserResult.Errors)
                 {
                     errorMessage += error.Description + " ";
                 }

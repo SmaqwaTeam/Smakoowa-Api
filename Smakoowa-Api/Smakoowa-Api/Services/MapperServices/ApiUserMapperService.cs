@@ -17,5 +17,18 @@
             mappedUser.UserRoles = (await _userManager.GetRolesAsync(user)).ToList();
             return mappedUser;
         }
+
+        public LoginResponse MapUserLoginResponse(ApiUser user, string token)
+        {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.Token = token;
+            loginResponse.User = _mapper.Map<ApiUserResponseDto>(user);
+            return loginResponse;
+        }
+
+        public ApiUser MapUserRegisterRequest(RegisterRequest user)
+        {
+            return _mapper.Map<ApiUser>(user);
+        }
     }
 }
