@@ -154,6 +154,7 @@
             services.AddScoped(typeof(IApiUserGetterService), typeof(ApiUserGetterService));
             services.AddScoped(typeof(IAccountService), typeof(AccountService));
             services.AddScoped(typeof(IApiUserRepository), typeof(ApiUserRepository));
+            services.AddScoped(typeof(IApiUserValidatorService), typeof(ApiUserValidatorService));
             services.AddScoped<RoleManager<ApiRole>>();
 
             services.AddSingleton(typeof(IRequestCounterService), typeof(RequestCounterService));
