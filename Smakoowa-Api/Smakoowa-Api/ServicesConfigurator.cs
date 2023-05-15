@@ -90,7 +90,7 @@
                 options.AddPolicy("corspolicy",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                        policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "https://10.0.2.2:7188")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials();
